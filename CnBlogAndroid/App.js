@@ -13,65 +13,94 @@ import {
   AppRegistry,
   TouchableHighlight
 } from 'react-native';
-
+import {
+    StackNavigator,
+} from 'react-navigation';
+import HomeworkDetail from './Source/screens/HomeworkDetail'
+import HomeworkList from './Source/screens/HomeworkList'
 //var token;
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-var token = "";
-export default class App extends Component<{}> {
-	constructor(props){
-		super(props)
-		this.state = {
-			title : '',
-			count : '',
-		};
-	}
-	
-  render() {
+class App extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            title : '',
+            count : '',
+        };
+    }
+    
+    render() {
+    const {navigate} = this.props.navigation;
     return (
-      <View style={styles.container}>		
-		<TouchableHighlight 
-          underlayColor="rgb(181, 136, 254)"
-          activeOpacity={0.5}  
-          style={{ borderRadius: 8,padding: 8,marginTop:5,backgroundColor:"#0588fe"}}
-          onPress={this.getInfo.bind(this)}
-          >
-             <Text style={{fontSize:20}}>GetInfo</Text>
+        <View style={styles.container}>		
+        <TouchableHighlight 
+            underlayColor="rgb(181, 136, 254)"
+            activeOpacity={0.5}  
+            style={{ borderRadius: 8,padding: 8,marginTop:5,backgroundColor:"#0588fe"}}
+//          onPress={this.getInfo.bind(this)}
+            onPress = {()=>navigate('HomeworkList')}
+        >
+        <Text style={{fontSize:20}}>班级111的作业</Text>
         </TouchableHighlight>
-        <Text>title：{this.state.title}</Text>
-        <Text>releaseYear：{this.state.year}</Text>
-      </View>
+        </View>
     );
-  }
+    }
    
-  getInfo(){	  
-  //在这里需要把url包装好，如何包装，具体请看博客园api帮助
-  //这里一定要注意网络请求的同步异步问题！！！！
-	  let url = Config.apiDomain + api.ClassGet.info + "/111";
-	  Service.get(url);	  
-  }
+    getInfo(){	  
+        //在这里需要把url包装好，如何包装，具体请看博客园api帮助
+        //这里一定要注意网络请求的同步异步问题！！！！
+        let url = Config.apiDomain + api.ClassGet.info + "/111";
+        Service.Get(url).then((jsonData)=>{ToastAndroid.show(jsonData.nameEn,ToastAndroid.LONG)});	  
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
 });
+
+const SimpleNavigation = StackNavigator({
+    Home: {
+        screen: App,
+        navigationOptions: {
+            header: null,
+        },
+    },
+    HomeworkList: {
+        screen: HomeworkList,
+        navigationOptions: {
+            headerTitle: '作业列表',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        },
+    },
+    HomeworkDetail: {
+        screen: HomeworkDetail,
+        navigationOptions: {
+            headerTitle: '作业详情',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        },
+    }
+},{
+    initialRouteName: 'Home',
+});
+export default SimpleNavigation;
