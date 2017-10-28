@@ -17,7 +17,7 @@ import {
     StackNavigator,
 } from 'react-navigation';
 import HomeworkDetail from './Source/screens/HomeworkDetail'
-import HomeworkList from './Source/screens/HomeworkList'
+import HomeworkLists from './Source/screens/HomeworkLists'
 //var token;
 
 class App extends Component {
@@ -38,7 +38,7 @@ class App extends Component {
             activeOpacity={0.5}  
             style={{ borderRadius: 8,padding: 8,marginTop:5,backgroundColor:"#0588fe"}}
 //          onPress={this.getInfo.bind(this)}
-            onPress = {()=>navigate('HomeworkList')}
+            onPress = {()=>navigate('HomeworkLists')}
         >
         <Text style={{fontSize:20}}>班级111的作业</Text>
         </TouchableHighlight>
@@ -80,14 +80,15 @@ const SimpleNavigation = StackNavigator({
             header: null,
         },
     },
-    HomeworkList: {
-        screen: HomeworkList,
+    HomeworkLists: {
+        screen: HomeworkLists,
         navigationOptions: {
+            header: null,/*
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
-            }
+            }*/
         },
     },
     HomeworkDetail: {
