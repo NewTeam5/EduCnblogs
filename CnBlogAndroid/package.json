@@ -18,6 +18,12 @@
 		"react-test-renderer": "16.0.0-beta.5"
 	},
 	"jest": {
-		"preset": "react-native"
+		"preset": "react-native",
+		 "transform": {
+			"^.+\\.js$": "babel-jest"
+		},
+		"transformIgnorePatterns": [
+			"node_modules/(?!react-native|victory-native)/"
+		]
 	}
 }
