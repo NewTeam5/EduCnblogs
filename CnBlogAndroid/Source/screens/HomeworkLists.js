@@ -22,7 +22,7 @@ const screenHeight = Dimensions.get('window').height;    //设备的高度
 const defaultPixel = 3;                           //开发设备的像素密度
 const fontRatio= PixelRatio.get()/PixelRatio.getFontScale(); //字体缩放比率
 const scale = Math.min( screenWidth / 360*defaultPixel,screenHeight / 592*defaultPixel);   //获取缩放比例
-function setSpText(size: number) {
+function setSpText(size) {
     size = Math.round((size * scale + 0.5) * fontRatio);
     //size= size*fontRatio;
     return size/defaultPixel;
@@ -42,7 +42,8 @@ export default class HomeworkLists extends Component {
     }
     //暂定班级ID为111,应该传进来班级ID作为属性
     componentDidMount = ()=>{
-        let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/111/1-12";
+        let classId = this.props.navigation.state.params.classId;
+        let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/1-12";
         // 先获取作业数量，再按作业数量获取作业信息列表
         Service.Get(url).then((jsonData)=>{
             this.setState({
@@ -50,7 +51,7 @@ export default class HomeworkLists extends Component {
             });
         })
         .then(()=>{
-            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/111/"+1+"-"+this.state.counts;
+            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
             Service.Get(url).then((jsonData)=>{
                 this.setState({
                     homeworks: jsonData.homeworks,
@@ -80,7 +81,7 @@ export default class HomeworkLists extends Component {
                         {description}...
                     </Text>				
                     <Text style= {HomeworkStyles.informationTextStyle}>
-                        截止于:{deadline}
+                        截止于:{deadline.slice(0,deadline.length-6)}
                     </Text>
                 </TouchableOpacity>
                 <View
@@ -104,7 +105,7 @@ export default class HomeworkLists extends Component {
         }
         return (
         <View
-            style= {{flexDirection: 'column',flex: 1}}
+            style= {{flexDirection: 'column',flex: 1, backgroundColor: 'white'}}
         >
             <HeaderNoBack
               text= "ClassName"
