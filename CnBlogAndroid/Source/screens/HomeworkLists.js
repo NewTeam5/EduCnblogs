@@ -3,6 +3,7 @@ import api from '../api/api.js';
 import {authData} from '../config';
 import * as Service from '../request/request.js';
 import MyAdapter from './MyAdapter.js';
+import HeaderNoBackComponent from './HeaderNoBackComponent.js'
 import React, { Component} from 'react';
 import {
     Platform,
@@ -98,7 +99,7 @@ export default class HomeworkLists extends Component {
         <View
             style= {{flexDirection: 'column',flex: 1}}
         >
-            <HeaderNoBack
+            <HeaderNoBackComponent
               text= "ClassName"
             />
             <View
@@ -312,49 +313,4 @@ const HomeworkStyles = StyleSheet.create({
         color: '#000000',  
         textAlign: 'center',          
     }
-});  
-class HeaderNoBack extends Component {//标题栏  
-    render() {  
-        return (  
-                <View style={HeaderNoBackStyles.container}> 
-                    <View style= {HeaderNoBackStyles.imageStyle}>
-                        <Image                 			
-                            source= {require('../images/1.png')}//头像
-                        />
-                    </View> 
-                    <View style={HeaderNoBackStyles.textview}>  
-                        <Text style={HeaderNoBackStyles.textstyle}>{this.props.text || "标题头"}</Text>  
-                    </View>  
-                </View>  
-        );  
-    }  
-}  
-  
-const HeaderNoBackStyles = StyleSheet.create({  
-    container: {  
-        flexDirection: 'row',  
-        alignItems: 'center',  
-        height: screenHeight/12,  
-        alignSelf: 'stretch',          
-    },
-    imageView:{
-        flex: 1,
-        alignSelf: 'flex-start',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 0.2*screenWidth
-    },
-    imageStyle:{
-
-    }, 
-    textview: {  
-        flex: 1,  
-        alignSelf: 'center',  
-    },  
-    textstyle: {  
-        fontSize: titleFontSize,  
-        color: '#000000',  
-        textAlign: 'center',  
-        fontWeight: 'bold',
-    },  
 });  
