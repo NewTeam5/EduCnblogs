@@ -103,10 +103,6 @@ export default class HomeworkLists extends Component {
               text= "ClassName"
             />
             <View
-              style= {{height:1,backgroundColor:'#000000'}}  		
-            >
-            </View>
-            <View
             style= {{
                 flexDirection: 'row',  
                 justifyContent:'space-between',
@@ -210,7 +206,7 @@ export default class HomeworkLists extends Component {
                 style={{
                     flex:1, 
                     marginRight:0.02*screenWidth,
-                    height: 0.041*screenHeight, 
+                    height: 0.06*screenHeight, 
                     borderColor: 'gray', 
                     borderWidth: 1
                 }}
