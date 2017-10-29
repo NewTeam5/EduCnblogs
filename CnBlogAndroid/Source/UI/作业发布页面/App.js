@@ -39,6 +39,7 @@ export default class App extends Component<{}> {
             style= {{
             	flexDirection: 'column',
             	flex: 1,
+            	backgroundColor: 'white'
             }}
         >
             <HeaderNoBackComponent

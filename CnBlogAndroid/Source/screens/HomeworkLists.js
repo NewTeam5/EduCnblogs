@@ -97,7 +97,11 @@ export default class HomeworkLists extends Component {
         }
         return (
         <View
-            style= {{flexDirection: 'column',flex: 1}}
+            style= {{
+                flexDirection: 'column',
+                flex: 1,
+                backgroundColor: 'white'                
+            }}
         >
             <HeaderNoBackComponent
               text= "ClassName"
