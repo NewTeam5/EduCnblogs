@@ -1,7 +1,8 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
-import * as Service from '../request/request.js'
+import {authData} from '../config';
+import * as Service from '../request/request.js';
+import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
 import {
     Platform,
@@ -16,21 +17,12 @@ import {
     Dimensions,
     PixelRatio,
 } from 'react-native';
-
-const screenWidth = Dimensions.get('window').width;      //设备的宽度
-const screenHeight = Dimensions.get('window').height;    //设备的高度
-const defaultPixel = 3;                           //开发设备的像素密度
-const fontRatio= PixelRatio.get()/PixelRatio.getFontScale(); //字体缩放比率
-const scale = Math.min( screenWidth / 360*defaultPixel,screenHeight / 592*defaultPixel);   //获取缩放比例
-function setSpText(size: number) {
-    size = Math.round((size * scale + 0.5) * fontRatio);
-    //size= size*fontRatio;
-    return size/defaultPixel;
-}
-const titleFontSize= setSpText(8);
-const abstractFontSize= setSpText(4);
-const informationFontSize= setSpText(4);
-const btnFontSize= setSpText(4);
+const screenWidth= MyAdapter.screenWidth;
+const screenHeight= MyAdapter.screenHeight;
+const titleFontSize= MyAdapter.titleFontSize;
+const abstractFontSize= MyAdapter.abstractFontSize;
+const informationFontSize= MyAdapter.informationFontSize;
+const btnFontSize= MyAdapter.btnFontSize;   
 
 export default class HomeworkLists extends Component {
     constructor(props){
