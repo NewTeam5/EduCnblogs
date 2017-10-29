@@ -77,7 +77,7 @@ export default class HomeworkLists extends Component {
                         {title}
                     </Text>
                     <Text style= {HomeworkStyles.abstractTextStyle}>
-                        {description}
+                        {description}...
                     </Text>				
                     <Text style= {HomeworkStyles.informationTextStyle}>
                         截止于:{deadline}
@@ -253,7 +253,8 @@ export default class HomeworkLists extends Component {
                 alignItems: 'flex-start',  
                 alignSelf: 'stretch',    
                 marginTop: 0.02*screenHeight,
-                marginHorizontal: 0.02*screenWidth,
+                marginLeft: 0.02*screenWidth,
+                marginRight: 0.04*screenWidth,
                 flex:1,
             }}      	
 
@@ -311,7 +312,7 @@ const HomeworkStyles = StyleSheet.create({
     abstractTextStyle:{
         fontSize: abstractFontSize,  
         color: '#000000',  
-        textAlign: 'center',          
+        textAlign: 'left',          
     },
     informationTextStyle:{
         alignSelf: "flex-end",
