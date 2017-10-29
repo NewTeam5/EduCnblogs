@@ -249,31 +249,7 @@ export default class HomeworkLists extends Component {
   }
 }
 
-/*class Homework extends Component{//每一项作业
-    render(){
-        return (
-            <View
-                  style= {HomeworkStyles.container}      	
-            >
-                <Text
-                    style= {HomeworkStyles.titleTextStyle}
-                >
-                {this.props.title}
-                </Text>
-                <Text
-                    style= {HomeworkStyles.abstractTextStyle}
-                >
-                {this.props.abstract}
-                </Text>				
-                <Text
-                    style= {HomeworkStyles.informationTextStyle}
-                >
-                {this.props.information}
-                </Text>								
-            </View>
-        );
-    }
-}*/
+
 const HomeworkStyles = StyleSheet.create({  
     container: {  
         flexDirection: 'column',  
