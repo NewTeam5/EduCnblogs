@@ -22,6 +22,11 @@ const btnFontSize= MyAdapter.btnFontSize;
 export default class HeaderNoBackComponent extends Component {//标题栏  
     render() {  
         return (  
+            <View
+                style= {{
+                    flexDirection:"column"
+                }}
+            >
                 <View style={Styles.container}> 
                     <View style= {Styles.imageStyle}>
                         <Image                          
@@ -32,6 +37,15 @@ export default class HeaderNoBackComponent extends Component {//标题栏
                         <Text style={Styles.textstyle}>{this.props.text || "标题头"}</Text>  
                     </View>  
                 </View>  
+                <View
+                  style= {{
+                    height:1,
+                    backgroundColor:'gray',
+                    marginTop:0.005*screenHeight,
+                }}         
+                >
+                </View>
+            </View>
         );  
     }  
 }  
@@ -40,7 +54,7 @@ const Styles = StyleSheet.create({
     container: {  
         flexDirection: 'row',  
         alignItems: 'center',  
-        height: screenHeight/12,  
+        //height: screenHeight/12,  
         alignSelf: 'stretch',          
     },
     imageView:{
