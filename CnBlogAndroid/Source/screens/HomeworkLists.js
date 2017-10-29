@@ -12,8 +12,25 @@ import {
     TouchableHighlight,    
     TextInput,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    Dimensions,
+    PixelRatio,
 } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;      //设备的宽度
+const screenHeight = Dimensions.get('window').height;    //设备的高度
+const defaultPixel = 3;                           //开发设备的像素密度
+const fontRatio= PixelRatio.get()/PixelRatio.getFontScale(); //字体缩放比率
+const scale = Math.min( screenWidth / 360*defaultPixel,screenHeight / 592*defaultPixel);   //获取缩放比例
+function setSpText(size: number) {
+    size = Math.round((size * scale + 0.5) * fontRatio);
+    //size= size*fontRatio;
+    return size/defaultPixel;
+}
+const titleFontSize= setSpText(8);
+const abstractFontSize= setSpText(4);
+const informationFontSize= setSpText(4);
+const btnFontSize= setSpText(4);
 
 export default class HomeworkLists extends Component {
     constructor(props){
@@ -51,20 +68,26 @@ export default class HomeworkLists extends Component {
         var deadline = item1.item.deadline;//作业截止日期
         var url = item1.item.url;//作业地址
         return (
-            <TouchableOpacity
-                onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url})}
-                style = {HomeworkStyles.container}
-            >
-                <Text style= {HomeworkStyles.titleTextStyle}>
-                    {title}
-                </Text>
-                <Text style= {HomeworkStyles.abstractTextStyle}>
-                    {description}
-                </Text>				
-                <Text style= {HomeworkStyles.informationTextStyle}>
-                    截止于:{deadline}
-                </Text>
-            </TouchableOpacity>
+            <View>
+                <TouchableOpacity
+                    onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url})}
+                    style = {HomeworkStyles.container}
+                >
+                    <Text style= {HomeworkStyles.titleTextStyle}>
+                        {title}
+                    </Text>
+                    <Text style= {HomeworkStyles.abstractTextStyle}>
+                        {description}...
+                    </Text>				
+                    <Text style= {HomeworkStyles.informationTextStyle}>
+                        截止于:{deadline}
+                    </Text>
+                </TouchableOpacity>
+                <View
+                    style= {{height:1,backgroundColor:'gray'}}         
+                >
+                </View>
+            </View>
         )
     }
     render() {
@@ -87,7 +110,7 @@ export default class HomeworkLists extends Component {
               text= "ClassName"
             />
             <View
-              style= {{height:2,backgroundColor:'#000000'}}  		
+              style= {{height:1,backgroundColor:'#000000'}}  		
             >
             </View>
             <View
@@ -95,93 +118,84 @@ export default class HomeworkLists extends Component {
                 flexDirection: 'row',  
                 justifyContent:'space-between',
                 alignItems: 'center',  
-                height: 40,  
+                marginTop: 0.02*screenHeight,
+                marginHorizontal: 0.02*screenWidth,
                 alignSelf: 'stretch',          
             }}  		
             >
                 <Text
                     style= {{  
-                        width: 200,
-                        height: 40,  
-                        //alignSelf: 'flex-start',
-                        marginTop: 10,
-                        fontSize: 30,  
+                        alignSelf: 'flex-start',
+                        fontSize: titleFontSize,  
                         color: '#000000',  
                         textAlign: 'center',  
                         fontWeight: 'bold',
                     }}  		
                 >
-                    HomeWorks
+                    Homeworks
                 </Text>
-                <View
-                    style= {{        
-                    width: 200,
-                    height: 40,  	      			
-                      //alignSelf: 'flex-end',      				
-                    marginTop: 20,
-                    alignItems: 'center',
-                }}
+                <TouchableHighlight
+                    underlayColor="#0588fe"
+                    activeOpacity={0.5}
+                    style= {{
+                        alignSelf: 'flex-end',
+                        borderRadius: 0.01*screenHeight,
+                        padding: 0.01*screenHeight,
+                        backgroundColor:"#0588fe"
+                    }}
+                    onPress={this._onPress}//关联函数
                 >
-                    <TouchableHighlight
-                        underlayColor="#0588fe"
-                        activeOpacity={0.5}
+                    <Text
                         style= {{
-                            borderRadius: 8,padding: 8,backgroundColor:"#0588fe"
-                        }}
-                        onPress={this._onPress}//关联函数
+                            fontSize: btnFontSize,  
+                            color: '#ffffff',  
+                            textAlign: 'center',  
+                            fontWeight: 'bold',
+                        }}   
                     >
-                        <Text
-                            style= {{
-                                fontSize: 20,  
-                                color: '#ffffff',  
-                                textAlign: 'center',  
-                                fontWeight: 'bold',
-                            }}   
-                        >
-                          New HomeWork
-                        </Text>
-                    </TouchableHighlight>
-                </View>
+                      New HomeWork
+                    </Text>
+                </TouchableHighlight>
             </View>
             <View style= {{        
                 flexDirection: 'row',  
                 justifyContent:'flex-end',
                 alignItems: 'center',  
-                height: 40,  
+                height: 0.032*screenHeight,  
                 alignSelf: 'stretch',    
-                marginTop:10,  
-                marginRight: 100
+                marginTop: 0.01*screenHeight,  
+                marginRight: 0.06*screenWidth,
             }}
             >
                 <Text style= {{
-                    fontSize: 20,  
+                    fontSize: btnFontSize,  
                     color: '#00bfff',  
                     textAlign: 'center',  
-                    marginRight:10
+                    marginRight: 0.02*screenWidth, 
                 }}      			
                 >
                     NoReply
                 </Text>
                 <Text style= {{
-                    fontSize: 20,  
+                    fontSize: btnFontSize,  
                     color: '#00bfff',  
                     textAlign: 'center',  
-                    marginRight:10  
+                    marginRight: 0.02*screenWidth,   
                 }}      			
                 >
                     Rank
                 </Text>
                 <Text style= {{
-                    fontSize: 20,  
+                    fontSize: btnFontSize,  
                     color: '#00bfff',  
                     textAlign: 'center',
-                    marginRight:10  
+                    marginRight: 0.02*screenWidth,   
                 }}      			
                 >
                     Essense
                 </Text>
                 <Text style= {{
-                    fontSize: 20,  
+                    fontSize: btnFontSize,  
                     color: '#00bfff',  
                     textAlign: 'center',  
                 }}      			
@@ -193,22 +207,28 @@ export default class HomeworkLists extends Component {
                 flexDirection: 'row',  
                 justifyContent:'flex-end',
                 alignItems: 'center',  
-                height: 40,  
+                height: 0.042*screenHeight,  
                 alignSelf: 'stretch',    
-                marginTop:10,
-                marginHorizontal:30
+                marginTop:0.01*screenHeight,
+                marginHorizontal:0.02*screenWidth
             }}      	
             >
             <TextInput
-                style={{flex:1, marginRight:20,height: 40, borderColor: 'gray', borderWidth: 1}}
+                style={{
+                    flex:1, 
+                    marginRight:0.02*screenWidth,
+                    height: 0.041*screenHeight, 
+                    borderColor: 'gray', 
+                    borderWidth: 1
+                }}
                 //onChangeText= 关联函数        		
             />      	
             <TouchableHighlight
                 underlayColor="white"
                 activeOpacity={0.5}
                 style= {{
-                    borderRadius: 8,
-                    padding: 8,
+                    borderRadius: 0.01*screenHeight,
+                    padding: 0.01*screenHeight,
                     backgroundColor:"white",
                     borderWidth:1
                 }}
@@ -216,7 +236,7 @@ export default class HomeworkLists extends Component {
             >
                 <Text
                     style= {{
-                        fontSize: 20,  
+                        fontSize: btnFontSize,  
                         color: 'black',  
                         textAlign: 'center',  
                         fontWeight: 'bold',
@@ -232,8 +252,9 @@ export default class HomeworkLists extends Component {
                 justifyContent:'flex-start',
                 alignItems: 'flex-start',  
                 alignSelf: 'stretch',    
-                marginTop:10,
-                marginHorizontal:30,
+                marginTop: 0.02*screenHeight,
+                marginLeft: 0.02*screenWidth,
+                marginRight: 0.04*screenWidth,
                 flex:1,
             }}      	
 
@@ -259,19 +280,19 @@ const HomeworkStyles = StyleSheet.create({
         alignSelf: 'stretch',          
     },
     titleTextStyle:{
-        fontSize: 30,  
+        fontSize: titleFontSize,  
         color: '#000000',  
         textAlign: 'center',  
         fontWeight: 'bold',
     },
     abstractTextStyle:{
-        fontSize: 20,  
+        fontSize: abstractFontSize,  
         color: '#000000',  
-        textAlign: 'center',          
+        textAlign: 'left',          
     },
     informationTextStyle:{
         alignSelf: "flex-end",
-        fontSize: 20,  
+        fontSize: informationFontSize,  
         color: '#000000',  
         textAlign: 'center',          
     }
@@ -297,12 +318,15 @@ const HeaderNoBackStyles = StyleSheet.create({
     container: {  
         flexDirection: 'row',  
         alignItems: 'center',  
-        height: 60,  
+        height: screenHeight/12,  
         alignSelf: 'stretch',          
     },
     imageView:{
         flex: 1,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 0.2*screenWidth
     },
     imageStyle:{
 
@@ -312,7 +336,7 @@ const HeaderNoBackStyles = StyleSheet.create({
         alignSelf: 'center',  
     },  
     textstyle: {  
-        fontSize: 30,  
+        fontSize: titleFontSize,  
         color: '#000000',  
         textAlign: 'center',  
         fontWeight: 'bold',
