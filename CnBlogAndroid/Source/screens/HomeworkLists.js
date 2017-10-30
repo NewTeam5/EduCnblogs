@@ -1,7 +1,9 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
-import * as Service from '../request/request.js'
+import {authData} from '../config';
+import * as Service from '../request/request.js';
+import MyAdapter from './MyAdapter.js';
+import HeaderNoBackComponent from './HeaderNoBackComponent.js'
 import React, { Component} from 'react';
 import {
     Platform,
@@ -17,20 +19,12 @@ import {
     PixelRatio,
 } from 'react-native';
 
-const screenWidth = Dimensions.get('window').width;      //设备的宽度
-const screenHeight = Dimensions.get('window').height;    //设备的高度
-const defaultPixel = 3;                           //开发设备的像素密度
-const fontRatio= PixelRatio.get()/PixelRatio.getFontScale(); //字体缩放比率
-const scale = Math.min( screenWidth / 360*defaultPixel,screenHeight / 592*defaultPixel);   //获取缩放比例
-function setSpText(size) {
-    size = Math.round((size * scale + 0.5) * fontRatio);
-    //size= size*fontRatio;
-    return size/defaultPixel;
-}
-const titleFontSize= setSpText(8);
-const abstractFontSize= setSpText(4);
-const informationFontSize= setSpText(4);
-const btnFontSize= setSpText(4);
+const screenWidth= MyAdapter.screenWidth;
+const screenHeight= MyAdapter.screenHeight;
+const titleFontSize= MyAdapter.titleFontSize;
+const abstractFontSize= MyAdapter.abstractFontSize;
+const informationFontSize= MyAdapter.informationFontSize;
+const btnFontSize= MyAdapter.btnFontSize;   
 
 export default class HomeworkLists extends Component {
     constructor(props){
@@ -105,15 +99,15 @@ export default class HomeworkLists extends Component {
         }
         return (
         <View
-            style= {{flexDirection: 'column',flex: 1, backgroundColor: 'white'}}
+            style= {{
+                flexDirection: 'column',
+                flex: 1,
+                backgroundColor: 'white'                
+            }}
         >
-            <HeaderNoBack
+            <HeaderNoBackComponent
               text= "ClassName"
             />
-            <View
-              style= {{height:1,backgroundColor:'#000000'}}  		
-            >
-            </View>
             <View
             style= {{
                 flexDirection: 'row',  
@@ -218,7 +212,7 @@ export default class HomeworkLists extends Component {
                 style={{
                     flex:1, 
                     marginRight:0.02*screenWidth,
-                    height: 0.041*screenHeight, 
+                    height: 0.06*screenHeight, 
                     borderColor: 'gray', 
                     borderWidth: 1
                 }}
@@ -297,49 +291,4 @@ const HomeworkStyles = StyleSheet.create({
         color: '#000000',  
         textAlign: 'center',          
     }
-});  
-class HeaderNoBack extends Component {//标题栏  
-    render() {  
-        return (  
-                <View style={HeaderNoBackStyles.container}> 
-                    <View style= {HeaderNoBackStyles.imageStyle}>
-                        <Image                 			
-                            source= {require('../images/1.png')}//头像
-                        />
-                    </View> 
-                    <View style={HeaderNoBackStyles.textview}>  
-                        <Text style={HeaderNoBackStyles.textstyle}>{this.props.text || "标题头"}</Text>  
-                    </View>  
-                </View>  
-        );  
-    }  
-}  
-  
-const HeaderNoBackStyles = StyleSheet.create({  
-    container: {  
-        flexDirection: 'row',  
-        alignItems: 'center',  
-        height: screenHeight/12,  
-        alignSelf: 'stretch',          
-    },
-    imageView:{
-        flex: 1,
-        alignSelf: 'flex-start',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 0.2*screenWidth
-    },
-    imageStyle:{
-
-    }, 
-    textview: {  
-        flex: 1,  
-        alignSelf: 'center',  
-    },  
-    textstyle: {  
-        fontSize: titleFontSize,  
-        color: '#000000',  
-        textAlign: 'center',  
-        fontWeight: 'bold',
-    },  
 });  
