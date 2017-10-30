@@ -202,12 +202,11 @@ const SimpleNavigation = StackNavigator({
     HomeworkLists: {
         screen: HomeworkLists,
         navigationOptions: {
-            header: null,/*
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
-            }*/
+            }
         },
     },
     HomeworkDetail: {
