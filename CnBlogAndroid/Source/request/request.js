@@ -36,9 +36,10 @@ function GetInfo(url, token){
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': token,
             },
-        }).then((response) => response.json())
-        .then((responseJson)=>{
-            resolve(responseJson);
+        })
+        .then((response)=>response.json())
+        .then((jsonData)=>{
+            resolve(jsonData);
         })
         .catch((error) => {
             console.error(error);
@@ -55,7 +56,7 @@ export function Get(url){
             return GetInfo(url, token);
         })
         .then((jsonData)=>{
-            resolve(jsonData);
+            resolve(jsonData)
         })
         .catch((error) => {
             console.error(error);

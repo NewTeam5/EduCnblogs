@@ -1,20 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
 import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import React, { Component} from 'react';
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableHighlight,    
-  TextInput,  
-  Picker
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableHighlight,    
+    TextInput,  
+    Picker
 } from 'react-native';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
@@ -30,10 +25,10 @@ export default class App extends Component {
   			language:"Java"
   		};
   	}
-  _onPress(){
+    _onPress(){
 
-  }
-  render() {
+    }
+    render() {
     return (
         <View
             style= {{

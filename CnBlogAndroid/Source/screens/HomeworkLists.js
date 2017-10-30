@@ -53,9 +53,9 @@ export default class HomeworkLists extends Component {
             })
         })
     };
-    _onPress(){
-
-    }
+    _onPress = ()=>{
+        this.props.navigation.navigate('HomeworkPost');
+    };
     _renderItem = (item)=>{
         let item1 = item;
         var title = item1.item.title;//作业标题
@@ -105,6 +105,9 @@ export default class HomeworkLists extends Component {
                 backgroundColor: 'white'                
             }}
         >
+            <HeaderNoBackComponent
+              text= "ClassName"
+            />
             <View
             style= {{
                 flexDirection: 'row',  

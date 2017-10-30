@@ -17,7 +17,7 @@ const screenHeight = Dimensions.get('window').height;    //设备的高度
 const defaultPixel = 3;                           //开发设备的像素密度
 const fontRatio= PixelRatio.get()/PixelRatio.getFontScale(); //字体缩放比率
 const scale = Math.min( screenWidth / 360*defaultPixel,screenHeight / 592*defaultPixel);   //获取缩放比例
-function setSpText(size: number) {
+function setSpText(size) {
     size = Math.round((size * scale + 0.5) * fontRatio);
     //size= size*fontRatio;
     return size/defaultPixel;

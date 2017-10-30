@@ -26,7 +26,8 @@ import ClassLists from './Source/screens/ClassLists'
 import Notice from './Source/screens/Notice'
 import UserInformation from './Source/screens/UserInformation'
 import ClassHome from './Source/screens/ClassHome'
-
+import HomeworkPost from './Source/screens/HomeworkPost'
+import BlogDetail from './Source/screens/BlogDetail'
 const { height, width } = Dimensions.get('window');
 class App extends Component {
     render() {
@@ -202,11 +203,12 @@ const SimpleNavigation = StackNavigator({
     HomeworkLists: {
         screen: HomeworkLists,
         navigationOptions: {
+            header: null,/*
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
-            }
+            }*/
         },
     },
     HomeworkDetail: {
@@ -253,6 +255,22 @@ const SimpleNavigation = StackNavigator({
         screen: ClassHome,
         navigationOptions: {
             headerTitle: '班级博客',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
+    },
+    HomeworkPost: {
+        screen: HomeworkPost,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    BlogDetail: {
+        screen: BlogDetail,
+        navigationOptions: {
+            headerTitle: '博客详情',
             headerStyle: {
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
