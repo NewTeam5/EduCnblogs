@@ -26,10 +26,9 @@ function GetToken(){
         });
     });
 }
-//注释的部分为原来的函数
+
 //这里修改为返回Promise对象(by ZiJiaW)
 function GetInfo(url, token){
-    //get();
     return new Promise((resolve,reject)=>{
         fetch(url,{
             method : 'GET',
@@ -39,7 +38,6 @@ function GetInfo(url, token){
             },
         }).then((response) => response.json())
         .then((responseJson)=>{
-//            ToastAndroid.show('调用完成2',ToastAndroid.LONG);
             resolve(responseJson);
         })
         .catch((error) => {
@@ -57,7 +55,6 @@ export function Get(url){
             return GetInfo(url, token);
         })
         .then((jsonData)=>{
-//            ToastAndroid.show('调用完成3',ToastAndroid.SHORT);
             resolve(jsonData);
         })
         .catch((error) => {

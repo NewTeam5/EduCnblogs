@@ -2,25 +2,30 @@ import Config from './Source/config';
 import api from './Source/api/api.js';
 import {authData} from './Source/config'
 import * as Service from './Source/request/request.js'
-
 import React, { Component } from 'react';
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  ToastAndroid,
-  AppRegistry,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Dimensions,
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    ToastAndroid,
+    AppRegistry,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    Dimensions,
 } from 'react-native';
 import {
     StackNavigator,
+    TabNavigator,
 } from 'react-navigation';
 import HomeworkDetail from './Source/screens/HomeworkDetail'
 import HomeworkLists from './Source/screens/HomeworkLists'
+import PersonalBlog from './Source/screens/PersonalBlog'
+import ClassLists from './Source/screens/ClassLists'
+import Notice from './Source/screens/Notice'
+import UserInformation from './Source/screens/UserInformation'
+import ClassHome from './Source/screens/ClassHome'
 
 const { height, width } = Dimensions.get('window');
 class App extends Component {
@@ -28,12 +33,12 @@ class App extends Component {
     const {navigate} = this.props.navigation;
     return (
         <View style={styles.container}>		
-            <Loginer loginSuccess = {() => navigate('HomeworkLists')}/>
+            <Loginer loginSuccess = {() => navigate('AfterloginTab')}/>
         </View>
     );
     }
 }
-
+// 在App中调用的登录界面组件
 class Loginer extends Component{
     constructor(props){
         super(props);
@@ -89,7 +94,7 @@ class Loginer extends Component{
                     />
                 </View>
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText}>登录</Text>
+                    <Text style={styles.btText}>登 录</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -144,6 +149,48 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     }
 });
+const HomeTab = TabNavigator({
+    PersonalBlog: {
+        screen: PersonalBlog,
+        navigationOptions: {
+            tabBarLabel: '我的博客'
+        }
+    },
+    ClassLists: {
+        screen: ClassLists,
+        navigationOptions: {
+            tabBarLabel: '我的班级',
+
+        }
+    },
+    Notice: {
+        screen: Notice,
+        navigationOptions: {
+            tabBarLabel: '消息'
+        }
+    },
+    UserInformation: {
+        screen: UserInformation,
+        navigationOptions: {
+            tabBarLabel: '我'
+        }
+    },
+},{
+    tabBarPosition: 'bottom',
+    initialRouteName: 'PersonalBlog',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+//        showIcon: true,
+        showLabel: true,
+        style: {
+//            height: 30,
+        },
+        labelStyle: {
+            //fontSize: 14
+        }
+    },
+})
 
 const SimpleNavigation = StackNavigator({
     Home: {
@@ -172,6 +219,46 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: 'rgb(51,204,255)',
             }
         },
+    },
+    PersonalBlog: {
+        screen: PersonalBlog,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    ClassLists: {
+        screen: ClassLists,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Notice: {
+        screen: Notice,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    UserInformation: {
+        screen: UserInformation,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    AfterloginTab: {
+        screen: HomeTab,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    ClassHome: {
+        screen: ClassHome,
+        navigationOptions: {
+            headerTitle: '班级博客',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
     }
 },{
     initialRouteName: 'Home',

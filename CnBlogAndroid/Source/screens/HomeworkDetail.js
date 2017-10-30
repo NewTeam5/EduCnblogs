@@ -21,7 +21,7 @@ export default class HomeWorkDetail extends Component{
             <View style = {{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#F5FCFF',
+                backgroundColor: 'white',
                 flex:1}}
             >
                 <WebView

@@ -18,6 +18,7 @@ import {
     Dimensions,
     PixelRatio,
 } from 'react-native';
+
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
@@ -35,7 +36,8 @@ export default class HomeworkLists extends Component {
     }
     //暂定班级ID为111,应该传进来班级ID作为属性
     componentDidMount = ()=>{
-        let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/111/1-12";
+        let classId = this.props.navigation.state.params.classId;
+        let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/1-12";
         // 先获取作业数量，再按作业数量获取作业信息列表
         Service.Get(url).then((jsonData)=>{
             this.setState({
@@ -43,7 +45,7 @@ export default class HomeworkLists extends Component {
             });
         })
         .then(()=>{
-            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/111/"+1+"-"+this.state.counts;
+            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
             Service.Get(url).then((jsonData)=>{
                 this.setState({
                     homeworks: jsonData.homeworks,
@@ -73,7 +75,7 @@ export default class HomeworkLists extends Component {
                         {description}...
                     </Text>				
                     <Text style= {HomeworkStyles.informationTextStyle}>
-                        截止于:{deadline}
+                        截止于:{deadline.slice(0,deadline.length-6)}
                     </Text>
                 </TouchableOpacity>
                 <View
