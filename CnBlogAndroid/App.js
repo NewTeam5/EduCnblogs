@@ -28,6 +28,8 @@ import UserInformation from './Source/screens/UserInformation'
 import ClassHome from './Source/screens/ClassHome'
 import HomeworkPost from './Source/screens/HomeworkPost'
 import BlogDetail from './Source/screens/BlogDetail'
+import PersonalSettings from './Source/screens/PersonalSettings'
+import ClassCreate from './Source/screens/ClassCreate'
 const { height, width } = Dimensions.get('window');
 class App extends Component {
     render() {
@@ -193,7 +195,7 @@ const HomeTab = TabNavigator({
     },
 })
 
-const SimpleNavigation = StackNavigator({
+const SimpleNavigation = StackNavigator({    
     Home: {
         screen: App,
         navigationOptions: {
@@ -233,6 +235,16 @@ const SimpleNavigation = StackNavigator({
             header: null,
         }
     },
+    ClassCreate: {
+        screen: ClassCreate,
+        navigationOptions: {
+            headerTitle: '创建班级',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }        
+    },
     Notice: {
         screen: Notice,
         navigationOptions: {
@@ -244,6 +256,16 @@ const SimpleNavigation = StackNavigator({
         navigationOptions: {
             header: null,
         }
+    },
+    PersonalSettings:{
+        screen: PersonalSettings,
+        navigationOptions: {
+            headerTitle: '个人设置',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }        
     },
     AfterloginTab: {
         screen: HomeTab,
