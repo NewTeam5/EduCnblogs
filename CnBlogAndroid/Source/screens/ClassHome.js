@@ -211,7 +211,7 @@ export default class ClassHome extends Component{
 	                        width: 0.1*screenHeight,
 	                        height: 0.1*screenHeight
 	                    }}
-	                    source={require('../images/calendar.png')}
+	                    source={require('../images/calender.png')}
 	                />
                 </TouchableHighlight>
                 <TouchableHighlight
