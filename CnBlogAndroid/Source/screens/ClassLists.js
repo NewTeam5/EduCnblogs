@@ -81,7 +81,7 @@ export default class ClassLists extends Component{
                         padding: 0.01*screenHeight,
                         backgroundColor:"#0588fe"
                     }}
-                    onPress={this._onPress}//关联函数
+                    onPress={() => this.props.navigation.navigate('ClassCreate')}//关联函数
                 >
                     <Text
                         style= {{
