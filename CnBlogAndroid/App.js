@@ -28,6 +28,9 @@ import UserInformation from './Source/screens/UserInformation'
 import ClassHome from './Source/screens/ClassHome'
 import HomeworkPost from './Source/screens/HomeworkPost'
 import BlogDetail from './Source/screens/BlogDetail'
+import BlogComment from './Source/screens/BlogComment'
+import ClassMember from './Source/screens/ClassMember'
+import MemberBlog from './Source/screens/MemberBlog'
 const { height, width } = Dimensions.get('window');
 class App extends Component {
     render() {
@@ -59,21 +62,14 @@ class Loginer extends Component{
         });
     };
     mylogin = () => {
-        if (this.state.username === 'admin' && this.state.password === '123456') {
-            ToastAndroid.show('登录成功',ToastAndroid.SHORT);
             this.props.loginSuccess();
-        } 
-        else
-        {
-            ToastAndroid.show('登录失败',ToastAndroid.SHORT);
-        }
     };
     render(){
         return(
             <View style = {styles.container}>
                 <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
-                <View style = {{height: 30}}></View>
-                <View style = {styles.inputBox}>
+                <View style = {{height: 40}}></View>
+                {/*<View style = {styles.inputBox}>
                     <Image source = {require('./Source/images/usn.png')} style = {styles.inputimg}/>
                     <TextInput 
                         style = {styles.input}
@@ -93,9 +89,12 @@ class Loginer extends Component{
                         underlineColorAndroid={'transparent'}
                         onChangeText = {this.OnPwdChanged}
                     />
-                </View>
+                </View>*/}
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
                     <Text style={styles.btText}>登 录</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
+                    <Text style={styles.btText}>注 册</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -130,12 +129,12 @@ const styles = StyleSheet.create({
     },
     loginbutton: {
         height: 50,
-        width: 280,
+        width: 250,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
         backgroundColor: 'rgb(51,153,255)',    
-        marginBottom: 8,
+        marginBottom: 20,
     },
     inputimg: {
         width: 30,
@@ -203,12 +202,12 @@ const SimpleNavigation = StackNavigator({
     HomeworkLists: {
         screen: HomeworkLists,
         navigationOptions: {
-            header: null,/*
+            //header: null,
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
-            }*/
+            }
         },
     },
     HomeworkDetail: {
@@ -264,15 +263,49 @@ const SimpleNavigation = StackNavigator({
     HomeworkPost: {
         screen: HomeworkPost,
         navigationOptions: {
-            header: null,
+            headerTitle: '作业发布',
+            headerStyle: {
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
         }
     },
     BlogDetail: {
         screen: BlogDetail,
         navigationOptions: {
-            headerTitle: '博客详情',
+            headerTitle: '博文详情',
             headerStyle: {
                 height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
+    },
+    BlogComment: {
+        screen: BlogComment,
+        navigationOptions:{
+            headerTitle: '评论',
+            headerStyle:{
+                height: 40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
+    },
+    ClassMember: {
+        screen: ClassMember,
+        navigationOptions:{
+            headerTitle: '班级成员',
+            headerStyle: {
+                height:40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
+    },
+    MemberBlog: {
+        screen: MemberBlog,
+        navigationOptions:{
+            headerTitle: '他的博客',
+            headerStyle: {
+                height:40,
                 backgroundColor: 'rgb(51,204,255)',
             }
         }

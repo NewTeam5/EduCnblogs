@@ -16,7 +16,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class App extends Component {
   	constructor(props){
@@ -37,9 +37,9 @@ export default class App extends Component {
             	backgroundColor: 'white'
             }}
         >
-            <HeaderNoBackComponent
+            {/*<HeaderNoBackComponent
               text= "Classes"
-            />        
+            />*/}
             <View style= {{        
                 flexDirection: 'row',  
                 justifyContent:'flex-start',
