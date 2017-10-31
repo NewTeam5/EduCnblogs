@@ -126,7 +126,7 @@ export default class ClassHome extends Component{
                         alignSelf:'flex-start',
                         backgroundColor:"transparent",
                     }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
+                    onPress={()=>this.props.navigation.navigate('ClassMember',{classId:classId})}//关联函数                   
                 >
 	                <Image
 	                    style= {{
