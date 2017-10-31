@@ -73,11 +73,12 @@ export default class PersonalBlog extends Component{
         var PostDate = item1.item.PostDate;
         var ViewCount = item1.item.ViewCount;
         var CommentCount = item1.item.CommentCount;
+        var Id = item1.item.key;
         return(
             <View>
                 <TouchableOpacity 
                     style = {styles.listcontainer} 
-                    onPress = {()=>this.props.navigation.navigate('BlogDetail',{Url:Url})}
+                    onPress = {()=>this.props.navigation.navigate('BlogDetail',{Id:Id, blogApp: 'NewTeam',CommentCount: CommentCount})}
                 >  
                     <Text style = {{
                         fontSize: 18,
@@ -102,7 +103,7 @@ export default class PersonalBlog extends Component{
                             {ViewCount+' 阅读'+'  '+CommentCount+' 评论'}
                         </Text>
                         <Text style = {{fontSize: 10, textAlign: 'right', color: 'black', flex: 1}}>
-                            {'发布于: '+PostDate}
+                            {'发布于: '+PostDate.split('T')[0]+' '+PostDate.split('T')[1]}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -110,7 +111,7 @@ export default class PersonalBlog extends Component{
         )
     };
     _separator = () => {
-        return <View style={{ height: 3, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     render(){
         var data = [];

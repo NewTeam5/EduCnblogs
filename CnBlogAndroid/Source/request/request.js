@@ -39,6 +39,7 @@ function GetInfo(url, token){
         })
         .then((response)=>response.json())
         .then((jsonData)=>{
+ //           ToastAndroid.show("222",ToastAndroid.SHORT);
             resolve(jsonData);
         })
         .catch((error) => {
@@ -56,6 +57,7 @@ export function Get(url){
             return GetInfo(url, token);
         })
         .then((jsonData)=>{
+ //           ToastAndroid.show("111",ToastAndroid.SHORT);
             resolve(jsonData)
         })
         .catch((error) => {
