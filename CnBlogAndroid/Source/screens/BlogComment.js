@@ -23,6 +23,35 @@ const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 // 博客评论页面
 // 接受评论数量 CommentCount 和 博客名 blogApp 以及博文Id作为参数
+// 这里定义一个用于粗略解决返回的评论字符串内包含无法解析的html标签的函数
+function CommemtHandler(data){
+    var s = data.split('');
+    var result = '';
+    var tag = 0;
+    for(var i in s)
+    {
+        if(s[i]=='>')
+        {
+            tag = 0;
+            if(s[i-1]=='/'&&s[i-2]=='r')
+            {
+                result+='\n';
+            }
+            continue;
+        }
+        if(s[i]=='<'||tag==1)
+        {
+            tag = 1;
+            continue;
+        }
+        if(s[i]=='引'||(s[i]=='用'&&s[i-1]=='引'))
+        {
+            continue;
+        }
+        result+=s[i];
+    }
+    return result;
+}
 export default class BlogComment extends Component{
     constructor(props){
         super(props);
@@ -53,7 +82,7 @@ export default class BlogComment extends Component{
                 </View>
                 <View style = {styles.textcontainer}>
                     <Text style = {{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{Author}</Text>
-                    <Text style = {{color: 'black', fontSize: 12}}>{Body}</Text>
+                    <Text style = {{color: 'black', fontSize: 12}}>{CommemtHandler(Body)}</Text>
                     <View style = {{
                         flexDirection: 'row',
                         justifyContent: 'space-around',

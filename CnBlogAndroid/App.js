@@ -3,7 +3,7 @@ import api from './Source/api/api.js';
 import {authData} from './Source/config'
 import * as Service from './Source/request/request.js'
 import React, { Component } from 'react';
-import 
+import {
     Platform,
     StyleSheet,
     Text,
@@ -13,7 +13,8 @@ import
     TouchableOpacity,
     Image,
     TextInput,
-    Dimensions,} from 'react-native';
+    Dimensions,
+} from 'react-native';
 import {
     StackNavigator,
     TabNavigator,
@@ -27,12 +28,11 @@ import UserInformation from './Source/screens/UserInformation'
 import ClassHome from './Source/screens/ClassHome'
 import HomeworkPost from './Source/screens/HomeworkPost'
 import BlogDetail from './Source/screens/BlogDetail'
-import PersonalSettings from './Source/screens/PersonalSettings'
-import ClassCreate from './Source/screens/ClassCreate'
 import BlogComment from './Source/screens/BlogComment'
 import ClassMember from './Source/screens/ClassMember'
 import MemberBlog from './Source/screens/MemberBlog'
-
+import ClassCreate from './Source/screens/ClassCreate'
+import PersonalSettings from './Source/screens/PersonalSettings'
 const { height, width } = Dimensions.get('window');
 class App extends Component {
     render() {
@@ -46,7 +46,7 @@ class App extends Component {
 }
 // 在App中调用的登录界面组件
 class Loginer extends Component{
-    constructor(props)
+    constructor(props){
         super(props);
         this.state = {
             username: '',
@@ -194,7 +194,7 @@ const HomeTab = TabNavigator({
     },
 })
 
-const SimpleNavigation = StackNavigator({    
+const SimpleNavigation = StackNavigator({
     Home: {
         screen: App,
         navigationOptions: {
@@ -264,7 +264,7 @@ const SimpleNavigation = StackNavigator({
                 height: 40,
                 backgroundColor: 'rgb(51,204,255)',
             }
-        }        
+        }
     },
     AfterloginTab: {
         screen: HomeTab,
