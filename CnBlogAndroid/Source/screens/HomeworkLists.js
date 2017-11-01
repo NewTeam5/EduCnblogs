@@ -78,12 +78,11 @@ export default class HomeworkLists extends Component {
                         截止于:{deadline.split('T')[0]+' '+deadline.split('T')[1].substring(0,8)}
                     </Text>
                 </TouchableOpacity>
-                <View
-                    style= {{height:1,backgroundColor:'gray'}}
-                >
-                </View>
             </View>
         )
+    }
+    _separator = () => {
+        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     render() {
         var data = [];
@@ -256,7 +255,7 @@ export default class HomeworkLists extends Component {
         >
             <FlatList
                 data={data}
-              //renderItem={({item}) => <Text style={styles.item}>{item.key}</Text>}
+                ItemSeparatorComponent = {this._separator}
                 renderItem={this._renderItem}
             />
           </View>
@@ -264,8 +263,6 @@ export default class HomeworkLists extends Component {
     );
   }
 }
-
-
 const HomeworkStyles = StyleSheet.create({  
     container: {  
         flexDirection: 'column',  
@@ -275,7 +272,7 @@ const HomeworkStyles = StyleSheet.create({
         alignSelf: 'stretch',          
     },
     titleTextStyle:{
-        fontSize: titleFontSize,  
+        fontSize: titleFontSize-5,  
         color: '#000000',  
         textAlign: 'center',  
         fontWeight: 'bold',

@@ -32,8 +32,7 @@ const btnFontSize= MyAdapter.btnFontSize;
 export default class ClassLists extends Component{
     _onPress(){
 
-    }    
-
+    }
     render(){
     var data= [];   
     for(var i= 1;i<=10;i++)
@@ -81,7 +80,7 @@ export default class ClassLists extends Component{
                         padding: 0.01*screenHeight,
                         backgroundColor:"#0588fe"
                     }}
-                    onPress={this._onPress}//关联函数
+                    onPress={()=>this.props.navigation.navigate('ClassCreate')}//关联函数
                 >
                     <Text
                         style= {{
@@ -247,7 +246,7 @@ export default class ClassLists extends Component{
                                 alignSelf:'flex-start',
                                 backgroundColor:"transparent",
                             }}
-                            onPress={()=>this.props.navigation.navigate('ClassHome')}//关联函数                   
+                            onPress={()=>this.props.navigation.navigate('ClassHome',{classId:238})}//关联函数                
                         >
                             <Text style= {{        
                                 fontSize: btnFontSize,  

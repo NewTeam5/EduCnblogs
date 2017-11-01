@@ -71,27 +71,6 @@ class Loginer extends Component{
             <View style = {styles.container}>
                 <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
                 <View style = {{height: 40}}></View>
-                {/*<View style = {styles.inputBox}>
-                    <Image source = {require('./Source/images/usn.png')} style = {styles.inputimg}/>
-                    <TextInput 
-                        style = {styles.input}
-                        placeholderTextColor={'rgb(204,204,204)'}
-                        placeholder={'username'}
-                        underlineColorAndroid={'transparent'}
-                        onChangeText = {this.OnUsnChanged}
-                    />
-                </View>
-                <View style = {styles.inputBox}>
-                    <Image source = {require('./Source/images/pwd.png')} style = {styles.inputimg}/>
-                    <TextInput 
-                        style = {styles.input}
-                        secureTextEntry={true}
-                        placeholderTextColor={'rgb(204,204,204)'}//提示文本的颜色
-                        placeholder={'password'}//提示文本内容
-                        underlineColorAndroid={'transparent'}
-                        onChangeText = {this.OnPwdChanged}
-                    />
-                </View>*/}
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
                     <Text style={styles.btText}>登 录</Text>
                 </TouchableOpacity>
@@ -193,7 +172,6 @@ const HomeTab = TabNavigator({
         }
     },
 })
-
 const SimpleNavigation = StackNavigator({
     Home: {
         screen: App,
