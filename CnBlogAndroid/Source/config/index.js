@@ -13,3 +13,14 @@ export const authData = {
 export const StorageKey = {
 	USER_TOKEN : "USER_TOKEN"
 }
+
+//这里是一个全局变量，存放的是用户的信息，调用的时候不用写是哪个模块里的，直接用global.user_infomation.**就行
+global.user_information = {
+	userId : '',
+	SpaceUserId : -1,
+	BlogId : -1,
+	DisplayName : '',
+	face : '',
+	Seniority : '',  //园龄
+	BlogApp : ''
+}
