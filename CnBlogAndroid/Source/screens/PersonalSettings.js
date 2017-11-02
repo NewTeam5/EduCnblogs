@@ -24,7 +24,7 @@ const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
 
-export default class PersonalSettings extends Component<{}> {  
+export default class PersonalSettings extends Component {  
   constructor(props){
     	super(props);  		
   		this.state={
