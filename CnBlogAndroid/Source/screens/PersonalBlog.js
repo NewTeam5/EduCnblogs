@@ -37,7 +37,7 @@ export default class PersonalBlog extends Component{
         componentDidMount();
     };
     componentDidMount = ()=>{
-        let blogApp = 'NewTeam';//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
+        let blogApp = 'StonesA';//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
         // 首先获取博客信息
         let url = Config.apiDomain+'api/blogs/'+blogApp;
         Service.Get(url)
@@ -52,12 +52,17 @@ export default class PersonalBlog extends Component{
         .then(()=>{
             // 计算页数
             let {pageSize, postCount} = this.state;
-            let pageCount  = pageSize * (postCount/pageSize) < postCount ? postCount/pageSize + 1 : postCount/pageSize;
+			
+            //let pageCount  = pageSize * (postCount/pageSize) < postCount ? postCount/pageSize + 1 : postCount/pageSize;
+			let pageCount = Math.ceil(postCount/pageSize);
+			//alert(pageCount)
             // 遍历所有页获得博文列表
+			//下面好像还有问题
             for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
             {
                 let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
                 Service.Get(url).then((jsonData)=>{
+					ToastAndroid.show(jsonData,ToastAndroid.SHORT)
                     this.setState({
                         blogs: this.state.blogs.concat(jsonData),
                     })
@@ -65,11 +70,13 @@ export default class PersonalBlog extends Component{
             }
         })
     };
+	
     _renderItem = (item)=>{
         let item1 = item;
         var Title = item1.item.Title;
         var Url = item1.item.Url;
         var Description = item1.item.Description;
+		//var Description = '';
         var PostDate = item1.item.PostDate;
         var ViewCount = item1.item.ViewCount;
         var CommentCount = item1.item.CommentCount;
@@ -91,7 +98,8 @@ export default class PersonalBlog extends Component{
                         {Title}
                     </Text>
                     <Text style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color: 'black'}}>
-                        {Description+'...'}
+             
+						{Description + '...'}
                     </Text>
                     <View style = {{
                         flexDirection: 'row',
@@ -110,8 +118,9 @@ export default class PersonalBlog extends Component{
             </View>
         )
     };
+	
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 3, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     render(){
         var data = [];
