@@ -93,10 +93,10 @@ class Loginer extends Component{
                     />
                 </View>*/}
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText}>登 录</Text>
+                    <Text style={styles.btText} accessibilityLabel = "App_signin">登 录</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText}>注 册</Text>
+                    <Text style={styles.btText} accessibilityLabel = "App_signup">注 册</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -155,26 +155,29 @@ const HomeTab = TabNavigator({
     PersonalBlog: {
         screen: PersonalBlog,
         navigationOptions: {
-            tabBarLabel: '我的博客'
+            tabBarLabel: '我的博客',
+			accessibilityLabel: "App_myBlog"
         }
     },
     ClassLists: {
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
-
+			accessibilityLabel: "App_myClass"
         }
     },
     Notice: {
         screen: Notice,
         navigationOptions: {
-            tabBarLabel: '消息'
+            tabBarLabel: '消息',
+			accessibilityLabel: "App_message"
         }
     },
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
-            tabBarLabel: '我'
+            tabBarLabel: '我',
+			accessibilityLabel: "App_user"
         }
     },
 },{
