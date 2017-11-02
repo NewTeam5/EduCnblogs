@@ -53,19 +53,75 @@ const CODE_URL = [
   '&nonce=xyz'
 ].join('');
 
-
+//首先使用上次的token来获取用户信息，如果失败那么重新登陆
+//用户退出之后一定要清空token
 class App extends Component {
     render() {
-    const {navigate} = this.props.navigation;
-    return (
-        <View style={styles.container}>		
-            <Loginer loginSuccess = {() => navigate('LoginPage')}/>	
-        </View>
-    );
-    }
+		//这里一定要测试一下，如果是刚刚下载的软件，一开始打开是不是会显示登陆界面
+		const {navigate} = this.props.navigation;
+		return (
+			<View style={styles.container}>
+				<Welcome/>
+			</View>
+		);	
+	}
 }
 
 // 在App中调用的登录界面组件
+class Welcome extends Component{	
+	render(){
+		return (
+			<View style = {styles.container}>
+				<Text> 欢迎使用博客园 </Text>
+			</View>
+		)
+	}
+	
+	toPersonalBlog()
+	{
+		this.props.navigation.navigate('PersonalBlog');
+	}
+	
+	toHome()
+	{
+		this.props.navigation.navigate('Loginer');
+	}
+	
+	componentDidMount(){
+		this.timer = setTimeout(
+			()=>{
+				storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
+					if(token === null)
+					{
+						this.toHome();
+					}
+					else{
+						if(token.access_token !== 'undefined')
+						{
+							let url = Config.apiDomain+'api/users/';
+							Service.GetInfo(url,token.access_token)
+								.then((jsonData)=>{
+								if(jsonData !== "rejected")
+								{
+									this.toPersonalBlog();
+								}
+								else
+								{	
+									this.toHome();
+								}
+							})
+						}			
+						else
+						{
+							this.toHome();
+						}
+					}
+				})
+			}
+			,1000)
+	}
+}
+
 class Loginer extends Component{
     constructor(props){
         super(props);
@@ -74,6 +130,7 @@ class Loginer extends Component{
             password: '',
         };
     }
+	
     OnUsnChanged = (newusn)=>{
         this.setState({
             username: newusn,
@@ -85,13 +142,12 @@ class Loginer extends Component{
         });
     };
     mylogin = () => {
-          this.props.loginSuccess();
-	};	
+		this.props.navigation.navigate('LoginPage')
+	};
 	
     render(){	
         return(
             <View style = {styles.container}>
-
 				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
 				<View style = {{height: 40}}></View>
 				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
@@ -173,7 +229,6 @@ class UrlLogin extends Component{
 		)
 	}
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -268,8 +323,14 @@ const HomeTab = TabNavigator({
 })
 
 const SimpleNavigation = StackNavigator({	
-    Home: {
-        screen: App,
+	Welcome: {
+		screen: Welcome,
+        navigationOptions: {
+            header: null,
+        },
+	},
+    Loginer: {
+        screen: Loginer,
         navigationOptions: {
             header: null,
         },
@@ -300,12 +361,6 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: 'rgb(51,204,255)',
             }
         },
-    },
-    PersonalBlog: {
-        screen: PersonalBlog,
-        navigationOptions: {
-            header: null,
-        }
     },
     ClassLists: {
         screen: ClassLists,
@@ -412,18 +467,6 @@ const SimpleNavigation = StackNavigator({
         }
     }
 },{
-    initialRouteName: 'Home',
+	initialRouteName: 'Welcome',
 });
 export default SimpleNavigation;
-
-/**
-	if(response.ok)
-			{
-				response.json();				
-			}
-			else
-			{
-				throw new error("登陆失败2");
-			}
-		}
-		*/
