@@ -37,34 +37,47 @@ export default class PersonalBlog extends Component{
         componentDidMount();
     };
     componentDidMount = ()=>{
-        let blogApp = 'NewTeam';//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
-        // 首先获取博客信息
-        let url = Config.apiDomain+'api/blogs/'+blogApp;
-        Service.Get(url)
-        .then((jsonData)=>{
-            this.setState({
-                blogTitle: jsonData.title,
-                pageSize: jsonData.pageSize,
-                postCount: jsonData.postCount,
-            });
-        })
-        // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
-        .then(()=>{
-            // 计算页数
-            let {pageSize, postCount} = this.state;
-			let pageCount = Math.ceil(postCount/pageSize);
+		let user_url = Config.apiDomain + api.user.info;
+		Service.Get(user_url)
+		.then((jsonData)=>{
+			global.user_information = {
+				userId : jsonData.UserId,
+				SpaceUserId : jsonData.SpaceUserId,
+				BlogId : jsonData.BlogId,
+				DisplayName : jsonData.DisplayName,
+				face : jsonData.Face,
+				Seniority : jsonData.Seniority,  //园龄
+				BlogApp : jsonData.BlogApp
+			}			
+			let blogApp = global.user_information.BlogApp;//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
+			// 首先获取博客信息
+			let url = Config.apiDomain+'api/blogs/'+blogApp;
+			Service.Get(url)
+			.then((jsonData)=>{
+				this.setState({
+					blogTitle: jsonData.title,
+					pageSize: jsonData.pageSize,
+					postCount: jsonData.postCount,
+				});
+			})
+			// 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
+			.then(()=>{
+				// 计算页数
+				let {pageSize, postCount} = this.state;
+				let pageCount = Math.ceil(postCount/pageSize);
 
-			//下面好像还有问题
-            for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
-            {
-                let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
-                Service.Get(url).then((jsonData)=>{
-                    this.setState({
-                        blogs: this.state.blogs.concat(jsonData),
-                    })
-                })
-            }
-        })
+				//下面好像还有问题
+				for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
+				{
+					let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
+					Service.Get(url).then((jsonData)=>{
+						this.setState({
+							blogs: this.state.blogs.concat(jsonData),
+						})
+					})
+				}
+			})
+		})
     };
 	
     _renderItem = (item)=>{
