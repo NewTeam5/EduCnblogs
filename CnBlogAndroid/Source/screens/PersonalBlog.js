@@ -37,7 +37,7 @@ export default class PersonalBlog extends Component{
         componentDidMount();
     };
     componentDidMount = ()=>{
-        let blogApp = 'StonesA';//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
+        let blogApp = 'NewTeam';//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
         // 首先获取博客信息
         let url = Config.apiDomain+'api/blogs/'+blogApp;
         Service.Get(url)
@@ -52,18 +52,13 @@ export default class PersonalBlog extends Component{
         .then(()=>{
             // 计算页数
             let {pageSize, postCount} = this.state;
-
-			
-            //let pageCount  = pageSize * (postCount/pageSize) < postCount ? postCount/pageSize + 1 : postCount/pageSize;
 			let pageCount = Math.ceil(postCount/pageSize);
-			//alert(pageCount)
-            // 遍历所有页获得博文列表
+
 			//下面好像还有问题
             for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
             {
                 let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
                 Service.Get(url).then((jsonData)=>{
-					ToastAndroid.show(jsonData,ToastAndroid.SHORT)
                     this.setState({
                         blogs: this.state.blogs.concat(jsonData),
                     })
