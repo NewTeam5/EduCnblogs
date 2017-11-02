@@ -41,7 +41,7 @@ import ClassMember from './Source/screens/ClassMember'
 import MemberBlog from './Source/screens/MemberBlog'
 import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
-
+import CommentAdd from './Source/screens/CommentAdd'
 const { height, width } = Dimensions.get('window');
 const CODE_URL = [
   'https://oauth.cnblogs.com/connect/authorize',
@@ -460,6 +460,16 @@ const SimpleNavigation = StackNavigator({
         screen: MemberBlog,
         navigationOptions:{
             headerTitle: '他的博客',
+            headerStyle: {
+                height:40,
+                backgroundColor: 'rgb(51,204,255)',
+            }
+        }
+    },
+    CommentAdd: {
+        screen: CommentAdd,
+        navigationOptions:{
+            headerTitle: '添加评论',
             headerStyle: {
                 height:40,
                 backgroundColor: 'rgb(51,204,255)',
