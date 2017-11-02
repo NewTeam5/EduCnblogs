@@ -266,12 +266,8 @@ const HomeTab = TabNavigator({
         }
     },
 })
-<<<<<<< HEAD
 
 const SimpleNavigation = StackNavigator({	
-=======
-const SimpleNavigation = StackNavigator({
->>>>>>> upstream/dev-code
     Home: {
         screen: App,
         navigationOptions: {
