@@ -52,7 +52,7 @@ export default class PersonalBlog extends Component{
         .then(()=>{
             // 计算页数
             let {pageSize, postCount} = this.state;
-            let pageCount  = pageSize * (postCount/pageSize) < postCount ? postCount/pageSize + 1 : postCount/pageSize;
+            let pageCount  = Math.ceil(postCount/pageSize);
             // 遍历所有页获得博文列表
             for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
             {
