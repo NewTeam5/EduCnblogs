@@ -1,8 +1,13 @@
+import {url} from 'url'
 import Config from './Source/config';
 import api from './Source/api/api.js';
 import {authData} from './Source/config'
+import {StorageKey} from './Source/config'
 import * as Service from './Source/request/request.js'
-import React, { Component } from 'react';
+import * as storage from './Source/Storage/storage.js'
+
+import React, { Component,} from 'react';
+
 import {
     Platform,
     StyleSheet,
@@ -14,11 +19,14 @@ import {
     Image,
     TextInput,
     Dimensions,
+	WebView,
+	AsyncStorage,
 } from 'react-native';
 import {
     StackNavigator,
     TabNavigator,
 } from 'react-navigation';
+
 import HomeworkDetail from './Source/screens/HomeworkDetail'
 import HomeworkLists from './Source/screens/HomeworkLists'
 import PersonalBlog from './Source/screens/PersonalBlog'
@@ -33,17 +41,30 @@ import ClassMember from './Source/screens/ClassMember'
 import MemberBlog from './Source/screens/MemberBlog'
 import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
+
 const { height, width } = Dimensions.get('window');
+const CODE_URL = [
+  'https://oauth.cnblogs.com/connect/authorize',
+  '?client_id=' + authData.clientId,
+  '&scope=openid profile CnBlogsApi',
+  '&response_type=code id_token',
+  '&redirect_uri=' + Config.CallBack,
+  '&state=abc',
+  '&nonce=xyz'
+].join('');
+
+
 class App extends Component {
     render() {
     const {navigate} = this.props.navigation;
     return (
         <View style={styles.container}>		
-            <Loginer loginSuccess = {() => navigate('AfterloginTab')}/>
+            <Loginer loginSuccess = {() => navigate('LoginPage')}/>	
         </View>
     );
     }
 }
+
 // 在App中调用的登录界面组件
 class Loginer extends Component{
     constructor(props){
@@ -64,14 +85,17 @@ class Loginer extends Component{
         });
     };
     mylogin = () => {
-            this.props.loginSuccess();
-    };
-    render(){
+          this.props.loginSuccess();
+	};	
+	
+    render(){	
         return(
             <View style = {styles.container}>
-                <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
-                <View style = {{height: 40}}></View>
-                <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
+
+				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
+				<View style = {{height: 40}}></View>
+				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
+				
                     <Text style={styles.btText}>登 录</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
@@ -81,6 +105,76 @@ class Loginer extends Component{
         );
     }
 }
+
+class UrlLogin extends Component{
+	constructor(props){
+        super(props);
+        this.state = {
+			code : '',
+        };
+    }
+	
+	toPerson()
+	{
+		this.props.navigation.navigate('PersonalBlog')
+	}
+	
+	getTokenFromApi(Code)
+	{		  
+		fetch(Config.AccessToken,{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack
+			})
+			.then((response)=>response.json())      //还没有对返回状态进行判断，所以还不完整
+			.then((responseJson)=>{
+				//let data = {access_token : responseJson.access_token};
+				storage.setItem(StorageKey.USER_TOKEN,responseJson);
+				
+				this.toPerson();
+			})
+			.catch((error)=>{
+				throw error;
+		})
+	}
+	
+	
+	
+	render()
+	{
+		return (
+			<View style={styles.container}>
+				<WebView	
+					onNavigationStateChange = {(event)=>{
+					var first_sta = event.url.indexOf('#');
+					if(event.url.substring(0,first_sta) === Config.CallBack)
+					{
+						var sta = event.url.indexOf('=');
+						var end = event.url.indexOf('&');
+						this.setState({
+							code : event.url.substring(sta+1,end)
+						})
+						if(this.state.code != '')
+						{
+							this.getTokenFromApi(this.state.code);
+						}
+					}
+				}}
+				source={{uri: CODE_URL}}	
+				style={{height: height-40, width: width}}
+				startInLoadingState={true}
+				domStorageEnabled={true}
+				javaScriptEnabled={true}	
+				/>
+			
+			</View>
+		)
+	}
+}
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -130,6 +224,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
     }
 });
+
 const HomeTab = TabNavigator({
     PersonalBlog: {
         screen: PersonalBlog,
@@ -141,7 +236,6 @@ const HomeTab = TabNavigator({
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
-
         }
     },
     Notice: {
@@ -172,13 +266,20 @@ const HomeTab = TabNavigator({
         }
     },
 })
-const SimpleNavigation = StackNavigator({
+
+const SimpleNavigation = StackNavigator({	
     Home: {
         screen: App,
         navigationOptions: {
             header: null,
         },
     },
+	LoginPage: {
+		screen: UrlLogin,
+		navigationOptions: {
+			header: null,
+		},
+	},
     HomeworkLists: {
         screen: HomeworkLists,
         navigationOptions: {
@@ -314,3 +415,15 @@ const SimpleNavigation = StackNavigator({
     initialRouteName: 'Home',
 });
 export default SimpleNavigation;
+
+/**
+	if(response.ok)
+			{
+				response.json();				
+			}
+			else
+			{
+				throw new error("登陆失败2");
+			}
+		}
+		*/
