@@ -57,52 +57,6 @@ export default class UserInformation extends Component{
             </View>
             <View style= {{        
                 flexDirection: 'row',  
-                justifyContent:'center',
-                alignItems: 'center',  
-                marginTop:0.04*screenHeight,
-            }}          
-            >
-                <Text style= {{      
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',  
-                    marginRight: 0.07*screenWidth,
-                }}
-                >
-                    Personal Blog
-                </Text>                 
-                <Text style= {{      
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',  
-                    marginRight: 0.07*screenWidth,
-                }}
-                >
-                    My Classes
-                </Text>                 
-                <TouchableHighlight
-                    underlayColor="#00bfff"
-                    activeOpacity={0.5}
-                    style= {{
-                        borderRadius: 0.01*screenHeight,
-                        padding: 0.01*screenHeight,                     
-                        alignSelf:'flex-start',
-                        backgroundColor:"#00bfff",
-                    }}
-                    onPress={() => this.props.navigation.navigate('ClassCreate')}//关联函数
-                >
-                <Text style= {{      
-                    fontSize: btnFontSize,  
-                    color: 'white',  
-                    textAlign: 'center',                    
-                }}
-                >
-                    Create Class
-                </Text>                 
-                </TouchableHighlight>
-            </View>
-            <View style= {{        
-                flexDirection: 'row',  
                 justifyContent:'space-between',
                 alignItems: 'center',  
                 marginTop:0.05*screenHeight,
