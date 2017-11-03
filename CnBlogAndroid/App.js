@@ -91,43 +91,15 @@ class Loginer extends Component{
     render(){	
         return(
             <View style = {styles.container}>
-<<<<<<< HEAD
-                <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
-                <View style = {{height: 40}}></View>
-                {/*<View style = {styles.inputBox}>
-                    <Image source = {require('./Source/images/usn.png')} style = {styles.inputimg}/>
-                    <TextInput 
-                        style = {styles.input}
-                        placeholderTextColor={'rgb(204,204,204)'}
-                        placeholder={'username'}
-                        underlineColorAndroid={'transparent'}
-                        onChangeText = {this.OnUsnChanged}
-                    />
-                </View>
-                <View style = {styles.inputBox}>
-                    <Image source = {require('./Source/images/pwd.png')} style = {styles.inputimg}/>
-                    <TextInput 
-                        style = {styles.input}
-                        secureTextEntry={true}
-                        placeholderTextColor={'rgb(204,204,204)'}//提示文本的颜色
-                        placeholder={'password'}//提示文本内容
-                        underlineColorAndroid={'transparent'}
-                        onChangeText = {this.OnPwdChanged}
-                    />
-                </View>*/}
-                <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText} accessibilityLabel = "App_signin">登 录</Text>
-=======
 
 				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
 				<View style = {{height: 40}}></View>
 				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
 				
                     <Text style={styles.btText}>登 录</Text>
->>>>>>> 6e133782dafa26995ed74131e15edc02f1eddd7b
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText} accessibilityLabel = "App_signup">注 册</Text>
+                    <Text style={styles.btText}>注 册</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -257,32 +229,25 @@ const HomeTab = TabNavigator({
     PersonalBlog: {
         screen: PersonalBlog,
         navigationOptions: {
-            tabBarLabel: '我的博客',
-			accessibilityLabel: "App_myBlog"
+            tabBarLabel: '我的博客'
         }
     },
     ClassLists: {
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
-<<<<<<< HEAD
-			accessibilityLabel: "App_myClass"
-=======
->>>>>>> 6e133782dafa26995ed74131e15edc02f1eddd7b
         }
     },
     Notice: {
         screen: Notice,
         navigationOptions: {
-            tabBarLabel: '消息',
-			accessibilityLabel: "App_message"
+            tabBarLabel: '消息'
         }
     },
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
-            tabBarLabel: '我',
-			accessibilityLabel: "App_user"
+            tabBarLabel: '我'
         }
     },
 },{
