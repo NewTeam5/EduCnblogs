@@ -4,6 +4,7 @@ import {authData,StorageKey} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+//关于cookie包的配置方法，请看https://github.com/joeferraro/react-native-cookies
 import CookieManager from 'react-native-cookies'
 import * as storage from '../Storage/storage.js'
 import {
