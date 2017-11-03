@@ -11,12 +11,14 @@ import {
     Text,
     View,
     Image,
+    ToastAndroid,
     TouchableHighlight,    
     TextInput,
     FlatList,
     TouchableOpacity,
     Dimensions,
     PixelRatio,
+    Alert
 } from 'react-native';
 
 const screenWidth= MyAdapter.screenWidth;
@@ -29,9 +31,25 @@ const btnFontSize= MyAdapter.btnFontSize;
 export default class HomeworkLists extends Component {
     constructor(props){
         super(props);
+        let url = Config.apiDomain + api.user.info;
+        Service.Get(url).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                if (jsonData.membership==2||jsonData.membership==3)
+                    this.setState({
+                        newDisplay: 1
+                    });
+                else {
+                    this.setState({
+                        newDisplay: 0
+                    });
+                }                
+            })                   
+        })                        
         this.state = {
             homeworks: [],
             counts: 0,
+            newDisplay: 0
         }
     }
     //暂定班级ID为111,应该传进来班级ID作为属性
@@ -54,7 +72,26 @@ export default class HomeworkLists extends Component {
         })
     };
     _onPress = ()=>{
-        this.props.navigation.navigate('HomeworkPost');
+        let url = Config.apiDomain + api.user.info;
+        Service.Get(url).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                if (jsonData.membership==2||jsonData.membership==3)
+                    this.props.navigation.navigate('HomeworkPost');
+                else {
+                    Alert.alert(
+                      'Warning',
+                      '学生不能创建作业！',
+                      [
+                        // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                        // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                      ],
+                      { cancelable: false }
+                    )            
+                }                
+            })                   
+        })                
     };
     _renderItem = (item)=>{
         let item1 = item;
@@ -96,6 +133,7 @@ export default class HomeworkLists extends Component {
                 deadline: this.state.homeworks[i].deadline,//作业截止日期
             })
         }
+        //let display= this.state.newDisplay?"New HomeWork":"";
         return (
         <View
             style= {{
@@ -128,6 +166,7 @@ export default class HomeworkLists extends Component {
                 >
                     Homeworks
                 </Text>
+                {this.state.newDisplay?(
                 <TouchableHighlight
                     underlayColor="#0588fe"
                     activeOpacity={0.5}
@@ -150,95 +189,8 @@ export default class HomeworkLists extends Component {
                       New HomeWork
                     </Text>
                 </TouchableHighlight>
-            </View>
-            <View style= {{        
-                flexDirection: 'row',  
-                justifyContent:'flex-end',
-                alignItems: 'center',  
-                height: 0.032*screenHeight,  
-                alignSelf: 'stretch',    
-                marginTop: 0.01*screenHeight,  
-                marginRight: 0.06*screenWidth,
-            }}
-            >
-                <Text style= {{
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',  
-                    marginRight: 0.02*screenWidth, 
-                }}      			
-                >
-                    NoReply
-                </Text>
-                <Text style= {{
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',  
-                    marginRight: 0.02*screenWidth,   
-                }}      			
-                >
-                    Rank
-                </Text>
-                <Text style= {{
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',
-                    marginRight: 0.02*screenWidth,   
-                }}      			
-                >
-                    Essense
-                </Text>
-                <Text style= {{
-                    fontSize: btnFontSize,  
-                    color: '#00bfff',  
-                    textAlign: 'center',  
-                }}      			
-                >
-                  All
-                </Text>      		
-            </View>
-            <View style= {{        
-                flexDirection: 'row',  
-                justifyContent:'flex-end',
-                alignItems: 'center',  
-                height: 0.042*screenHeight,  
-                alignSelf: 'stretch',    
-                marginTop:0.01*screenHeight,
-                marginHorizontal:0.02*screenWidth
-            }}      	
-            >
-            <TextInput
-                style={{
-                    flex:1, 
-                    marginRight:0.02*screenWidth,
-                    height: 0.06*screenHeight, 
-                    borderColor: 'gray', 
-                    borderWidth: 1
-                }}
-                //onChangeText= 关联函数        		
-            />      	
-            <TouchableHighlight
-                underlayColor="white"
-                activeOpacity={0.5}
-                style= {{
-                    borderRadius: 0.01*screenHeight,
-                    padding: 0.01*screenHeight,
-                    backgroundColor:"white",
-                    borderWidth:1
-                }}
-                onPress={this._onPress}//关联函数      				
-            >
-                <Text
-                    style= {{
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                        fontWeight: 'bold',
-                    }}   
-                >
-                    Search
-                </Text>
-            </TouchableHighlight>
+                ):(null)
+                }
             </View>
         <View 
             style= {{        
