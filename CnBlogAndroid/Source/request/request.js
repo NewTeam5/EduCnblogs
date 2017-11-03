@@ -49,7 +49,7 @@ export function GetInfo(url, token){
         })
         .catch((error) => {
             console.error(error);
-            reject();
+            reject("rejected");    //如果失败了，那么就返回一个空字符串
         });
     });
 }
@@ -65,7 +65,7 @@ export function Get(url){
 		})
 		.catch((error) => {
 			console.error(error);
-			reject();
+			reject("rejected");
 		});
 	})
 }

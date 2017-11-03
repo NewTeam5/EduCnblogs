@@ -79,6 +79,7 @@ class Welcome extends Component{
 	
 	toPersonalBlog()
 	{
+		
 		this.props.navigation.navigate('PersonalBlog');
 	}
 	
@@ -188,7 +189,6 @@ class UrlLogin extends Component{
 			.then((responseJson)=>{
 				//let data = {access_token : responseJson.access_token};
 				storage.setItem(StorageKey.USER_TOKEN,responseJson);
-				
 				this.toPerson();
 			})
 			.catch((error)=>{
@@ -218,6 +218,7 @@ class UrlLogin extends Component{
 						}
 					}
 				}}
+				
 				source={{uri: CODE_URL}}	
 				style={{height: height-40, width: width}}
 				startInLoadingState={true}
