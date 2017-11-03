@@ -34,7 +34,7 @@ function GetToken(){
 }*/
 
 //这里修改为返回Promise对象(by ZiJiaW)
-function GetInfo(url, token){
+export function GetInfo(url, token){
     return new Promise((resolve,reject)=>{
         fetch(url,{
             method : 'GET',

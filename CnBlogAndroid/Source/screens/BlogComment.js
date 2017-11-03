@@ -14,6 +14,7 @@ import {
     TextInput,
     Dimensions,
     FlatList,
+    Button,
 } from 'react-native';
 import {
     StackNavigator,
@@ -58,6 +59,8 @@ export default class BlogComment extends Component{
         this.state = {
             comments: [],
         }
+    }
+    static navigationOptions = {
     }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/blogs/'+this.props.navigation.state.params.blogApp
@@ -116,6 +119,14 @@ export default class BlogComment extends Component{
                     renderItem={this._renderItem}
                     data={data}
                 />
+                <TouchableOpacity
+                    style= {styles.button}
+                    onPress={()=>this.props.navigation.navigate('CommentAdd',
+                            {blogApp: this.props.navigation.state.params.blogApp,
+                            Id: this.props.navigation.state.params.Id})}              
+                >
+	                <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>添加/回复评论</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -149,5 +160,13 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',  
         flex: 6,
         backgroundColor: 'white',
+    },
+    button: {
+        height: 0.2*0.5*screenWidth,
+        width: screenWidth,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 0,
+        backgroundColor: 'rgb(51,204,255)',  
     }
 });

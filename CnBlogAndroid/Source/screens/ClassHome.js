@@ -40,7 +40,7 @@ export default class ClassHome extends Component{
             bulletinCount: 0, // 公告数目
         }
     }
-    componentDidMount = ()=>{
+    componentWillMount = ()=>{
         let classId = this.props.navigation.state.params.classId;
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/'+classId;
         Service.Get(url).then((jsonData)=>{
@@ -84,33 +84,6 @@ export default class ClassHome extends Component{
                 marginTop:0.04*screenHeight,
             }}
             >
-	            {/*<Text style= {{      
-	            	alignSelf:'center',
-	                fontSize: btnFontSize,  
-	                color: '#00bfff',  
-	                textAlign: 'center',  
-	            }}
-	            >
-	                School
-	            </Text>       
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                    	marginLeft: 0.07*screenWidth,
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={this._onPress}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.0625*screenHeight,
-	                        height: 0.0625*screenHeight
-	                    }}
-	                    source={require('../images/heart.png')}
-	                />
-                    </TouchableHighlight>*/}
                 <Text style= {{      
 	            	alignSelf:'center',
                     fontSize: titleFontSize+10,
@@ -152,119 +125,6 @@ export default class ClassHome extends Component{
                 >
                     <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>班级成员</Text>
                 </TouchableOpacity>
-                {/*<TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/edit.png')}
-	                />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/save.png')}
-	                />
-                </TouchableHighlight>
-
-            </View>
-            <View style= {{        
-                flexDirection: 'row',  
-                justifyContent:'space-between',
-                alignItems: 'center',  
-                marginTop:0.03*screenHeight,
-                marginHorizontal:0.084*screenWidth,
-            }}      	
-            >
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/message.png')}
-	                />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/calender.png')}
-	                />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/ring.png')}
-	                />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
-                >
-	                <Image
-	                    style= {{
-	                        width: 0.1*screenHeight,
-	                        height: 0.1*screenHeight
-	                    }}
-	                    source={require('../images/setting.png')}
-	                />
-                    </TouchableHighlight>*/}
-
             </View>
 
         </View>
