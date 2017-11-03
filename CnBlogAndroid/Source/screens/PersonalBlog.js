@@ -37,7 +37,8 @@ export default class PersonalBlog extends Component{
         componentDidMount();
     };
     componentDidMount = ()=>{
-		let user_url = Config.apiDomain + api.user.info;
+        // 获取当前登录用户信息，存放于global
+        let user_url = Config.apiDomain + api.user.info;
 		Service.Get(user_url)
 		.then((jsonData)=>{
 			global.user_information = {
@@ -48,44 +49,42 @@ export default class PersonalBlog extends Component{
 				face : jsonData.Face,
 				Seniority : jsonData.Seniority,  //园龄
 				BlogApp : jsonData.BlogApp
-			}			
-			let blogApp = global.user_information.BlogApp;//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
-			// 首先获取博客信息
-			let url = Config.apiDomain+'api/blogs/'+blogApp;
-			Service.Get(url)
-			.then((jsonData)=>{
-				this.setState({
-					blogTitle: jsonData.title,
-					pageSize: jsonData.pageSize,
-					postCount: jsonData.postCount,
-				});
-			})
-			// 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
-			.then(()=>{
-				// 计算页数
-				let {pageSize, postCount} = this.state;
-				let pageCount = Math.ceil(postCount/pageSize);
-
-				//下面好像还有问题
-				for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
-				{
-					let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
-					Service.Get(url).then((jsonData)=>{
-						this.setState({
-							blogs: this.state.blogs.concat(jsonData),
-						})
-					})
-				}
-			})
-		})
+            }
+        }).then(()=>{
+        let blogApp = global.user_information.BlogApp;//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
+        // 首先获取博客信息
+        let url = Config.apiDomain+'api/blogs/'+blogApp;
+        Service.Get(url)
+        .then((jsonData)=>{
+            this.setState({
+                blogTitle: jsonData.title,
+                pageSize: jsonData.pageSize,
+                postCount: jsonData.postCount,
+            });
+        })
+        // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
+        .then(()=>{
+            // 计算页数
+            let {pageSize, postCount} = this.state;
+            let pageCount  = Math.ceil(postCount/pageSize);
+            // 遍历所有页获得博文列表
+            for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
+            {
+                let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
+                Service.Get(url).then((jsonData)=>{
+                    this.setState({
+                        blogs: this.state.blogs.concat(jsonData),
+                    })
+                })
+            }
+        })
+        })
     };
-	
     _renderItem = (item)=>{
         let item1 = item;
         var Title = item1.item.Title;
         var Url = item1.item.Url;
         var Description = item1.item.Description;
-		//var Description = '';
         var PostDate = item1.item.PostDate;
         var ViewCount = item1.item.ViewCount;
         var CommentCount = item1.item.CommentCount;
@@ -94,7 +93,7 @@ export default class PersonalBlog extends Component{
             <View>
                 <TouchableOpacity 
                     style = {styles.listcontainer} 
-                    onPress = {()=>this.props.navigation.navigate('BlogDetail',{Id:Id, blogApp: 'NewTeam',CommentCount: CommentCount})}
+                    onPress = {()=>this.props.navigation.navigate('BlogDetail',{Id:Id, blogApp: global.user_information.BlogApp, CommentCount: CommentCount})}
                 >  
                     <Text style = {{
                         fontSize: 18,
@@ -107,8 +106,7 @@ export default class PersonalBlog extends Component{
                         {Title}
                     </Text>
                     <Text style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color: 'black'}}>
-             
-						{Description + '...'}
+                        {Description+'...'}
                     </Text>
                     <View style = {{
                         flexDirection: 'row',
@@ -127,9 +125,8 @@ export default class PersonalBlog extends Component{
             </View>
         )
     };
-	
     _separator = () => {
-        return <View style={{ height: 3, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     render(){
         var data = [];
