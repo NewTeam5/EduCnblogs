@@ -15,6 +15,7 @@ import {
     Dimensions,
     FlatList,
     Button,
+    Alert
 } from 'react-native';
 import {
     StackNavigator,
@@ -60,8 +61,6 @@ export default class BlogComment extends Component{
             comments: [],
         }
     }
-    static navigationOptions = {
-    }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/blogs/'+this.props.navigation.state.params.blogApp
                 +'/posts/'+this.props.navigation.state.params.Id+'/comments?pageIndex=1&pageSize='
@@ -75,9 +74,22 @@ export default class BlogComment extends Component{
     _separator = () => {
         return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    onDelete = ()=>{
+        Alert.alert(
+            '','确定要删除这段评论吗？',
+            [
+                {text: '确定', onPress: this.Delete},
+                {text: '取消'}
+            ]
+        )
+    }
+    Delete = ()=>{
+        ToastAndroid.show("删除成功",ToastAndroid.SHORT);
+    }
     _renderItem = (item)=>{
         let item1 = item;
         let {key,Body,Author,DateAdded,AuthorUrl,FaceUrl} = item1.item;
+        let del = global.user_information.BlogApp===this.props.navigation.state.params.blogApp?'删除':'';
         return(
             <View style = {styles.listcontainer}>
                 <View style = {{flex:1}}>
@@ -91,6 +103,11 @@ export default class BlogComment extends Component{
                         justifyContent: 'space-around',
                         alignItems: 'flex-start'
                     }}>
+                        <TouchableOpacity onPress={this.onDelete}>
+                        <Text style = {{fontSize: 10, color: 'blue',textAlign:'right',flex:1}}>
+                            {del}
+                        </Text>
+                        </TouchableOpacity>
                         <Text style = {{fontSize: 10, color: 'black',textAlign:'right',flex:1}}>
                             {'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}
                         </Text>

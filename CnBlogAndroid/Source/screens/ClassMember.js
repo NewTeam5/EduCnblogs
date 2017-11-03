@@ -39,18 +39,19 @@ export default class ClassMember extends Component{
     }
     _renderItem = (item)=>{
         let item1 = item;
-        let {blogUrl,displayName,avatarUrl,membership,realName} = item1.item;
+        let {blogUrl,displayName,avatarUrl,membership,realName,blogId} = item1.item;
+        realName = realName===null?'':'('+realName+')';
         return(
             <View>
                 <TouchableOpacity
-                    onPress = {()=>this.props.navigation.navigate('MemberBlog',{blogUrl:blogUrl})}
+                    onPress = {()=>this.props.navigation.navigate('MemberBlog',{blogId:blogId})}
                     style = {styles.listcontainer}
                 >
                     <View style = {{flex:1}}>
                         <Image source = {avatarUrl?{uri:avatarUrl}:require('../images/defaultface.png')} style = {styles.avatarstyle}/>
                     </View>
                     <View style = {styles.textcontainer}>
-                        <Text style = {{fontSize: 20, fontWeight: 'bold', color: 'black',flex:2}}>{displayName+'('+realName+')'}</Text>
+                        <Text style = {{fontSize: 20, fontWeight: 'bold', color: 'black',flex:2}}>{displayName+realName}</Text>
                         <Text style = {{fontSize: 15,flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
                     </View>
                 </TouchableOpacity>
@@ -71,6 +72,7 @@ export default class ClassMember extends Component{
                 avatarUrl: this.state.members[i].avatarUrl,//头像链接
                 membership: this.state.members[i].membership,//1：学生 2：老师 3: 助教
                 realName: this.state.members[i].realName,//真实姓名
+                blogId: this.state.members[i].blogId,
             })
         }
         return(
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     textcontainer: {
         justifyContent:'flex-start',
         alignItems: 'flex-start',  
-        flex: 3,
+        flex: 4,
         backgroundColor: 'white',
     }
 });

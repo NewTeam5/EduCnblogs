@@ -105,7 +105,7 @@ export default class PersonalBlog extends Component{
                     }}>
                         {Title}
                     </Text>
-                    <Text style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color: 'black'}}>
+                    <Text  numberOfLines={3} style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color:'rgb(70,70,70)'}}>
                         {Description+'...'}
                     </Text>
                     <View style = {{
@@ -126,7 +126,13 @@ export default class PersonalBlog extends Component{
         )
     };
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return (
+            <View style={{ height: 7, justifyContent: 'center'}}>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)' ,marginTop:0.25}}/>
+            <View style={{ height: 5, backgroundColor: 'rgb(235,235,235)'}}/>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(180,180,180)',marginBottom:0.25}}/>
+            </View>
+        );
     }
     render(){
         var data = [];
@@ -176,7 +182,7 @@ const styles = StyleSheet.create({
     headertext: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: 'black'
+        color: 'white'
     },
     content: {
         flex: 11,
