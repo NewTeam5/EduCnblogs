@@ -1,9 +1,11 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,StorageKey} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+import CookieManager from 'react-native-cookies'
+import * as storage from '../Storage/storage.js'
 import {
     StyleSheet,
     Text,
@@ -31,6 +33,16 @@ export default class UserInformation extends Component{
   _onPress(){
 
   }
+  
+  _logout(){
+		storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
+			CookieManager.clearAll()
+			.then((res)=>{
+				this.props.navigation.navigate('Loginer')
+			})
+		})
+	}
+	
   render() {
     return (
         <View
@@ -262,20 +274,11 @@ export default class UserInformation extends Component{
                 </View>
             </View>
             <View style = {styles.container}>                
-                <Button title = '退出登录' onPress = {()=>this.props.navigation.navigate('Home')}/>
+				<Button title = '退出登录' onPress = {this._logout.bind(this)}/>
             </View>            
         </View>
     );
   }
-
-    // render(){
-    //     return(
-    //         <View style = {styles.container}>
-    //             <Text>假装是用户信息</Text>
-    //             <Button title = '退出登录' onPress = {()=>this.props.navigation.navigate('Home')}/>
-    //         </View>
-    //     )
-    // }
 }
 
 const styles = StyleSheet.create({
