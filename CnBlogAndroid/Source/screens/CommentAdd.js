@@ -28,15 +28,27 @@ export default class CommentAdd extends Component{
         this.state = {
             text : '',
         }
-    }
+    }  
     onSubmit = ()=>{
         let blogApp = this.props.navigation.state.params.blogApp;
         let Id = this.props.navigation.state.params.Id;
+		let add_url = Config.apiDomain + "api/blogs/" + blogApp + "/posts/" + Id + "/comments"
+		let content = this.state.text;
+		Service.UserAction(add_url,content,"POST").then((result)=>{
+			if(result.status === 200){
+				ToastAndroid.show("添加成功",ToastAndroid.LONG);
+				this.refs.commentRef.clear();
+			}
+			else{
+				ToastAndroid.show("添加失败，请稍后重试",ToastAndroid.LONG);
+			}
+		})
     }
+	
     render(){
         return(
             <View style = {styles.container}>
-                <TextInput
+                <TextInput ref="commentRef"
                     style={styles.textcontainer}
                     onChangeText={(text) => this.setState({text: text})}
                     value={this.state.text}
@@ -48,7 +60,7 @@ export default class CommentAdd extends Component{
                 </View>
                 <TouchableOpacity
                     style= {styles.button}
-                    onPress = {()=>{}}
+                    onPress = {this.onSubmit.bind(this)}
                 >
                     <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>提交</Text>
                 </TouchableOpacity>
