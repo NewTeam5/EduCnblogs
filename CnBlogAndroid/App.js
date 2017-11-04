@@ -38,6 +38,7 @@ import HomeworkPost from './Source/screens/HomeworkPost'
 import BlogDetail from './Source/screens/BlogDetail'
 import BlogComment from './Source/screens/BlogComment'
 import ClassMember from './Source/screens/ClassMember'
+import ClassMemberAdd from './Source/screens/ClassMemberAdd'
 import MemberBlog from './Source/screens/MemberBlog'
 import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
@@ -450,6 +451,16 @@ const SimpleNavigation = StackNavigator({
             },
             headerTitleStyle: {
                // color: 'white'
+            }
+        }
+    },
+    ClassMemberAdd: {
+        screen: ClassMemberAdd,
+        navigationOptions:{
+            headerTitle: '添加班级成员',
+            headerStyle: {
+                height:40,
+                backgroundColor: 'rgb(51,204,255)',
             }
         }
     },
