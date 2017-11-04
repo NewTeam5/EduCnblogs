@@ -37,7 +37,7 @@ export default class ClassLists extends Component{
         }
     }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
@@ -45,7 +45,7 @@ export default class ClassLists extends Component{
             this.setState({
                 classes: jsonData,
             })
-        }).then(()=>{
+        }).then(()=>
             for(var i in this.state.classes)
             {
                 let url2 = 'https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[i].schoolClassId;
@@ -55,8 +55,7 @@ export default class ClassLists extends Component{
                     })
                 })
             }
-        })
-    }
+        })    }
     render(){
     var data= [];   
     for(var i in this.state.classes)
@@ -76,9 +75,21 @@ export default class ClassLists extends Component{
                 backgroundColor: 'white'
             }}
         >
+
+        <View style= {{        
+            flexDirection: 'row',  
+            justifyContent:'flex-start',
+            alignItems: 'center',  
+            backgroundColor: '#1C86EE',
+            height: screenHeight/12,
+            paddingLeft: 0.05*screenWidth,
+        }}>
+            <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
+        </View>
+
             <View 
                 style= {{        
-                    flexDirection: 'row',  
+                    flexDirection: 'row', 
                     justifyContent:'flex-start',
                     alignItems: 'flex-start',  
                     alignSelf: 'stretch',
