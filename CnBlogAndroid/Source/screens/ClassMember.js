@@ -14,6 +14,7 @@ import {
     TextInput,
     Dimensions,
     FlatList,
+    TouchableHighlight,
 } from 'react-native';
 import {
     StackNavigator,
@@ -21,6 +22,10 @@ import {
 } from 'react-navigation';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
+const titleFontSize= MyAdapter.titleFontSize;
+const abstractFontSize= MyAdapter.abstractFontSize;
+const informationFontSize= MyAdapter.informationFontSize;
+const btnFontSize= MyAdapter.btnFontSize;   
 // 传入classId作为参数
 export default class ClassMember extends Component{
     constructor(props){
@@ -61,6 +66,9 @@ export default class ClassMember extends Component{
     _separator = () => {
         return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    _onPress(){
+
+    }    
     render(){
         var data = [];
         for(var i in this.state.members)
@@ -77,6 +85,39 @@ export default class ClassMember extends Component{
         }
         return(
             <View style = {styles.container}>
+	            <View style= {{        
+	                flexDirection: 'row',           
+	                justifyContent:'flex-end',
+	                alignItems: 'center',  
+	                alignSelf: 'stretch',    
+	                marginTop: 0.01*screenHeight,
+	                marginHorizontal:0.01*screenWidth
+	            }}
+	            >
+	                <TouchableHighlight
+	                    underlayColor="#0588fe"
+	                    activeOpacity={0.5}
+	                    style= {{
+	                    	width:0.35*screenWidth,
+	                        alignSelf: 'flex-end',
+	                        borderRadius: 0.01*screenHeight,
+	                        padding: 0.01*screenHeight,
+	                        backgroundColor:"#0588fe"
+	                    }}
+	                    onPress={()=>this.props.navigation.navigate('ClassMemberAdd')}//关联函数
+	                >
+	                    <Text
+	                        style= {{
+	                            fontSize: btnFontSize,  
+	                            color: '#ffffff',  
+	                            textAlign: 'center',  
+	                            fontWeight: 'bold',
+	                        }}   
+	                    >
+	                      添加成员
+	                    </Text>
+	                </TouchableHighlight>            
+	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}
                     renderItem={this._renderItem}

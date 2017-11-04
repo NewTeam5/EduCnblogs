@@ -76,30 +76,6 @@ export default class ClassLists extends Component{
                 backgroundColor: 'white'
             }}
         >
-            <View
-            style= {{
-                flexDirection: 'row',  
-                justifyContent:'space-between',
-                alignItems: 'center',  
-                marginTop: 0.02*screenHeight,
-                marginHorizontal: 0.02*screenWidth,
-                marginBottom: 0.01*screenHeight,
-                alignSelf: 'stretch',
-            }}          
-            >
-                <Text
-                    style= {{  
-                        alignSelf: 'center',
-                        fontSize: titleFontSize,  
-                        color: '#000000',  
-                        textAlign: 'center',  
-                        fontWeight: 'bold',
-                    }}          
-                >
-                    Classes
-                </Text>
-            </View>
-            <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>
             <View 
                 style= {{        
                     flexDirection: 'row',  
