@@ -79,6 +79,7 @@ class Welcome extends Component{
 	
 	toPersonalBlog()
 	{
+		
 		this.props.navigation.navigate('PersonalBlog');
 	}
 	
@@ -123,39 +124,19 @@ class Welcome extends Component{
 }
 
 class Loginer extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-        };
-    }
-	
-    OnUsnChanged = (newusn)=>{
-        this.setState({
-            username: newusn,
-        });
-    };
-    OnPwdChanged = (newpwd)=>{
-        this.setState({
-            password: newpwd,
-        });
-    };
     mylogin = () => {
 		this.props.navigation.navigate('LoginPage')
 	};
-	
     render(){	
         return(
             <View style = {styles.container}>
 				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
 				<View style = {{height: 40}}></View>
+				<Text> </Text>
+				<Text> </Text>
+				<Text> </Text>
 				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-				
-                    <Text style={styles.btText}>登 录</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText}>注 册</Text>
+                    <Text style={styles.btText}>登   录</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -188,16 +169,12 @@ class UrlLogin extends Component{
 			.then((responseJson)=>{
 				//let data = {access_token : responseJson.access_token};
 				storage.setItem(StorageKey.USER_TOKEN,responseJson);
-				
 				this.toPerson();
 			})
 			.catch((error)=>{
 				throw error;
 		})
 	}
-	
-	
-	
 	render()
 	{
 		return (
@@ -218,6 +195,7 @@ class UrlLogin extends Component{
 						}
 					}
 				}}
+				
 				source={{uri: CODE_URL}}	
 				style={{height: height-40, width: width}}
 				startInLoadingState={true}
@@ -264,18 +242,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 8,
         backgroundColor: 'rgb(51,153,255)',    
-        marginBottom: 20,
-    },
-    inputimg: {
-        width: 30,
-        height: 30,
+        marginTop: height/10,
     },
     btText: {
         color: '#fff',
+        fontSize: 25,
     },
     image: {
-        height: height/9,
-        width: width/2,
+        height: height/7,
+        width: width/1.5,
         resizeMode: 'stretch',
     }
 });

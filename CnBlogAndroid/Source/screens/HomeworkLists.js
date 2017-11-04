@@ -83,8 +83,6 @@ export default class HomeworkLists extends Component {
                       'Warning',
                       '学生不能创建作业！',
                       [
-                        // {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-                        // {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                         {text: 'OK', onPress: () => console.log('OK Pressed')},
                       ],
                       { cancelable: false }
@@ -108,7 +106,7 @@ export default class HomeworkLists extends Component {
                     <Text style= {HomeworkStyles.titleTextStyle}>
                         {title}
                     </Text>
-                    <Text style= {HomeworkStyles.abstractTextStyle}>
+                    <Text numberOfLines={3} style= {HomeworkStyles.abstractTextStyle}>
                         {description}...
                     </Text>				
                     <Text style= {HomeworkStyles.informationTextStyle}>
@@ -119,7 +117,13 @@ export default class HomeworkLists extends Component {
         )
     }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return (
+            <View style={{ height: 7, justifyContent: 'center'}}>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)' ,marginTop:0.25}}/>
+            <View style={{ height: 5, backgroundColor: 'rgb(235,235,235)'}}/>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(180,180,180)',marginBottom:0.25}}/>
+            </View>
+        );
     }
     render() {
         var data = [];
@@ -142,16 +146,14 @@ export default class HomeworkLists extends Component {
                 backgroundColor: 'white'                
             }}
         >
-            {/*<HeaderNoBackComponent
-              text= "ClassName"
-            />*/}
             <View
             style= {{
                 flexDirection: 'row',  
                 justifyContent:'space-between',
                 alignItems: 'center',  
-                marginTop: 0.02*screenHeight,
+                marginTop: 0.008*screenHeight,
                 marginHorizontal: 0.02*screenWidth,
+                marginBottom: 0.008*screenHeight,
                 alignSelf: 'stretch',          
             }}  		
             >
@@ -192,15 +194,18 @@ export default class HomeworkLists extends Component {
                 ):(null)
                 }
             </View>
+            <View style={{ height: 7, justifyContent: 'center'}}>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)' ,marginTop:0.25}}/>
+            <View style={{ height: 5, backgroundColor: 'rgb(235,235,235)'}}/>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(180,180,180)',marginBottom:0.25}}/>
+            </View>
         <View 
             style= {{        
                 flexDirection: 'row',  
                 justifyContent:'flex-start',
                 alignItems: 'flex-start',  
                 alignSelf: 'stretch',    
-                marginTop: 0.02*screenHeight,
-                marginLeft: 0.02*screenWidth,
-                marginRight: 0.04*screenWidth,
+                marginTop: 0.01*screenHeight,
                 flex:1,
             }}      	
 
@@ -221,7 +226,9 @@ const HomeworkStyles = StyleSheet.create({
         justifyContent:'flex-start',
         alignItems: 'flex-start',  
         flex:1,
-        alignSelf: 'stretch',          
+        alignSelf: 'stretch',
+        marginLeft: 0.02*screenWidth,
+        marginRight: 0.04*screenWidth,
     },
     titleTextStyle:{
         fontSize: titleFontSize-5,  
