@@ -28,7 +28,7 @@ export default class CommentAdd extends Component{
         this.state = {
             text : '',
         }
-    }
+    }  
     onSubmit = ()=>{
         let blogApp = this.props.navigation.state.params.blogApp;
         let Id = this.props.navigation.state.params.Id;
