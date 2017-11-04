@@ -81,7 +81,7 @@ export function UserAction(url,content,type){  //此处的body为修改的内容
 		.catch((error) => {
 			console.error(error);
 			reject("rejected");
-		});
+		});   
 	})
 }
 
