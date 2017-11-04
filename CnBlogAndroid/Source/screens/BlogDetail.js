@@ -57,18 +57,11 @@ export default class BlogDetail extends Component{
         })
     }
     _onPress = ()=>{
-        if(this.props.navigation.state.params.CommentCount===0)
-        {
-            ToastAndroid.show("没有评论哦",ToastAndroid.SHORT);
-        }
-        else
-        {
-            this.props.navigation.navigate('BlogComment',{
-                blogApp: this.props.navigation.state.params.blogApp,
-                CommentCount: this.props.navigation.state.params.CommentCount,
-                Id: this.props.navigation.state.params.Id,
-            });
-        }
+        this.props.navigation.navigate('BlogComment',{
+            blogApp: this.props.navigation.state.params.blogApp,
+            CommentCount: this.props.navigation.state.params.CommentCount+100,
+            Id: this.props.navigation.state.params.Id,
+        });
     }
     render(){
         return(
