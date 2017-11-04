@@ -460,7 +460,7 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '添加班级成员',
             headerStyle: {
                 height:40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
             }
         }
     },

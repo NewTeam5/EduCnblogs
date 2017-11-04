@@ -45,7 +45,7 @@ export default class ClassLists extends Component{
             this.setState({
                 classes: jsonData,
             })
-        }).then(()=>
+        }).then(()=>{
             for(var i in this.state.classes)
             {
                 let url2 = 'https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[i].schoolClassId;
