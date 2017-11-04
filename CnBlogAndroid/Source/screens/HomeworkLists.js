@@ -118,10 +118,10 @@ export default class HomeworkLists extends Component {
     }
     _separator = () => {
         return (
-            <View style={{ height: 7, justifyContent: 'center'}}>
-            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)' ,marginTop:0.25}}/>
-            <View style={{ height: 5, backgroundColor: 'rgb(235,235,235)'}}/>
-            <View style={{ height: 0.75, backgroundColor: 'rgb(180,180,180)',marginBottom:0.25}}/>
+            <View style={{ height: 10.5, justifyContent: 'center'}}>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
+            <View style={{ height: 9, backgroundColor: 'rgb(235,235,235)'}}/>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
             </View>
         );
     }
@@ -155,7 +155,7 @@ export default class HomeworkLists extends Component {
                 marginHorizontal: 0.02*screenWidth,
                 marginBottom: 0.008*screenHeight,
                 alignSelf: 'stretch',          
-            }}  		
+            }}
             >
                 <Text
                     style= {{  
@@ -194,18 +194,13 @@ export default class HomeworkLists extends Component {
                 ):(null)
                 }
             </View>
-            <View style={{ height: 7, justifyContent: 'center'}}>
-            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)' ,marginTop:0.25}}/>
-            <View style={{ height: 5, backgroundColor: 'rgb(235,235,235)'}}/>
-            <View style={{ height: 0.75, backgroundColor: 'rgb(180,180,180)',marginBottom:0.25}}/>
-            </View>
+            <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)'}}/>
         <View 
             style= {{        
                 flexDirection: 'row',  
                 justifyContent:'flex-start',
                 alignItems: 'flex-start',  
-                alignSelf: 'stretch',    
-                marginTop: 0.01*screenHeight,
+                alignSelf: 'stretch',
                 flex:1,
             }}      	
 
@@ -233,18 +228,22 @@ const HomeworkStyles = StyleSheet.create({
     titleTextStyle:{
         fontSize: titleFontSize-5,  
         color: '#000000',  
-        textAlign: 'center',  
+        textAlign: 'center',
+        marginTop: 10,
+        marginBottom: 8,
         fontWeight: 'bold',
     },
     abstractTextStyle:{
-        fontSize: abstractFontSize,  
-        color: '#000000',  
-        textAlign: 'left',          
+        fontSize: abstractFontSize+2,  
+        color:'rgb(70,70,70)',  
+        textAlign: 'left',
+        marginBottom: 8,         
     },
     informationTextStyle:{
         alignSelf: "flex-end",
         fontSize: informationFontSize,  
         color: '#000000',  
-        textAlign: 'center',          
+        textAlign: 'center',
+        marginBottom: 8      
     }
 });  

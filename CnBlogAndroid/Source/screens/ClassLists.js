@@ -37,7 +37,7 @@ export default class ClassLists extends Component{
         }
     }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
@@ -76,30 +76,16 @@ export default class ClassLists extends Component{
                 backgroundColor: 'white'
             }}
         >
-            <View
-            style= {{
-                flexDirection: 'row',  
-                justifyContent:'space-between',
-                alignItems: 'center',  
-                marginTop: 0.02*screenHeight,
-                marginHorizontal: 0.02*screenWidth,
-                marginBottom: 0.01*screenHeight,
-                alignSelf: 'stretch',
-            }}          
-            >
-                <Text
-                    style= {{  
-                        alignSelf: 'center',
-                        fontSize: titleFontSize,  
-                        color: '#000000',  
-                        textAlign: 'center',  
-                        fontWeight: 'bold',
-                    }}          
-                >
-                    Classes
-                </Text>
-            </View>
-            <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>
+        <View style= {{        
+            flexDirection: 'row',  
+            justifyContent:'flex-start',
+            alignItems: 'center',  
+            backgroundColor: '#1C86EE',
+            height: screenHeight/12,
+            paddingLeft: 0.05*screenWidth,
+        }}>
+            <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
+        </View>
             <View 
                 style= {{        
                     flexDirection: 'row',  

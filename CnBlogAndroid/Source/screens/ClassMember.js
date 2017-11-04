@@ -44,7 +44,7 @@ export default class ClassMember extends Component{
         return(
             <View>
                 <TouchableOpacity
-                    onPress = {()=>this.props.navigation.navigate('MemberBlog',{blogId:blogId})}
+                    onPress = {()=>this.props.navigation.navigate('MemberBlog',{blogId:blogId,blogUrl: blogUrl})}
                     style = {styles.listcontainer}
                 >
                     <View style = {{flex:1}}>
@@ -59,7 +59,7 @@ export default class ClassMember extends Component{
         )
     }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)' }}/>;
     }
     render(){
         var data = [];

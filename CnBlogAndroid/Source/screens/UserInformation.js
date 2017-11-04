@@ -31,11 +31,16 @@ const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
 
 export default class UserInformation extends Component{
-  _onPress(){
-
-  }
-  
-  _logout(){
+    constructor(props){
+        super(props);
+        this.state={
+            faceurl:'',
+            DisplayName: '',
+            BlogApp: '',
+            Seniority: ''
+        }
+    }
+    _logout(){
 		storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
 			CookieManager.clearAll()
 			.then((res)=>{
@@ -43,194 +48,102 @@ export default class UserInformation extends Component{
 			})
 		})
 	}
-	
-  render() {
+	componentWillMount=()=>{
+        let user_url = Config.apiDomain + api.user.info;
+		Service.Get(user_url)
+		.then((jsonData)=>{
+			global.user_information = {
+				userId : jsonData.UserId,
+				SpaceUserId : jsonData.SpaceUserId,
+				BlogId : jsonData.BlogId,
+				DisplayName : jsonData.DisplayName,
+				face : jsonData.Face,
+				Seniority : jsonData.Seniority,  //园龄
+				BlogApp : jsonData.BlogApp
+            }
+        }).then(()=>{
+            this.setState({
+                faceurl: global.user_information.face,
+                DisplayName: global.user_information.DisplayName,
+                BlogApp: global.user_information.BlogApp,
+                Seniority: global.user_information.Seniority,
+            })
+        })
+    }
+    render() {
     return (
         <View
             style= {{
                 flexDirection: 'column',
                 flex: 1,
-                backgroundColor: 'white'
             }}
         >
             <View style= {{        
                 flexDirection: 'row',  
-                justifyContent:'center',
+                justifyContent:'flex-start',
                 alignItems: 'center',  
-                marginTop:0.05*screenHeight,
-            }}          
-            >
-                <Image
-                    style= {{
-                        width: 0.3*screenHeight,
-                        height: 0.3*screenHeight
-                    }}
-                    source={{uri: 'https://i.loli.net/2017/10/30/59f7235c222ae.png'}}
-                />
+                marginBottom: 0.03*screenHeight,
+                backgroundColor: '#1C86EE',
+                height: screenHeight/12,
+                paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>个人信息</Text>
             </View>
             <View style= {{        
                 flexDirection: 'row',  
-                justifyContent:'space-between',
-                alignItems: 'center',  
-                marginTop:0.05*screenHeight,
-                marginHorizontal:0.084*screenWidth,
-            }}          
-            >
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={this._onPress}//关联函数                   
-                >
-                    <Image
-                        style= {{
-                            width: 0.1*screenHeight,
-                            height: 0.1*screenHeight
-                        }}
-                        source={require('../images/calendar.png')}
-                    />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={this._onPress}//关联函数                   
-                >
-                    <Image
-                        style= {{
-                            width: 0.1*screenHeight,
-                            height: 0.1*screenHeight
-                        }}
-                        source={require('../images/ring.png')}
-                    />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={()=>this.props.navigation.navigate('PersonalSettings')}//关联函数                   
-                >
-                    <Image
-                        style= {{
-                            width: 0.1*screenHeight,
-                            height: 0.1*screenHeight
-                        }}
-                        source={require('../images/setting.png')}
-                    />
-                </TouchableHighlight>
-                <TouchableHighlight
-                    underlayColor="transparent"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf:'flex-start',
-                        backgroundColor:"transparent",
-                    }}
-                    onPress={this._onPress}//关联函数                   
-                >
-                    <Image
-                        style= {{
-                            width: 0.1*screenHeight,
-                            height: 0.1*screenHeight
-                        }}
-                        source={require('../images/upload.png')}
-                    />
-                </TouchableHighlight>
-            </View>
-            <View style= {{        
-                flexDirection: 'column',  
                 justifyContent:'flex-start',
                 alignItems: 'center',  
-                marginTop:0.05*screenHeight,
-                marginHorizontal:0.084*screenWidth,
-            }}          
+                marginBottom: 0.05*screenHeight,
+                backgroundColor: 'white',
+                height: 0.15*screenHeight,
+                paddingLeft: 0.05*screenWidth,
+            }}
             >
-                <View style= {{        
-                    flexDirection: 'row',  
-                    justifyContent:'space-between',
-                    alignItems: 'center',  
-                }}          
-                >
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                        marginRight: 0.07*screenWidth,
+                <Image
+                    style= {{
+                        width: 0.1*screenHeight,
+                        height: 0.1*screenHeight,
                     }}
-                    >
-                        Personal Information
-                    </Text>                 
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                    }}
-                    >
-                        Personal Information
-                    </Text>                 
-                </View>
-                <View style= {{        
-                    flexDirection: 'row',  
-                    justifyContent:'space-between',
-                    alignItems: 'center',  
-                    marginTop: 0.03*screenHeight
-                }}          
-                >
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                        marginRight: 0.07*screenWidth,
-                    }}
-                    >
-                        Personal Information
-                    </Text>                 
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                    }}
-                    >
-                        Personal Information
-                    </Text>                 
-                </View>
-                <View style= {{        
-                    flexDirection: 'row',  
-                    justifyContent:'space-between',
-                    alignItems: 'center',  
-                    marginTop: 0.03*screenHeight
-                }}          
-                >
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',  
-                        marginRight: 0.07*screenWidth,
-                    }}
-                    >
-                        Personal Information
-                    </Text>                 
-                    <Text style= {{      
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'center',                        
-                    }}
-                    >
-                        Personal Information
-                    </Text>                 
+                    source={{uri: this.state.faceurl?this.state.faceurl:'../images/defaultface.png'}}
+                />
+                <View style = {{justifyContent: 'center',paddingLeft: 0.05*screenWidth,}}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>用户昵称:</Text>
+                <Text style = {{fontSize: 15}}>{this.state.DisplayName}</Text>
                 </View>
             </View>
-            <View style = {styles.container}>                
-				<Button title = '退出登录' onPress = {this._logout.bind(this)}/>
-            </View>            
+            <View style = {{
+                justifyContent:'center',
+                alignItems: 'flex-start',
+                height: 0.1*screenHeight,
+                marginBottom: 0.05*screenHeight,
+                backgroundColor: 'white',
+                paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>博客地址:</Text>
+                <Text style = {{fontSize: 15}}>https://www.cnblogs.com/{this.state.BlogApp}/</Text>
+            </View>
+            <View style = {{
+                justifyContent:'center',
+                alignItems: 'flex-start',
+                height: 0.1*screenHeight,
+                marginBottom: 0.2*screenHeight,
+                backgroundColor: 'white',
+                paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>园龄:</Text>
+                <Text style = {{fontSize: 15}}>{this.state.Seniority}</Text>
+            </View>
+            <TouchableOpacity style = {{
+                justifyContent:'center',
+                alignItems: 'flex-start',
+                height: 0.07*screenHeight,
+                backgroundColor: '#00F5FF',
+                paddingLeft: 0.05*screenWidth,
+            }}
+                onPress = {this._logout.bind(this)}
+            >
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>退出登录</Text>
+            </TouchableOpacity>
         </View>
     );
   }

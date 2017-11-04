@@ -132,9 +132,6 @@ class Loginer extends Component{
             <View style = {styles.container}>
 				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
 				<View style = {{height: 40}}></View>
-				<Text> </Text>
-				<Text> </Text>
-				<Text> </Text>
 				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
                     <Text style={styles.btText}>登   录</Text>
                 </TouchableOpacity>
@@ -165,7 +162,7 @@ class UrlLogin extends Component{
 			},
 			body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack
 			})
-			.then((response)=>response.json())      //还没有对返回状态进行判断，所以还不完整
+			.then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
 			.then((responseJson)=>{
 				//let data = {access_token : responseJson.access_token};
 				storage.setItem(StorageKey.USER_TOKEN,responseJson);
@@ -268,12 +265,6 @@ const HomeTab = TabNavigator({
             tabBarLabel: '我的班级',
         }
     },
-    Notice: {
-        screen: Notice,
-        navigationOptions: {
-            tabBarLabel: '消息'
-        }
-    },
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
@@ -293,7 +284,11 @@ const HomeTab = TabNavigator({
         },
         labelStyle: {
             //fontSize: 14
-        }
+        },
+        tabStyle: {
+            backgroundColor: '#1C86EE',
+            height: 40,
+        },
     },
 })
 
@@ -323,7 +318,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+//                color: 'white'
             }
         },
     },
@@ -333,7 +331,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '作业详情',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+                //color: 'white'
             }
         },
     },
@@ -349,7 +350,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '创建班级',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+                //color: 'white'
             }
         }        
     },
@@ -371,7 +375,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '个人设置',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor:'#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     },
@@ -387,7 +394,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '班级博客',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     },
@@ -397,7 +407,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '作业发布',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     },
@@ -407,8 +420,11 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '博文详情',
             headerStyle: {
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
-            }
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+                //color: 'white'
+            },
         }
     },
     BlogComment: {
@@ -417,7 +433,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '评论',
             headerStyle:{
                 height: 40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     },
@@ -427,7 +446,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '班级成员',
             headerStyle: {
                 height:40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     },
@@ -437,7 +459,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '他的博客',
             headerStyle: {
                 height:40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+              //  color: 'white'
             }
         }
     },
@@ -447,7 +472,10 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '添加评论',
             headerStyle: {
                 height:40,
-                backgroundColor: 'rgb(51,204,255)',
+                backgroundColor:'#1C86EE',
+            },
+            headerTitleStyle: {
+               // color: 'white'
             }
         }
     }
