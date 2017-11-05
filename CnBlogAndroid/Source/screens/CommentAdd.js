@@ -33,16 +33,13 @@ export default class CommentAdd extends Component{
         let blogApp = this.props.navigation.state.params.blogApp;
         let Id = this.props.navigation.state.params.Id;
 		let add_url = Config.apiDomain + "api/blogs/" + blogApp + "/posts/" + Id + "/comments"
-		let content = this.state.text;
+        let content1 = this.state.text;
+        let content = JSON.stringify({body: content1});
 		Service.UserAction(add_url,content,"POST").then((result)=>{
-			if(result.status === 200){
+			if(result.status == 200){
 				ToastAndroid.show("添加成功",ToastAndroid.SHORT);
                 this.refs.commentRef.clear();
-                this.props.navigation.navigate('BlogComment',{
-                    blogApp: this.props.navigation.state.params.blogApp,
-                    Id: this.props.navigation.state.params.Id,
-                    CommentCount: this.props.navigation.state.params.CommentCount+1,
-                });
+                this.props.navigation.goBack();
 			}
 			else{
 				ToastAndroid.show("添加失败，请稍后重试",ToastAndroid.SHORT);

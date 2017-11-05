@@ -43,13 +43,20 @@ export function GetInfo(url, token){
                 'Authorization': 'Bearer' + ' ' + token,
             },
         })
-        .then((response)=>response.json())
+        .then((response)=>{
+            if(response.status!=200)
+            {
+                resolve("rejected");
+            }
+            else
+                return response.json();
+        })
         .then((jsonData)=>{
             resolve(jsonData);
         })
         .catch((error) => {
             console.error(error);
-            reject("rejected");    //如果失败了，那么就返回一个空字符串
+            reject("rejected");   //如果失败了，那么就返回rejected
         });
     });
 }
@@ -71,21 +78,21 @@ export function Get(url){
 }
 
 export function UserAction(url,content,type){  //此处的body为修改的内容
-	return new Promise((resolve,reject)=>{	
+	return new Promise((resolve,reject)=>{
 		storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
 			return PostInfo(url,token.access_token,content,type);
 		})
-		.then((jsonData)=>{
-			resolve(jsonData)
+		.then((response)=>{
+			resolve(response);
 		})
 		.catch((error) => {
-			console.error(error);
+		    console.error(error);
 			reject("rejected");
 		});   
 	})
 }
-
 //这个函数是涉及到操作的request
+//传入的内容要是json化的
 function PostInfo(url,token,content,type){        
 	return new Promise((resolve,reject)=>{
         fetch(url,{
@@ -94,9 +101,7 @@ function PostInfo(url,token,content,type){
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Authorization': 'Bearer' + ' ' + token,
             },
-			body : JSON.stringify({
-				body: content,
-			})
+			body : content
         })
         .then((response)=>{
             resolve(response);
