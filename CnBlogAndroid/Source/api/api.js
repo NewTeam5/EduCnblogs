@@ -23,6 +23,9 @@ export default {
         unSubmitList : "api/edu/answer/uncommitted",    //未提交作业列表（班号 && 作业号）
         bulletinInfo : "api/edu/bulletin",           //根据公告id获取公告信息
         currentBulletin : "api/edu/bulletin/current",   //获取当前班级公告
-        //投票未添加
-    }
+        //投票未添加		
+    },
+	classAction : {
+		addMemberByName : "api/edu/member/register/displayName",
+	}
 }
