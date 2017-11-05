@@ -31,6 +31,11 @@ const btnFontSize= MyAdapter.btnFontSize;
 export default class HomeworkLists extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            homeworks: [],
+            counts: 0,
+            newDisplay: 0
+        }        
         let url = Config.apiDomain + api.user.info;
         Service.Get(url).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
@@ -46,11 +51,6 @@ export default class HomeworkLists extends Component {
                 }                
             })                   
         })                        
-        this.state = {
-            homeworks: [],
-            counts: 0,
-            newDisplay: 0
-        }
     }
     //暂定班级ID为111,应该传进来班级ID作为属性
     componentDidMount = ()=>{
