@@ -31,8 +31,24 @@ export default class ClassMember extends Component{
     constructor(props){
         super(props);
         this.state = {
-            members: []
+            members: [],
+            addDisplay:0
         }
+        let url = Config.apiDomain + api.user.info;
+        Service.Get(url).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                if (jsonData.membership==2||jsonData.membership==3)
+                    this.setState({
+                        addDisplay: 1
+                    });
+                else {
+                    this.setState({
+                        addDisplay: 0
+                    });
+                }                
+            })                   
+        })                                
     }
     componentDidMount = ()=>{
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
@@ -94,7 +110,7 @@ export default class ClassMember extends Component{
 	                marginHorizontal:0.01*screenWidth
 	            }}
 	            >
-	                <TouchableHighlight
+	                {this.state.addDisplay?(<TouchableHighlight
 	                    underlayColor="#0588fe"
 	                    activeOpacity={0.5}
 	                    style= {{
@@ -116,7 +132,8 @@ export default class ClassMember extends Component{
 	                    >
 	                      添加成员
 	                    </Text>
-	                </TouchableHighlight>            
+	                </TouchableHighlight>):(null)       
+	                }     
 	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}
