@@ -167,11 +167,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     button: {
-        height: 0.2*0.5*screenWidth,
+        height: screenHeight/12,
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 0,
-        backgroundColor: 'rgb(51,204,255)',  
+        backgroundColor: '#1C86EE',  
     }
 });

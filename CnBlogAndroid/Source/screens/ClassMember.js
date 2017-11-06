@@ -42,7 +42,7 @@ export default class ClassMember extends Component{
                 this.setState({
                     membership: jsonData.membership,
                 })
-            })       
+            })
         })
     }
     componentDidMount = ()=>{

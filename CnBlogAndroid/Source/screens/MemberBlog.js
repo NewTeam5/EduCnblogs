@@ -102,7 +102,6 @@ export default class MemberBlog extends Component{
         let blogApp = arr[3];
         return(
             <View>
-                <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
                 <TouchableOpacity 
                     style = {styles.listcontainer}
                     onPress = {()=>{
