@@ -75,7 +75,7 @@ export default class BlogComment extends Component{
         this.componentDidMount();
     }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     _renderItem = (item)=>{
         let item1 = item;

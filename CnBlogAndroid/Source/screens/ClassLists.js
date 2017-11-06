@@ -39,6 +39,13 @@ export default class ClassLists extends Component{
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    UpdateData = ()=>{
+        this.setState({
+            classed:[],
+            imgs:[],
+        })
+        this.componentDidMount();
+    }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData)=>{
@@ -116,6 +123,8 @@ export default class ClassLists extends Component{
 
             >
                 <FlatList
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
                     data={data}
                     ItemSeparatorComponent={this._separator}
                     renderItem={

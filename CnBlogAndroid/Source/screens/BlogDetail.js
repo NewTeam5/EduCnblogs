@@ -31,15 +31,6 @@ const head = '<!DOCTYPE html><head>'+
 '<script src="//common.cnblogs.com/script/jquery.js" type="text/javascript"></script>'+
 '<script src="/bundles/blog-common.js?v=hm0KZwWzsEv1qy3Vf9Vq9zW3uMF7kiGWJjjCrkS4nJY1" type="text/javascript"></script>'+
 '</head>';
-function inject(){ 
-    var objs = document.getElementsByTagName('img');
-    for(var i=0;i<objs.length;i++)
-    { 
-        var img = objs[i];
-        img.style.width = 200;
-        img.style.height= 200;
-    }
-}
 // 传入博客Id和blogApp和CommentCount作为参数
 export default class BlogDetail extends Component{
     constructor(props){
