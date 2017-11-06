@@ -137,7 +137,7 @@ export default class UserInformation extends Component{
                 justifyContent:'center',
                 alignItems: 'flex-start',
                 height: 0.07*screenHeight,
-                backgroundColor: '#00F5FF',
+                backgroundColor: 'rgb(204,255,255)',
                 paddingLeft: 0.05*screenWidth,
             }}
                 onPress = {this._logout.bind(this)}

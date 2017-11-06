@@ -20,12 +20,13 @@ import {
     Image,
     TextInput,
     Dimensions,
-	WebView,
-	AsyncStorage,
+    WebView,
+    AsyncStorage,
 } from 'react-native';
 import {
     StackNavigator,
     TabNavigator,
+    NavigationActions
 } from 'react-navigation';
 
 import HomeworkDetail from './Source/screens/HomeworkDetail'
@@ -59,87 +60,96 @@ const CODE_URL = [
 //用户退出之后一定要清空token
 class App extends Component {
     render() {
-		//这里一定要测试一下，如果是刚刚下载的软件，一开始打开是不是会显示登陆界面
-		const {navigate} = this.props.navigation;
-		return (
-			<View style={styles.container}>
-				<Welcome/>
-			</View>
-		);	
-	}
+        //这里一定要测试一下，如果是刚刚下载的软件，一开始打开是不是会显示登陆界面
+        const {navigate} = this.props.navigation;
+        return (
+            <View style={styles.container}>
+                <Welcome/>
+            </View>
+        );	
+    }
 }
 
 // 在App中调用的登录界面组件
 class Welcome extends Component{	
-	render(){
-		return (
-			<View style = {styles.container}>
-				<Text> 欢迎使用博客园 </Text>
-			</View>
-		)
-	}
-	
-	toPersonalBlog()
-	{
-		
-		this.props.navigation.navigate('PersonalBlog');
-	}
-	
-	toHome()
-	{
-		this.props.navigation.navigate('Loginer');
-	}
-	
-	componentDidMount(){
-		this.timer = setTimeout(
-			()=>{
-				storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
-					if(token === null)
-					{
-						this.toHome();
-					}
-					else{
-						if(token.access_token !== 'undefined')
-						{
-							let url = Config.apiDomain+'api/users/';
-							Service.GetInfo(url,token.access_token)
-								.then((jsonData)=>{
-								if(jsonData !== "rejected")
-								{
-									this.toPersonalBlog();
-								}
-								else
-								{
-									storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
-										CookieManager.clearAll()
-										.then((res)=>{
-											this.props.navigation.navigate('Loginer')
-										})
-									})
-								}
-							})
-						}
-						else
-						{
-							this.toHome();
-						}
-					}
-				})
-			}
-			,1000)
-	}
+    render(){
+        return (
+            <View style = {styles.container}>
+                <Text> 欢迎使用博客园 </Text>
+            </View>
+        )
+    }
+    
+    toPersonalBlog()
+    {
+        this.reset();
+        this.props.navigation.navigate('PersonalBlog');
+    }
+    
+    toHome()
+    {
+        this.props.navigation.navigate('Loginer');
+    }
+    reset = ()=>{
+        // 重置路由：使得无法返回登录界面
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'AfterloginTab'}),
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+    }
+    componentDidMount(){
+        this.timer = setTimeout(
+            ()=>{
+                storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
+                    if(token === null)
+                    {
+                        this.toHome();
+                    }
+                    else{
+                        if(token.access_token !== 'undefined')
+                        {
+                            let url = Config.apiDomain+'api/users/';
+                            Service.GetInfo(url,token.access_token)
+                                .then((jsonData)=>{
+                                if(jsonData !== "rejected")
+                                {
+                                    this.toPersonalBlog();
+                                }
+                                else
+                                {
+                                    storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
+                                        CookieManager.clearAll()
+                                        .then((res)=>{
+                                            this.props.navigation.navigate('Loginer')
+                                        })
+                                    })
+                                }
+                            })
+                        }
+                        else
+                        {
+                            this.toHome();
+                        }
+                    }
+                })
+            }
+            ,1000)
+    }
 }
 
 class Loginer extends Component{
     mylogin = () => {
-		this.props.navigation.navigate('LoginPage')
-	};
+        this.props.navigation.navigate('LoginPage')
+    };
     render(){	
         return(
             <View style = {styles.container}>
-				<Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
-				<View style = {{height: 40}}></View>
-				<TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
+                <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
+                <View style = {{height: 40}}></View>
+                <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
                     <Text style={styles.btText}>登   录</Text>
                 </TouchableOpacity>
             </View>
@@ -148,68 +158,75 @@ class Loginer extends Component{
 }
 
 class UrlLogin extends Component{
-	constructor(props){
+    constructor(props){
         super(props);
         this.state = {
-			code : '',
+            code : '',
         };
     }
-	
-	toPerson()
-	{
-		this.props.navigation.navigate('PersonalBlog')
-	}
-	
-	getTokenFromApi(Code)
-	{		  
-		fetch(Config.AccessToken,{
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack
-			})
-			.then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
-			.then((responseJson)=>{
-				//let data = {access_token : responseJson.access_token};
-				storage.setItem(StorageKey.USER_TOKEN,responseJson);
-				this.toPerson();
-			})
-			.catch((error)=>{
-				throw error;
-		})
-	}
-	render()
-	{
-		return (
-			<View style={styles.container}>
-				<WebView	
-					onNavigationStateChange = {(event)=>{
-					var first_sta = event.url.indexOf('#');
-					if(event.url.substring(0,first_sta) === Config.CallBack)
-					{
-						var sta = event.url.indexOf('=');
-						var end = event.url.indexOf('&');
-						this.setState({
-							code : event.url.substring(sta+1,end)
-						})
-						if(this.state.code != '')
-						{
-							this.getTokenFromApi(this.state.code);
-						}
-					}
-				}}
-				
-				source={{uri: CODE_URL}}	
-				style={{height: height-40, width: width}}
-				startInLoadingState={true}
-				domStorageEnabled={true}
-				javaScriptEnabled={true}	
-				/>
-			
-			</View>
-		)
-	}
+    
+    toPerson()
+    {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'AfterloginTab'}),
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.navigate('PersonalBlog');
+    }
+    
+    getTokenFromApi(Code)
+    {		  
+        fetch(Config.AccessToken,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack
+            })
+            .then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
+            .then((responseJson)=>{
+                //let data = {access_token : responseJson.access_token};
+                storage.setItem(StorageKey.USER_TOKEN,responseJson);
+                this.toPerson();
+            })
+            .catch((error)=>{
+                throw error;
+        })
+    }
+    render()
+    {
+        return (
+            <View style={styles.container}>
+                <WebView	
+                    onNavigationStateChange = {(event)=>{
+                    var first_sta = event.url.indexOf('#');
+                    if(event.url.substring(0,first_sta) === Config.CallBack)
+                    {
+                        var sta = event.url.indexOf('=');
+                        var end = event.url.indexOf('&');
+                        this.setState({
+                            code : event.url.substring(sta+1,end)
+                        })
+                        if(this.state.code != '')
+                        {
+                            this.getTokenFromApi(this.state.code);
+                        }
+                    }
+                }}
+                
+                source={{uri: CODE_URL}}	
+                style={{height: height-40, width: width}}
+                startInLoadingState={true}
+                domStorageEnabled={true}
+                javaScriptEnabled={true}	
+                />
+            
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -294,30 +311,30 @@ const HomeTab = TabNavigator({
         },
         tabStyle: {
             backgroundColor: '#1C86EE',
-            height: 40,
+            height: height/13,
         },
     },
 })
 
 const SimpleNavigation = StackNavigator({	
-	Welcome: {
-		screen: Welcome,
+    Welcome: {
+        screen: Welcome,
         navigationOptions: {
             header: null,
         },
-	},
+    },
     Loginer: {
         screen: Loginer,
         navigationOptions: {
             header: null,
         },
     },
-	LoginPage: {
-		screen: UrlLogin,
-		navigationOptions: {
-			header: null,
-		},
-	},
+    LoginPage: {
+        screen: UrlLogin,
+        navigationOptions: {
+            header: null,
+        },
+    },
     HomeworkLists: {
         screen: HomeworkLists,
         navigationOptions: {
@@ -497,6 +514,6 @@ const SimpleNavigation = StackNavigator({
         }
     }
 },{
-	initialRouteName: 'Welcome',
+    initialRouteName: 'Welcome',
 });
 export default SimpleNavigation;

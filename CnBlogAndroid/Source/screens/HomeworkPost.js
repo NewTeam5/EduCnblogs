@@ -11,8 +11,9 @@ import {
     View,
     Image,
     TouchableHighlight,
-    TextInput,  
-    Picker
+    TextInput,
+    Picker,
+    ToastAndroid,
 } from 'react-native';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
@@ -26,14 +27,14 @@ export default class App extends Component {
         super(props);
   		this.state={
             formatType: 1,//1: TintMce 2: Markdown
-            title: '',
-            startTime: '',
-            deadline: '',
-            content: '',
+            title: 'a',
+            startTime: '2017-06-11 21:00',
+            deadline: '2017-07-11 21:00',
+            content: 'aaaaaaa',
             IsShowInHome: true,// true or false
   		};
   	}
-    _onPress(){
+    _onPress=()=>{
         let url = 'https://api.cnblogs.com/api/edu/homework/publish';
         let classId = Number(this.props.navigation.state.params.classId);
         let postBody = {
@@ -42,21 +43,26 @@ export default class App extends Component {
             startTime: this.state.startTime,
             deadline: this.state.deadline,
             content: this.state.content,
-            formatType: this.state.formatType,
+            formatType: Number(this.state.formatType),
             IsShowInHome: this.state.IsShowInHome,
         }
+        ToastAndroid.show(postBody.title+postBody.startTime+postBody.deadline+postBody.content,ToastAndroid.SHORT);
         let body = JSON.stringify(postBody);
         Service.UserAction(url,body,'POST').then((response)=>{
             if(response.status !== 200)
             {
-                ToastAndroid.show('请求失败！',ToastAndroid.SHORT);
+                return null;
             }
             else
             {
                 return response.json();
             }
         }).then((jsonData)=>{
-            if(jsonData.isSuccess)
+            if(jsonData===null)
+            {
+                ToastAndroid.show('请求失败！',ToastAndroid.SHORT);
+            }
+            else if(jsonData.isSuccess)
             {
                 ToastAndroid.show('添加成功，请刷新查看！',ToastAndroid.SHORT);
                 this.props.navigation.goBack();
