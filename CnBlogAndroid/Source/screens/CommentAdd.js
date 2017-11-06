@@ -21,22 +21,39 @@ import {
 } from 'react-navigation';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
-// 本页面接受博客名blogApp和博文编号Id作为参数
+// 本页面接受博客名blogApp和博文编号Id,原评论数量CommentCount作为参数
 export default class CommentAdd extends Component{
     constructor(props){
         super(props);
         this.state = {
             text : '',
         }
-    }
+    }  
     onSubmit = ()=>{
         let blogApp = this.props.navigation.state.params.blogApp;
         let Id = this.props.navigation.state.params.Id;
+		let add_url = Config.apiDomain + "api/blogs/" + blogApp + "/posts/" + Id + "/comments"
+		let content = this.state.text;
+		Service.UserAction(add_url,content,"POST").then((result)=>{
+			if(result.status === 200){
+				ToastAndroid.show("添加成功",ToastAndroid.SHORT);
+                this.refs.commentRef.clear();
+                this.props.navigation.navigate('BlogComment',{
+                    blogApp: this.props.navigation.state.params.blogApp,
+                    Id: this.props.navigation.state.params.Id,
+                    CommentCount: this.props.navigation.state.params.CommentCount+1,
+                });
+			}
+			else{
+				ToastAndroid.show("添加失败，请稍后重试",ToastAndroid.SHORT);
+			}
+		})
     }
+	
     render(){
         return(
             <View style = {styles.container}>
-                <TextInput
+                <TextInput ref="commentRef"
                     style={styles.textcontainer}
                     onChangeText={(text) => this.setState({text: text})}
                     value={this.state.text}
@@ -48,7 +65,7 @@ export default class CommentAdd extends Component{
                 </View>
                 <TouchableOpacity
                     style= {styles.button}
-                    onPress = {()=>{}}
+                    onPress = {this.onSubmit.bind(this)}
                 >
                     <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>提交</Text>
                 </TouchableOpacity>

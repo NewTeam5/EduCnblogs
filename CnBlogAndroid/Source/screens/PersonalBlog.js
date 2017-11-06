@@ -34,7 +34,7 @@ export default class PersonalBlog extends Component{
     }
     // 更新博客显示数据
     UpdateData = ()=>{
-        componentDidMount();
+        this.componentDidMount();
     };
     componentDidMount = ()=>{
         // 获取当前登录用户信息，存放于global
@@ -51,33 +51,43 @@ export default class PersonalBlog extends Component{
 				BlogApp : jsonData.BlogApp
             }
         }).then(()=>{
-        let blogApp = global.user_information.BlogApp;//对于传入的参数，应为 this.props.blogApp，这里暂时使用团队博客的内容
-        // 首先获取博客信息
-        let url = Config.apiDomain+'api/blogs/'+blogApp;
-        Service.Get(url)
-        .then((jsonData)=>{
-            this.setState({
-                blogTitle: jsonData.title,
-                pageSize: jsonData.pageSize,
-                postCount: jsonData.postCount,
-            });
-        })
-        // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
-        .then(()=>{
-            // 计算页数
-            let {pageSize, postCount} = this.state;
-            let pageCount  = Math.ceil(postCount/pageSize);
-            // 遍历所有页获得博文列表
-            for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
-            {
-                let url = Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex;
-                Service.Get(url).then((jsonData)=>{
-                    this.setState({
-                        blogs: this.state.blogs.concat(jsonData),
-                    })
+            let blogApp = global.user_information.BlogApp;
+            // 首先获取博客信息
+            let url = Config.apiDomain+'api/blogs/'+blogApp;
+            Service.Get(url)
+            .then((jsonData)=>{
+                this.setState({
+                    blogTitle: jsonData.title,
+                    pageSize: jsonData.pageSize,
+                    postCount: jsonData.postCount,
+                });
+            })
+            // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
+            .then(()=>{
+                // 计算页数
+                let {pageSize, postCount} = this.state;
+                let pageCount  = Math.ceil(postCount/pageSize);
+                var pageIndexes = [];
+                for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
+                {
+                    pageIndexes.push(pageIndex);
+                }
+                // 这里需要使用promise数组保证获取内容的顺序(不可在for循环中进行异步操作，顺序会乱)
+                return promises = pageIndexes.map((pageIndex)=>{
+                    return Service.Get(Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex)
                 })
-            }
-        })
+            })
+            // 使用promise.all按顺序获取数组中的信息
+            .then((promises)=>{
+                Promise.all(promises).then((posts)=>{
+                    for(var i in posts)
+                    {
+                        this.setState({
+                            blogs: this.state.blogs.concat(posts[i]),
+                        })
+                    }
+                })
+            })
         })
     };
     _renderItem = (item)=>{
@@ -91,26 +101,28 @@ export default class PersonalBlog extends Component{
         var Id = item1.item.key;
         return(
             <View>
-                <TouchableOpacity 
+                <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
+                <TouchableOpacity
                     style = {styles.listcontainer} 
-                    onPress = {()=>this.props.navigation.navigate('BlogDetail',{Id:Id, blogApp: global.user_information.BlogApp, CommentCount: CommentCount})}
+                    onPress = {()=>this.props.navigation.navigate('BlogDetail',
+                    {Id:Id, blogApp: global.user_information.BlogApp, CommentCount: CommentCount})}
                 >  
                     <Text style = {{
                         fontSize: 18,
                         fontWeight: 'bold',
-                        marginTop: 3,
-                        marginBottom: 3,
+                        marginTop: 10,
+                        marginBottom: 8,
                         textAlign: 'left',
                         color: 'black'
                     }} >
                         {Title}
                     </Text>
-                    <Text style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color: 'black'}}>
+                    <Text  numberOfLines={3} style = {{fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
                         {Description+'...'}
                     </Text>
                     <View style = {{
                         flexDirection: 'row',
-                        marginBottom: 3,
+                        marginBottom: 8,
                         justifyContent: 'space-around',
                         alignItems: 'flex-start'
                     }}>
@@ -126,7 +138,12 @@ export default class PersonalBlog extends Component{
         )
     };
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return (
+            <View style={{ height: 9.75, justifyContent: 'center'}}>
+            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
+            <View style={{ height: 9, backgroundColor: 'rgb(235,235,235)'}}/>
+            </View>
+        );
     }
     render(){
         var data = [];
@@ -152,6 +169,8 @@ export default class PersonalBlog extends Component{
                         ItemSeparatorComponent={this._separator}
                         renderItem={this._renderItem}
                         data={data}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
                     />
                 </View>
             </View>
@@ -166,17 +185,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
     },
-    header: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgb(51,153,255)',
+    header:{
+        flexDirection: 'row',  
+        justifyContent:'flex-start',
+        alignItems: 'center',  
+        backgroundColor: '#1C86EE',
+        height: screenHeight/12,
+        paddingLeft: 0.03*screenWidth,
         width: screenWidth,
     },
     headertext: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: 'black'
+        fontSize: 22,
+        color: 'white',
+        fontWeight:'bold',
     },
     content: {
         flex: 11,
@@ -190,7 +211,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',  
         flex:1,
         backgroundColor: 'white',
-        marginLeft: 8,
-        marginRight: 12,
+        marginLeft: 0.03*screenWidth,
+        marginRight: 0.04*screenWidth,
     }
 });
