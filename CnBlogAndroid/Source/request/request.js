@@ -56,7 +56,7 @@ export function GetInfo(url, token){
         })
         .catch((error) => {
             console.error(error);
-            reject("rejected");    //如果失败了，那么就返回rejected
+            reject("rejected");   //如果失败了，那么就返回rejected
         });
     });
 }
@@ -80,7 +80,7 @@ export function Get(url){
 export function UserAction(url,content,type){  //此处的body为修改的内容
 	return new Promise((resolve,reject)=>{
 		storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
-			return PostInfo(url,token.access_token,data,type);
+			return PostInfo(url,token.access_token,content,type);
 		})
 		.then((response)=>{
 			resolve(response);
