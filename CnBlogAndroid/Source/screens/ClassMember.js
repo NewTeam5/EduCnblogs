@@ -93,7 +93,7 @@ export default class ClassMember extends Component{
     }
     render(){
         var data = [];
-        for(var i in this.state.members)
+        for(let i in this.state.members)
         {
             data.push({
                 key: this.state.members[i].memberId,//成员Id
@@ -139,7 +139,7 @@ export default class ClassMember extends Component{
 	                        添加成员
 	                    </Text>
 	                </TouchableHighlight>
-                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width:screenWidth, marginTop: 0.005*screenHeight,}}/>  
+                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width: screenWidth, marginTop: 0.005*screenHeight,}}/>  
 	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}
