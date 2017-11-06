@@ -49,7 +49,7 @@ export function GetInfo(url, token){
         })
         .catch((error) => {
             console.error(error);
-            reject("rejected");    //如果失败了，那么就返回一个空字符串
+            reject("rejected");    //如果失败了，那么就返回rejected
         });
     });
 }
@@ -71,9 +71,12 @@ export function Get(url){
 }
 
 export function UserAction(url,content,type){  //此处的body为修改的内容
+	let data = JSON.stringify({
+		body : content,
+	});
 	return new Promise((resolve,reject)=>{	
 		storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
-			return PostInfo(url,token.access_token,content,type);
+			return PostInfo(url,token.access_token,data,type);
 		})
 		.then((jsonData)=>{
 			resolve(jsonData)
@@ -86,6 +89,7 @@ export function UserAction(url,content,type){  //此处的body为修改的内容
 }
 
 //这个函数是涉及到操作的request
+//传入的内容要是json化的
 function PostInfo(url,token,content,type){        
 	return new Promise((resolve,reject)=>{
         fetch(url,{
@@ -94,9 +98,7 @@ function PostInfo(url,token,content,type){
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Authorization': 'Bearer' + ' ' + token,
             },
-			body : JSON.stringify({
-				body: content,
-			})
+			body : content
         })
         .then((response)=>{
             resolve(response);
