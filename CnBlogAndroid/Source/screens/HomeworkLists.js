@@ -34,25 +34,19 @@ export default class HomeworkLists extends Component {
         this.state = {
             homeworks: [],
             counts: 0,
-            newDisplay: 0
-        }        
+            membership: 1,
+        }
         let url = Config.apiDomain + api.user.info;
         Service.Get(url).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
             Service.Get(url2).then((jsonData)=>{
-                if (jsonData.membership==2||jsonData.membership==3)
-                    this.setState({
-                        newDisplay: 1
-                    });
-                else {
-                    this.setState({
-                        newDisplay: 0
-                    });
-                }                
-            })                   
-        })                        
+                this.setState({
+                    membership: jsonData.membership,
+                })
+            })       
+        })
     }
-    //暂定班级ID为111,应该传进来班级ID作为属性
+    //应该传进来班级ID作为属性
     componentDidMount = ()=>{
         let classId = this.props.navigation.state.params.classId;
         let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/1-12";
@@ -71,25 +65,17 @@ export default class HomeworkLists extends Component {
             })
         })
     };
+    UpdateData=()=>{
+        this.componentDidMount();
+    };
     _onPress = ()=>{
         let url = Config.apiDomain + api.user.info;
-        Service.Get(url).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                if (jsonData.membership==2||jsonData.membership==3)
-                    this.props.navigation.navigate('HomeworkPost');
-                else {
-                    Alert.alert(
-                      'Warning',
-                      '学生不能创建作业！',
-                      [
-                        {text: 'OK', onPress: () => console.log('OK Pressed')},
-                      ],
-                      { cancelable: false }
-                    )            
-                }                
-            })                   
-        })                
+        if (this.state.membership==2||this.state.membership==3)
+            this.props.navigation.navigate('HomeworkPost',{classId: this.props.navigation.state.params.classId});
+        else
+        {
+            ToastAndroid.show("您没有权限，只有老师和助教才能发布作业哦！",ToastAndroid.SHORT);
+        }
     };
     _renderItem = (item)=>{
         let item1 = item;
@@ -168,7 +154,7 @@ export default class HomeworkLists extends Component {
                 >
                     Homeworks
                 </Text>
-                {this.state.newDisplay?(
+                {/*{this.state.newDisplay?(*/}
                 <TouchableHighlight
                     underlayColor="#0588fe"
                     activeOpacity={0.5}
@@ -191,8 +177,8 @@ export default class HomeworkLists extends Component {
                       New HomeWork
                     </Text>
                 </TouchableHighlight>
-                ):(null)
-                }
+                {/*):(null)
+                }*/}
             </View>
             <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)'}}/>
         <View 
@@ -209,6 +195,8 @@ export default class HomeworkLists extends Component {
                 data={data}
                 ItemSeparatorComponent = {this._separator}
                 renderItem={this._renderItem}
+                onRefresh = {this.UpdateData}
+                refreshing= {false}
             />
           </View>
       </View>

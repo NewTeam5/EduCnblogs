@@ -109,7 +109,7 @@ class Welcome extends Component{
 									this.toPersonalBlog();
 								}
 								else
-								{	
+								{
 									storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
 										CookieManager.clearAll()
 										.then((res)=>{
@@ -118,7 +118,7 @@ class Welcome extends Component{
 									})
 								}
 							})
-						}			
+						}
 						else
 						{
 							this.toHome();

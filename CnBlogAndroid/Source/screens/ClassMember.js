@@ -32,23 +32,18 @@ export default class ClassMember extends Component{
         super(props);
         this.state = {
             members: [],
-            addDisplay:0
+            membership: 1,
         }
+        //是否有添加成员的权限
         let url = Config.apiDomain + api.user.info;
         Service.Get(url).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
             Service.Get(url2).then((jsonData)=>{
-                if (jsonData.membership==2||jsonData.membership==3)
-                    this.setState({
-                        addDisplay: 1
-                    });
-                else {
-                    this.setState({
-                        addDisplay: 0
-                    });
-                }                
-            })                   
-        })                                
+                this.setState({
+                    membership: jsonData.membership,
+                })
+            })       
+        })
     }
     componentDidMount = ()=>{
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
@@ -57,6 +52,9 @@ export default class ClassMember extends Component{
                 members: jsonData,
             })
         })
+    }
+    UpdateData = ()=>{
+        this.componentDidMount();
     }
     _renderItem = (item)=>{
         let item1 = item;
@@ -82,9 +80,17 @@ export default class ClassMember extends Component{
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)' }}/>;
     }
-    _onPress(){
-
-    }    
+    _onPress = ()=>{
+        if(this.state.membership===1)
+        {
+            ToastAndroid.show("您没有权限，只有老师和助教才能添加班级成员哦！",ToastAndroid.SHORT);
+        }
+        else
+        {
+            this.props.navigation.navigate('ClassMemberAdd',
+            {classId: this.props.navigation.state.params.classId})
+        }
+    }
     render(){
         var data = [];
         for(var i in this.state.members)
@@ -102,12 +108,12 @@ export default class ClassMember extends Component{
         return(
             <View style = {styles.container}>
 	            <View style= {{        
-	                flexDirection: 'row',           
-	                justifyContent:'flex-end',
-	                alignItems: 'center',  
+	                flexDirection: 'column',           
+	                justifyContent:'center',
+	                alignItems: 'flex-end',  
 	                alignSelf: 'stretch',    
-	                marginTop: 0.01*screenHeight,
-	                marginHorizontal:0.01*screenWidth
+	                marginTop: 0.005*screenHeight,
+                    marginHorizontal:0.01*screenWidth,
 	            }}
 	            >
 	                {this.state.addDisplay?(<TouchableHighlight
@@ -120,7 +126,7 @@ export default class ClassMember extends Component{
 	                        padding: 0.01*screenHeight,
 	                        backgroundColor:"#0588fe"
 	                    }}
-	                    onPress={()=>this.props.navigation.navigate('ClassMemberAdd')}//关联函数
+                        onPress={this._onPress}
 	                >
 	                    <Text
 	                        style= {{
@@ -130,15 +136,17 @@ export default class ClassMember extends Component{
 	                            fontWeight: 'bold',
 	                        }}   
 	                    >
-	                      添加成员
+	                        添加成员
 	                    </Text>
-	                </TouchableHighlight>):(null)       
-	                }     
+	                </TouchableHighlight>
+                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width:screenWidth, marginTop: 0.005*screenHeight,}}/>  
 	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}
                     renderItem={this._renderItem}
                     data={data}
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
                 />
             </View>
         )

@@ -71,8 +71,11 @@ export default class BlogComment extends Component{
             })
         })
     }
+    UpdateData = ()=>{
+        this.componentDidMount();
+    }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     _renderItem = (item)=>{
         let item1 = item;
@@ -117,6 +120,8 @@ export default class BlogComment extends Component{
                     ItemSeparatorComponent={this._separator}
                     renderItem={this._renderItem}
                     data={data}
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
                 />
                 <TouchableOpacity
                     style= {styles.button}

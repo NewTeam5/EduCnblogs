@@ -1,5 +1,8 @@
+import Config from '../config';
+import api from '../api/api.js';
+import {authData} from '../config'
+import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
-import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import React, { Component} from 'react';
 import {
     Platform,
@@ -7,7 +10,7 @@ import {
     Text,
     View,
     Image,
-    TouchableHighlight,    
+    TouchableHighlight,
     TextInput,  
     Picker
 } from 'react-native';
@@ -20,13 +23,53 @@ const btnFontSize= MyAdapter.btnFontSize;
 
 export default class App extends Component {
   	constructor(props){
-        super(props);  		
+        super(props);
   		this.state={
-  			language:"Java"
+            formatType: 1,//1: TintMce 2: Markdown
+            title: '',
+            startTime: '',
+            deadline: '',
+            content: '',
+            IsShowInHome: true,// true or false
   		};
   	}
     _onPress(){
-
+        let url = 'https://api.cnblogs.com/api/edu/homework/publish';
+        let classId = Number(this.props.navigation.state.params.classId);
+        let postBody = {
+            schoolClassId: classId,
+            title: this.state.title,
+            startTime: this.state.startTime,
+            deadline: this.state.deadline,
+            content: this.state.content,
+            formatType: this.state.formatType,
+            IsShowInHome: this.state.IsShowInHome,
+        }
+        let body = JSON.stringify(postBody);
+        Service.UserAction(url,body,'POST').then((response)=>{
+            if(response.status !== 200)
+            {
+                ToastAndroid.show('请求失败！',ToastAndroid.SHORT);
+            }
+            else
+            {
+                return response.json();
+            }
+        }).then((jsonData)=>{
+            if(jsonData.isSuccess)
+            {
+                ToastAndroid.show('添加成功，请刷新查看！',ToastAndroid.SHORT);
+                this.props.navigation.goBack();
+            }
+            else if(jsonData.isWarning)
+            {
+                ToastAndroid.show(jsonData.message,ToastAndroid.SHORT);
+            }
+            else
+            {
+                ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
+            }
+        })
     }
     render() {
     return (
@@ -37,9 +80,6 @@ export default class App extends Component {
             	backgroundColor: 'white'
             }}
         >
-            {/*<HeaderNoBackComponent
-              text= "Classes"
-            />*/}
             <View style= {{        
                 flexDirection: 'row',  
                 justifyContent:'flex-start',
@@ -47,7 +87,7 @@ export default class App extends Component {
                 alignSelf: 'stretch',    
                 marginTop:0.05*screenHeight,
                 marginHorizontal:0.07*screenWidth
-            }}      	
+            }}
             >
 	            <Text
 	                style= {{
@@ -57,7 +97,7 @@ export default class App extends Component {
 	                    textAlign: 'right',  	                    
 	                }}   
 	            >
-	                Title
+	                作业标题
 	            </Text>            
 	            <TextInput
 	                style={{
@@ -88,7 +128,7 @@ export default class App extends Component {
 	                    textAlign: 'right',  	                    
 	                }}   
 	            >
-	                DueTime
+	                内容格式
 	            </Text>   
 	            <View
 					style= {{
@@ -110,9 +150,9 @@ export default class App extends Component {
 						}}
 						mode= 'dropdown'
 					  	selectedValue={this.state.language}
-					  	onValueChange={(lang) => this.setState({language: lang})}>
-					  	<Picker.Item label="Java" value="java" />
-					  	<Picker.Item label="JavaScript" value="js" />
+					  	onValueChange={(value) => this.setState({formatType: value})}>
+					  	<Picker.Item label="TinyMce" value={1} />
+					  	<Picker.Item label="Markdown" value={2} />
 					</Picker>   
 				</View>         	
             </View>
@@ -137,7 +177,7 @@ export default class App extends Component {
 	            </Text>   
             </View>
             <View style= {{        
-                flexDirection: 'row',           
+                flexDirection: 'row',
                 justifyContent:'flex-start',
                 alignItems: 'center',  
                 alignSelf: 'stretch',    
