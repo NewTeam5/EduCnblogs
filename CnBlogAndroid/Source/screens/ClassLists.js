@@ -128,7 +128,7 @@ export default class ClassLists extends Component{
                                 alignSelf: 'stretch',    
                                 marginTop: 0.01*screenHeight,
                                 marginLeft: 0.02*screenWidth,
-                                marginRight: 0.04*screenWidth,
+                                marginRight: 0.02*screenWidth,
                                 marginBottom: 0.01*screenHeight,
                                 flex:1,
                             }}

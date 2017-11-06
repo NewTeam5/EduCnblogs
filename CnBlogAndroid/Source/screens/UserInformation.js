@@ -22,6 +22,7 @@ import {
 import {
     StackNavigator,
     TabNavigator,
+    NavigationActions
 } from 'react-navigation';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
@@ -40,11 +41,18 @@ export default class UserInformation extends Component{
             Seniority: ''
         }
     }
-    _logout(){
+    _logout=()=>{
 		storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
 			CookieManager.clearAll()
 			.then((res)=>{
-				this.props.navigation.navigate('Loginer')
+//                this.props.navigation.navigate('Loginer');
+                const resetAction = NavigationActions.reset({
+                    index: 0,
+                    actions: [
+                        NavigationActions.navigate({ routeName: 'Loginer'}),
+                    ]
+                });
+                this.props.navigation.dispatch(resetAction);
 			})
 		})
 	}
