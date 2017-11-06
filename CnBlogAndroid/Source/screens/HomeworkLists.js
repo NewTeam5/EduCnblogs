@@ -63,12 +63,14 @@ export default class HomeworkLists extends Component {
             });
         })
         .then(()=>{
-            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
-            Service.Get(url).then((jsonData)=>{
-                this.setState({
-                    homeworks: jsonData.homeworks,
-                });
-            })
+			if(this.state.counts !== 0){				
+				let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
+				Service.Get(url).then((jsonData)=>{
+					this.setState({
+						homeworks: jsonData.homeworks,
+					});
+				})
+			}
         })
     };
     _onPress = ()=>{
