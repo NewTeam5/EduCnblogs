@@ -102,7 +102,7 @@ export default class PersonalBlog extends Component{
                         marginBottom: 3,
                         textAlign: 'left',
                         color: 'black'
-                    }}>
+                    }} >
                         {Title}
                     </Text>
                     <Text style = {{fontSize: 14, marginBottom: 3, textAlign: 'left', color: 'black'}}>
