@@ -1,7 +1,8 @@
 //对AsyncStorage的封装
 //存储方式：键值对
 import React,{
-	AsyncStorage
+	AsyncStorage,
+	ToastAndroid
 } from 'react-native';
 
 export function setItem(key, value) {
@@ -19,7 +20,7 @@ export function mergeItem(key, value) {
 export function getItem(key) {
 	return AsyncStorage.getItem(key)
 		.then(function (value) {
-			return JSON.parse(value)
+			return JSON.parse(value);
 		});
 }
 

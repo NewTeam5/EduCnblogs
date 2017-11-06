@@ -7,6 +7,7 @@ import * as Service from './Source/request/request.js'
 import * as storage from './Source/Storage/storage.js'
 
 import React, { Component,} from 'react';
+import CookieManager from 'react-native-cookies'
 
 import {
     Platform,
@@ -108,11 +109,16 @@ class Welcome extends Component{
 									this.toPersonalBlog();
 								}
 								else
-								{	
-									this.toHome();
+								{
+									storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
+										CookieManager.clearAll()
+										.then((res)=>{
+											this.props.navigation.navigate('Loginer')
+										})
+									})
 								}
 							})
-						}			
+						}
 						else
 						{
 							this.toHome();

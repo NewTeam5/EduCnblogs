@@ -34,6 +34,13 @@ export default class PersonalBlog extends Component{
     }
     // 更新博客显示数据
     UpdateData = ()=>{
+        // 先清零数据
+        this.setState({
+            blogs: [],//博客随笔信息列表
+            blogTitle: '',//博客标题
+            pageSize: 0,//博客页容量
+            postCount: 0,//随笔总数
+        });
         this.componentDidMount();
     };
     componentDidMount = ()=>{
