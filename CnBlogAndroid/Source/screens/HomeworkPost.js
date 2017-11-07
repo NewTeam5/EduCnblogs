@@ -48,7 +48,7 @@ export default class App extends Component {
           };
       }
     _onPress=()=>{
-        let url = Config.apiDomain + Config.ClassDomain + Config.HomeworkPub;
+        let url = 'https://api.cnblogs.com/api/edu/homework/publish';
         let classId = Number(this.props.navigation.state.params.classId);
         let postBody = {
             schoolClassId: classId,
