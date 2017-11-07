@@ -42,7 +42,7 @@ export default class ClassMemberAdd extends Component {
             studentNo: this.state.studentNo,
         }
         let body = JSON.stringify(postBody);
-        let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
+		let url = Config.apiDomain + Config.ClassDomain + Config.AddMemberByName;
         Service.UserAction(url, body, 'POST').then((response)=>{
             if(response.status!==200)
             {
