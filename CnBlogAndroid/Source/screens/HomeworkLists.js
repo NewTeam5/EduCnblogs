@@ -35,16 +35,8 @@ export default class HomeworkLists extends Component {
             homeworks: [],
             counts: 0,
             membership: 1,
+            finishedcount: '',
         }
-        let url = Config.apiDomain + api.user.info;
-        Service.Get(url).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
-            })       
-        })
     }
     //应该传进来班级ID作为属性
     componentDidMount = ()=>{
@@ -62,7 +54,27 @@ export default class HomeworkLists extends Component {
                 this.setState({
                     homeworks: jsonData.homeworks,
                 });
+            }).then(()=>{
+                var c = 0;
+                for(var i in this.state.homeworks)
+                {
+                    if(this.state.homeworks[i].isFinished===false)
+                        c++;
+                }
+                this.setState({
+                    finishedcount: c,
+                })
             })
+        })
+        // 获取身份信息，判断是否可以发布作业
+        let url1 = Config.apiDomain + api.user.info;
+        Service.Get(url1).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                this.setState({
+                    membership: jsonData.membership,
+                })
+            })       
         })
     };
     UpdateData=()=>{
@@ -135,22 +147,21 @@ export default class HomeworkLists extends Component {
                 flexDirection: 'row',  
                 justifyContent:'space-between',
                 alignItems: 'center',  
-                marginTop: 0.008*screenHeight,
-                marginHorizontal: 0.02*screenWidth,
-                marginBottom: 0.008*screenHeight,
+                marginTop: 0.005*screenHeight,
+                marginHorizontal: 0.01*screenWidth,
+                marginBottom: 0.005*screenHeight,
                 alignSelf: 'stretch',          
             }}
             >
                 <Text
                     style= {{  
-                        alignSelf: 'flex-start',
-                        fontSize: titleFontSize,  
-                        color: '#000000',  
-                        textAlign: 'center',  
-                        fontWeight: 'bold',
+                        alignSelf: 'center',
+                        fontSize: btnFontSize,
+                        textAlign: 'center',
+                        color: 'rgb(51,51,51)'
                     }}  		
                 >
-                    Homeworks
+                    未结束：{this.state.finishedcount}
                 </Text>
                 <TouchableHighlight
                     underlayColor="#0588fe"
@@ -171,7 +182,7 @@ export default class HomeworkLists extends Component {
                             fontWeight: 'bold',
                         }}   
                     >
-                      New HomeWork
+                        发布作业
                     </Text>
                 </TouchableHighlight>
             </View>

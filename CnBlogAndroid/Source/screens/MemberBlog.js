@@ -105,7 +105,7 @@ export default class MemberBlog extends Component{
                 <TouchableOpacity 
                     style = {styles.listcontainer}
                     onPress = {()=>{
-                        this.props.navigation.navigate('BlogDetail',{Id:Id, blogApp: blogApp, CommentCount: CommentCount})}
+                        this.props.navigation.navigate('BlogDetail',{Url: Url, Id:Id, blogApp: blogApp, CommentCount: CommentCount})}
                     }
                 >  
                     <Text style = {{

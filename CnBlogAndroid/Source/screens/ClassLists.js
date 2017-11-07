@@ -95,7 +95,7 @@ export default class ClassLists extends Component{
         <View style= {{        
             flexDirection: 'row',  
             justifyContent:'flex-start',
-            alignItems: 'center',  
+            alignItems: 'center',
             backgroundColor: '#1C86EE',
             height: screenHeight/12,
             paddingLeft: 0.05*screenWidth,
@@ -111,9 +111,7 @@ export default class ClassLists extends Component{
                     marginLeft: 0.02*screenWidth,
                     marginRight: 0.04*screenWidth,
                     flex:1,
-                }}          
-
-            >
+                }}>
                 <FlatList
                     onRefresh = {this.UpdateData}
                     refreshing= {false}
@@ -146,19 +144,20 @@ export default class ClassLists extends Component{
                                 alignItems: 'flex-start',  
                                 alignSelf: 'stretch',                                
                                 marginLeft: 0.02*screenWidth,
+                                paddingLeft: 0.01*screenWidth,
                                 height: 0.1*screenHeight,
                                 flex:1,
                             }}>
                                 <View
                                     style= {{
-                                        alignSelf:'flex-start',
-                                        backgroundColor:"transparent",
+                                        flexDirection: 'row',
+                                        justifyContent:'flex-start',
+                                        alignItems: 'flex-start',
                                     }}             
                                 >
                                     <Text style= {{
                                         fontSize: titleFontSize-5,  
                                         color: 'rgb(51,51,51)',  
-                                        textAlign: 'center',
                                     }}>
                                         {item.universityNameCn}
                                     </Text>                 
@@ -171,7 +170,6 @@ export default class ClassLists extends Component{
                                     <Text style= {{
                                         fontSize: btnFontSize+2,
                                         color: 'rgb(51,51,51)',  
-                                        textAlign: 'center',
                                         marginRight: 0.02*screenWidth,   
                                     }}>
                                         {item.nameCn}
