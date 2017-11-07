@@ -150,7 +150,7 @@ class Loginer extends Component{
                 <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
                 <View style = {{height: 40}}></View>
                 <TouchableOpacity style={styles.loginbutton} onPress = {this.mylogin}>
-                    <Text style={styles.btText}>登   录</Text>
+                    <Text style={styles.btText} accessibilityLabel = 'App_signin'>登   录</Text>
                 </TouchableOpacity>
             </View>
         );

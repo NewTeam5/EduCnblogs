@@ -121,7 +121,7 @@ export default class PersonalBlog extends Component{
                         marginBottom: 8,
                         textAlign: 'left',
                         color: 'black'
-                    }}>
+                    }} accessibilityLabel = {Url}>
                         {Title}
                     </Text>
                     <Text  numberOfLines={3} style = {{fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
