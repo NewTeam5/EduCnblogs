@@ -40,17 +40,24 @@ export default class ClassHome extends Component{
             bulletinCount: 0, // 公告数目
         }
     }
+    _isMounted;
     componentWillMount = ()=>{
+        this._isMounted = true;
         let classId = this.props.navigation.state.params.classId;
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/'+classId;
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                classname: jsonData.nameCn,
-                universityname: jsonData.universityNameCn,
-                iconurl: jsonData.icon,
-                bulletinCount: jsonData.bulletinCount,
-            })
+            if(this._isMounted){
+                this.setState({
+                    classname: jsonData.nameCn,
+                    universityname: jsonData.universityNameCn,
+                    iconurl: jsonData.icon,
+                    bulletinCount: jsonData.bulletinCount,
+                })
+            }
         })
+    }
+    componentWillUnmount=()=>{
+        this._isMounted = false;
     }
     render() {
 	let classId = this.props.navigation.state.params.classId;	

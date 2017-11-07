@@ -59,20 +59,36 @@ export default class BlogComment extends Component{
         super(props);
         this.state = {
             comments: [],
+            isRequestSuccess: false,//初始认为页面请求失败，不渲染，否则会由于网络问题导致crash
         }
     }
-    componentDidMount=()=>{
+    _isMounted;
+    componentWillMount=()=>{
+        this._isMounted=true;
         let url = 'https://api.cnblogs.com/api/blogs/'+this.props.navigation.state.params.blogApp
                 +'/posts/'+this.props.navigation.state.params.Id+'/comments?pageIndex=1&pageSize='
                 +this.props.navigation.state.params.CommentCount;
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                comments: jsonData,
-            })
+            if(jsonData!=='rejected')
+            {
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted){
+                    this.setState({
+                    comments: jsonData,
+                })}
+            }
         })
     }
+    componentWillUnmount=()=>{
+        this._isMounted=false;
+    }
     UpdateData = ()=>{
-        this.componentDidMount();
+        this.setState({
+            isRequestSuccess: false,
+        });
+        this.componentWillMount();
     }
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
@@ -103,6 +119,7 @@ export default class BlogComment extends Component{
     }
     render(){
         var data = [];
+        if(this.state.isRequestSuccess){
         for(var i in this.state.comments)
         {
             data.push({
@@ -113,7 +130,7 @@ export default class BlogComment extends Component{
                 AuthorUrl: this.state.comments[i].AuthorUrl,
                 FaceUrl: this.state.comments[i].FaceUrl,
             })
-        }
+        }}
         return (
             <View style = {styles.container}>
                 <FlatList
@@ -123,6 +140,7 @@ export default class BlogComment extends Component{
                     onRefresh = {this.UpdateData}
                     refreshing= {false}
                 />
+                {this.state.isRequestSuccess===false?null:
                 <TouchableOpacity
                     style= {styles.button}
                     onPress={()=>this.props.navigation.navigate('CommentAdd',
@@ -130,7 +148,7 @@ export default class BlogComment extends Component{
                             Id: this.props.navigation.state.params.Id,
                             CommentCount: this.props.navigation.state.params.CommentCount})}
                 >
-	                <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加/回复评论</Text>
+	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加/回复评论</Text>
                 </TouchableOpacity>
             </View>
         )

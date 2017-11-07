@@ -22,6 +22,7 @@ import {
     Dimensions,
     WebView,
     AsyncStorage,
+    Alert,
 } from 'react-native';
 import {
     StackNavigator,
@@ -167,6 +168,7 @@ class UrlLogin extends Component{
     
     toPerson()
     {
+        // 这里重置路由，阻止用户返回登录界面
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
@@ -176,7 +178,6 @@ class UrlLogin extends Component{
         this.props.navigation.dispatch(resetAction);
         this.props.navigation.navigate('PersonalBlog');
     }
-    
     getTokenFromApi(Code)
     {		  
         fetch(Config.AccessToken,{
@@ -200,7 +201,7 @@ class UrlLogin extends Component{
     {
         return (
             <View style={styles.container}>
-                <WebView	
+                <WebView
                     onNavigationStateChange = {(event)=>{
                     var first_sta = event.url.indexOf('#');
                     if(event.url.substring(0,first_sta) === Config.CallBack)
@@ -216,14 +217,13 @@ class UrlLogin extends Component{
                         }
                     }
                 }}
-                
-                source={{uri: CODE_URL}}	
+                source={{uri: CODE_URL}}
                 style={{height: height-40, width: width}}
                 startInLoadingState={true}
                 domStorageEnabled={true}
-                javaScriptEnabled={true}	
+                javaScriptEnabled={true}
+                onError = {()=>Alert.alert('网络异常，请稍后再试！')}
                 />
-            
             </View>
         )
     }

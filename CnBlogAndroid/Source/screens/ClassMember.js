@@ -33,28 +33,47 @@ export default class ClassMember extends Component{
         this.state = {
             members: [],
             membership: 1,
+            isRequestSuccess: false,//初始认为请求未成功，不进行渲染，以防App崩溃
         }
     }
-    componentDidMount = ()=>{
+    _isMounted;
+    componentWillMount = ()=>{
+        this._isMounted=true;
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                members: jsonData,
-            })
+            if(jsonData!=='rejected')
+            {
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted){
+                    this.setState({
+                        members: jsonData,
+                    })
+                }
+            }
         })
         //是否有添加成员的权限
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
             Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
+                if(this._isMounted){
+                    this.setState({
+                        membership: jsonData.membership,
+                    })
+                }
             })
         })
     }
     UpdateData = ()=>{
-        this.componentDidMount();
+        this.setState({
+            isRequestSuccess: false,
+        })
+        this.componentWillMount();
+    }
+    componentWillUnmount=()=>{
+        this._isMounted=false;
     }
     _renderItem = (item)=>{
         let item1 = item;
@@ -93,7 +112,9 @@ export default class ClassMember extends Component{
     }
     render(){
         var data = [];
-        for(let i in this.state.members)
+        // 在请求成功的情况下渲染列表
+        if(this.state.isRequestSuccess){
+        for(var i in this.state.members)
         {
             data.push({
                 key: this.state.members[i].memberId,//成员Id
@@ -104,7 +125,7 @@ export default class ClassMember extends Component{
                 realName: this.state.members[i].realName,//真实姓名
                 blogId: this.state.members[i].blogId,
             })
-        }
+        }}
         return(
             <View style = {styles.container}>
 	            <View style= {{        

@@ -16,6 +16,7 @@ import {
     Dimensions,
     WebView,
     Image,
+    Alert
 } from 'react-native';
 import {
     StackNavigator,
@@ -39,15 +40,31 @@ export default class BlogDetail extends Component{
         super(props);
         this.state = {
             content: '',
+            isRequestSuccess: false,
         }
     }
-    componentDidMount = ()=>{
+    _isMounted;
+    componentWillMount = ()=>{
+        this._isMounted=true;
         let contenturl = 'https://api.cnblogs.com/api/blogposts/'+this.props.navigation.state.params.Id+'/body';
         Service.Get(contenturl).then((jsonData)=>{
-            this.setState({
-                content: jsonData,
-            })
+            if(jsonData!=='rejected'){
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted){
+                    this.setState({
+                        content: jsonData,
+                    })
+                }
+            }
+            else{
+                ToastAndroid.show("网络异常！请稍后重试！",ToastAndroid.SHORT);
+            }
         })
+    }
+    componentWillUnmount = ()=>{
+        this._isMounted=false;
     }
     _onPress = ()=>{
         this.props.navigation.navigate('BlogComment',{
@@ -58,6 +75,7 @@ export default class BlogDetail extends Component{
     }
     render(){
         return(
+            this.state.isRequestSuccess===false?null:
             <View style = {styles.container}>
                 <WebView
                     source={{html: head+this.state.content, baseUrl: this.props.navigation.state.params.Url}}
@@ -67,6 +85,7 @@ export default class BlogDetail extends Component{
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     scalesPageToFit={true}
+                    onError = {()=>Alert.alert('网络异常，请稍后再试！')}
                 />
                 <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', width: width}}/>
                 <View style = {styles.bottom}>

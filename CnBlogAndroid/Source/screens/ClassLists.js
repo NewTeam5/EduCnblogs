@@ -34,24 +34,40 @@ export default class ClassLists extends Component{
         this.state={
             classes: [],
             imgs: [],
+            isEmpty: true,//初始认为请求未成功，不进行渲染，以防App崩溃
         }
     }
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    _isMounted;
+    componentWillUnmount = ()=>{
+        this._isMounted=false;
+    }
     UpdateData = ()=>{
         this.setState({
-            classed:[],
+            classes:[],
             imgs:[],
+            isEmpty: true
         })
-        this.componentDidMount();
+        this.componentWillMount();
     }
-    componentDidMount=()=>{
+    componentWillMount=()=>{
+        this._isMounted=true;
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                classes: jsonData,
-            })
+            if(this._isMounted){
+                this.setState({
+                    classes: jsonData,
+                })
+                if(jsonData!=='rejected')
+                {
+                    this.setState({
+                        isEmpty: false,
+                    })
+                }
+                //ToastAndroid.show(jsonData,ToastAndroid.SHORT);
+            }
         }).then(()=>{
             let classIndexes = [];
             for(var i in this.state.classes)
@@ -66,15 +82,17 @@ export default class ClassLists extends Component{
             Promise.all(promises).then((posts)=>{
                 for(var i in posts)
                 {
+                    if(this._isMounted){
                     this.setState({
                         imgs: this.state.imgs.concat(posts[i].icon),
-                    })
+                    })}
                 }
             })
         })
     }
     render(){
-    var data= [];   
+    var data= [];
+    if(this.state.isEmpty===false){
     for(var i in this.state.classes)
     {
         data.push({
@@ -83,7 +101,7 @@ export default class ClassLists extends Component{
             universityNameCn: this.state.classes[i].universityNameCn,
             imgurl: this.state.imgs[i],
         })
-    }
+    }}
     return (
         <View
             style= {{
@@ -118,7 +136,7 @@ export default class ClassLists extends Component{
                     data={data}
                     ItemSeparatorComponent={this._separator}
                     renderItem={
-                        ({item}) => 
+                        ({item}) =>
                             <TouchableOpacity style= {{        
                                 flexDirection: 'row',  
                                 justifyContent:'flex-start',

@@ -55,8 +55,13 @@ export default class UserInformation extends Component{
                 this.props.navigation.dispatch(resetAction);
 			})
 		})
-	}
+    }
+    _isMounted;
+    componentWillUnmount=()=>{
+        this._isMounted=false;
+    }
 	componentWillMount=()=>{
+        this._isMounted=true;
         let user_url = Config.apiDomain + api.user.info;
 		Service.Get(user_url)
 		.then((jsonData)=>{
@@ -70,12 +75,13 @@ export default class UserInformation extends Component{
 				BlogApp : jsonData.BlogApp
             }
         }).then(()=>{
+            if(this._isMounted){
             this.setState({
                 faceurl: global.user_information.face,
                 DisplayName: global.user_information.DisplayName,
                 BlogApp: global.user_information.BlogApp,
                 Seniority: global.user_information.Seniority,
-            })
+            })}
         })
     }
     render() {
@@ -145,7 +151,7 @@ export default class UserInformation extends Component{
                 justifyContent:'center',
                 alignItems: 'flex-start',
                 height: 0.07*screenHeight,
-                backgroundColor: 'rgb(204,255,255)',
+                backgroundColor: 'rgb(0,255,102)',
                 paddingLeft: 0.05*screenWidth,
             }}
                 onPress = {this._logout.bind(this)}
