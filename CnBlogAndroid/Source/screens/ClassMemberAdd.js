@@ -146,6 +146,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_realName'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果 	                
                     onChangeText= {(text)=>{
                         this.setState({
@@ -227,6 +228,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_studentID'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果              
                     onChangeText={(text)=>{
                         this.setState({

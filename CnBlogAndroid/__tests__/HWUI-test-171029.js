@@ -5,7 +5,7 @@ import HWUI from '../Source/UI/HomeworkPage/App';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
-test('renders correctly', () => {
+it('renders correctly', () => {
 	const tree = renderer.create(
 		<HWUI />
 	).toJSON();

@@ -160,7 +160,9 @@ export default class ClassMember extends Component{
 	                        添加成员
 	                    </Text>
 	                </TouchableHighlight>
-                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width:screenWidth, marginTop: 0.005*screenHeight,}}/>         
+
+                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width: screenWidth, marginTop: 0.005*screenHeight,}} />  
+
 	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}

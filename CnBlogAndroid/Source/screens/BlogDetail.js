@@ -90,7 +90,7 @@ export default class BlogDetail extends Component{
                 <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', width: width}}/>
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
-                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle}/>
+                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle} accessibilityLabel = 'BlogDetail_commentImage'/>
                         <Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>
                     </TouchableOpacity>
                 </View>

@@ -148,8 +148,8 @@ export default class BlogComment extends Component{
                             Id: this.props.navigation.state.params.Id,
                             CommentCount: this.props.navigation.state.params.CommentCount})}
                 >
-	                <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>添加/回复评论</Text>
-                </TouchableOpacity>}
+	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加/回复评论</Text>
+                </TouchableOpacity>
             </View>
         )
     }
