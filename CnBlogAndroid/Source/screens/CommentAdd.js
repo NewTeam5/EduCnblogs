@@ -56,6 +56,7 @@ export default class CommentAdd extends Component{
                     value={this.state.text}
                     multiline={true}
                     underlineColorAndroid="transparent"
+					accessibilityLabel = "CommentAdd_inputBox"
                 />
                 <View style={{flex:1}}>
                 <Text style = {{color: 'rgb(51,51,51)',fontSize: 15}}>回复请在评论第一行写上:@用户昵称</Text>
@@ -64,7 +65,7 @@ export default class CommentAdd extends Component{
                     style= {styles.button}
                     onPress = {this.onSubmit.bind(this)}
                 >
-                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>提交</Text>
+                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
                 </TouchableOpacity>
                 
             </View>

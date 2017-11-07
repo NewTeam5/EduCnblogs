@@ -104,10 +104,9 @@ export default class HomeworkLists extends Component {
     }
     _separator = () => {
         return (
-            <View style={{ height: 10.5, justifyContent: 'center'}}>
+            <View style={{ height: 9.75, justifyContent: 'center'}}>
             <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
             <View style={{ height: 9, backgroundColor: 'rgb(235,235,235)'}}/>
-            <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
             </View>
         );
     }
@@ -123,7 +122,6 @@ export default class HomeworkLists extends Component {
                 deadline: this.state.homeworks[i].deadline,//作业截止日期
             })
         }
-        //let display= this.state.newDisplay?"New HomeWork":"";
         return (
         <View
             style= {{
@@ -154,7 +152,6 @@ export default class HomeworkLists extends Component {
                 >
                     Homeworks
                 </Text>
-                {/*{this.state.newDisplay?(*/}
                 <TouchableHighlight
                     underlayColor="#0588fe"
                     activeOpacity={0.5}
@@ -177,8 +174,6 @@ export default class HomeworkLists extends Component {
                       New HomeWork
                     </Text>
                 </TouchableHighlight>
-                {/*):(null)
-                }*/}
             </View>
             <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)'}}/>
         <View 

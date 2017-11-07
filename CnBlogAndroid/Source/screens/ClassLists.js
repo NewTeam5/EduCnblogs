@@ -57,12 +57,6 @@ export default class ClassLists extends Component{
             for(var i in this.state.classes)
             {
                 classIndexes.push(i);
-                /*let url2 = 'https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[i].schoolClassId;
-                Service.Get(url2).then((jsonData)=>{
-                    this.setState({
-                        imgs: this.state.imgs.concat(jsonData.icon),
-                    })
-                })*/
             }
             return promises = classIndexes.map((classIndex)=>{
                 return Service.Get('https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[classIndex].schoolClassId)
@@ -98,7 +92,6 @@ export default class ClassLists extends Component{
                 backgroundColor: 'white'
             }}
         >
-
         <View style= {{        
             flexDirection: 'row',  
             justifyContent:'flex-start',
@@ -109,7 +102,6 @@ export default class ClassLists extends Component{
         }}>
             <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
         </View>
-
             <View 
                 style= {{        
                     flexDirection: 'row', 
@@ -136,7 +128,7 @@ export default class ClassLists extends Component{
                                 alignSelf: 'stretch',    
                                 marginTop: 0.01*screenHeight,
                                 marginLeft: 0.02*screenWidth,
-                                marginRight: 0.04*screenWidth,
+                                marginRight: 0.02*screenWidth,
                                 marginBottom: 0.01*screenHeight,
                                 flex:1,
                             }}
@@ -190,7 +182,7 @@ export default class ClassLists extends Component{
                     }/>
                 </View>
             </View>
-    );        
+    );  
     }
 }
 

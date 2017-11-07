@@ -46,13 +46,17 @@ export default class ClassMemberAdd extends Component {
         Service.UserAction(url, body, 'POST').then((response)=>{
             if(response.status!==200)
             {
-                ToastAndroid.show('请求失败！',ToastAndroid.SHORT);
+                return null;
             }
             else{
                 return response.json();
             }
         }).then((jsonData)=>{
-            if(jsonData.isSuccess)
+            if(jsonData===null)
+            {
+                ToastAndroid.show('请求失败！',ToastAndroid.SHORT);
+            }
+            else if(jsonData.isSuccess)
             {
                 ToastAndroid.show('添加成功，请刷新查看！',ToastAndroid.SHORT);
                 this.props.navigation.goBack();
@@ -142,6 +146,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_realName'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果 	                
                     onChangeText= {(text)=>{
                         this.setState({
@@ -223,6 +228,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_studentID'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果              
                     onChangeText={(text)=>{
                         this.setState({
