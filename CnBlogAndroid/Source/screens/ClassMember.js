@@ -34,22 +34,22 @@ export default class ClassMember extends Component{
             members: [],
             membership: 1,
         }
-        //是否有添加成员的权限
-        let url = Config.apiDomain + api.user.info;
-        Service.Get(url).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
-            })
-        })
     }
     componentDidMount = ()=>{
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
             this.setState({
                 members: jsonData,
+            })
+        })
+        //是否有添加成员的权限
+        let url1 = Config.apiDomain + api.user.info;
+        Service.Get(url1).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                this.setState({
+                    membership: jsonData.membership,
+                })
             })
         })
     }

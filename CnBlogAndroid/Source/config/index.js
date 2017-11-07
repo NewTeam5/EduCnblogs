@@ -3,11 +3,6 @@ export default{
 	AccessToken : 'https://oauth.cnblogs.com/connect/token',
 	AuthCode : 'https://oauth.cnblogs.com/connect/authorize',
 	CallBack : 'https://oauth.cnblogs.com/auth/callback',
-	
-	
-	ClassDomain : 'api/edu/',
-	HomeworkPub : 'homework/publish',
-	AddMemberByName : 'member/register/displayName',
 }
 
 export const authData = {
