@@ -63,7 +63,7 @@ export function GetInfo(url, token){
 //异步依赖异步回调的Primise用法 参考https://segmentfault.com/a/1190000005894077?_ea=943171
 //这里将上面两个异步作了进一步封装(by ZiJiaW)，promise返回值为该url的json对象
 export function Get(url){
-	return new Promise((resolve,reject)=>{	
+	return new Promise((resolve,reject)=>{
 		storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
 			return GetInfo(url, token.access_token);
 		})

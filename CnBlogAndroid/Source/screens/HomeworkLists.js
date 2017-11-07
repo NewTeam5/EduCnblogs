@@ -36,24 +36,43 @@ export default class HomeworkLists extends Component {
             counts: 0,
             membership: 1,
             finishedcount: '',
+            isRequestSuccess: false,
         }
     }
+    // 标志位
+    _isMounted;
+    componentWillUnmount = ()=>{
+        this._isMounted = false;
+    }
     //应该传进来班级ID作为属性
-    componentDidMount = ()=>{
+    componentWillMount = ()=>{
+        // 先设标志位为true，表示组件未卸载
+        this._isMounted = true;
         let classId = this.props.navigation.state.params.classId;
         let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/1-12";
         // 先获取作业数量，再按作业数量获取作业信息列表
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                counts: jsonData.totalCount,
-            });
+            if(jsonData!=='rejected')
+            {
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted)
+                {
+                    this.setState({
+                        counts: jsonData.totalCount,
+                    });
+                }
+            }
         })
         .then(()=>{
             let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
             Service.Get(url).then((jsonData)=>{
-                this.setState({
-                    homeworks: jsonData.homeworks,
-                });
+                if(this._isMounted&&this.state.isRequestSuccess){
+                    this.setState({
+                        homeworks: jsonData.homeworks,
+                    });
+                }
             }).then(()=>{
                 var c = 0;
                 for(var i in this.state.homeworks)
@@ -61,9 +80,12 @@ export default class HomeworkLists extends Component {
                     if(this.state.homeworks[i].isFinished===false)
                         c++;
                 }
-                this.setState({
-                    finishedcount: c,
-                })
+                if(this._isMounted)
+                {
+                    this.setState({
+                        finishedcount: c,
+                    })
+                }
             })
         })
         // 获取身份信息，判断是否可以发布作业
@@ -71,14 +93,19 @@ export default class HomeworkLists extends Component {
         Service.Get(url1).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
             Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
+                if(this._isMounted && jsonData!=='rejected'){
+                    this.setState({
+                        membership: jsonData.membership,
+                    })
+                }
             })       
         })
     };
     UpdateData=()=>{
-        this.componentDidMount();
+        this.setState({
+            isRequestSuccess: false,
+        });
+        this.componentWillMount();
     };
     _onPress = ()=>{
         let url = Config.apiDomain + api.user.info;
@@ -124,6 +151,7 @@ export default class HomeworkLists extends Component {
     }
     render() {
         var data = [];
+        if(this.state.isRequestSuccess){
         for(var i in this.state.homeworks)
         {
             data.push({
@@ -133,7 +161,7 @@ export default class HomeworkLists extends Component {
                 description: this.state.homeworks[i].description,//作业描述
                 deadline: this.state.homeworks[i].deadline,//作业截止日期
             })
-        }
+        }}
         return (
         <View
             style= {{
@@ -148,7 +176,8 @@ export default class HomeworkLists extends Component {
                 justifyContent:'space-between',
                 alignItems: 'center',  
                 marginTop: 0.005*screenHeight,
-                marginHorizontal: 0.01*screenWidth,
+                marginLeft: 0.03*screenWidth,
+                marginRight: 0.04*screenWidth,
                 marginBottom: 0.005*screenHeight,
                 alignSelf: 'stretch',          
             }}
@@ -216,7 +245,7 @@ const HomeworkStyles = StyleSheet.create({
         alignItems: 'flex-start',  
         flex:1,
         alignSelf: 'stretch',
-        marginLeft: 0.02*screenWidth,
+        marginLeft: 0.03*screenWidth,
         marginRight: 0.04*screenWidth,
     },
     titleTextStyle:{
@@ -224,18 +253,20 @@ const HomeworkStyles = StyleSheet.create({
         color: '#000000',  
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 8,
+        marginBottom: 2,
         fontWeight: 'bold',
+        fontFamily : 'serif',
     },
     abstractTextStyle:{
         fontSize: abstractFontSize+2,  
         color:'rgb(70,70,70)',  
         textAlign: 'left',
-        marginBottom: 8,         
+        marginBottom: 8,
+        lineHeight: 25   
     },
     informationTextStyle:{
         alignSelf: "flex-end",
-        fontSize: informationFontSize,  
+        fontSize: informationFontSize-2,  
         color: '#000000',  
         textAlign: 'center',
         marginBottom: 8      

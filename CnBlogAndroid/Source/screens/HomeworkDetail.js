@@ -10,6 +10,7 @@ import {
     FlatList,
     Dimensions,
     WebView,
+    Alert
 } from 'react-native';
 import {
     StackNavigator,
@@ -31,6 +32,7 @@ export default class HomeWorkDetail extends Component{
                     startInLoadingState={true}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
+                    onError = {()=>Alert.alert('网络异常，请稍后再试！')}
                 />
             </View>
         )

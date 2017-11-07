@@ -37,12 +37,12 @@ export default class CommentAdd extends Component{
         let content = JSON.stringify({body: content1});
 		Service.UserAction(add_url,content,"POST").then((result)=>{
 			if(result.status == 200){
-				ToastAndroid.show("添加成功",ToastAndroid.SHORT);
+				ToastAndroid.show("添加成功，请刷新查看！",ToastAndroid.SHORT);
                 this.refs.commentRef.clear();
                 this.props.navigation.goBack();
 			}
 			else{
-				ToastAndroid.show("添加失败，请稍后重试",ToastAndroid.SHORT);
+				ToastAndroid.show("添加失败，请稍后重试！",ToastAndroid.SHORT);
 			}
 		})
     }

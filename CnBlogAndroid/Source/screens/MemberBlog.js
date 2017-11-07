@@ -32,6 +32,7 @@ export default class MemberBlog extends Component{
             postCount: 0,//随笔总数
         };
     }
+    _isMounted;
     UpdateData = ()=>{
         this.setState({
             blogs: [],//博客随笔信息列表
@@ -39,20 +40,23 @@ export default class MemberBlog extends Component{
             pageSize: 0,//博客页容量
             postCount: 0,//随笔总数
         });
-        this.componentDidMount();
+        this.componentWillMount();
     }
-    componentDidMount=()=>{
+    componentWillMount=()=>{
+        this._isMounted=true;
         let blogUrl = this.props.navigation.state.params.blogUrl;
         let blogId = this.props.navigation.state.params.blogId;
         let blogApp = blogUrl.split('/')[3];
         let url = Config.apiDomain+'api/blogs/'+blogApp;
         Service.Get(url)
         .then((jsonData)=>{
-            this.setState({
-                blogTitle: jsonData.title,
-                pageSize: jsonData.pageSize,
-                postCount: jsonData.postCount,
-            });
+            if(this._isMounted){
+                this.setState({
+                    blogTitle: jsonData.title,
+                    pageSize: jsonData.pageSize,
+                    postCount: jsonData.postCount,
+                });
+            }
         })
         // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
         .then(()=>{
@@ -74,12 +78,17 @@ export default class MemberBlog extends Component{
             Promise.all(promises).then((posts)=>{
                 for(var i in posts)
                 {
-                    this.setState({
-                        blogs: this.state.blogs.concat(posts[i]),
-                    })
+                    if(this._isMounted){
+                        this.setState({
+                            blogs: this.state.blogs.concat(posts[i]),
+                        })
+                    }
                 }
             })
         })
+    }
+    componentWillUnmount=()=>{
+        this._isMounted=false;
     }
     _separator = () => {
         return (
@@ -112,13 +121,14 @@ export default class MemberBlog extends Component{
                         fontSize: 18,
                         fontWeight: 'bold',
                         marginTop: 10,
-                        marginBottom: 8,
+                        marginBottom: 2,
                         textAlign: 'left',
-                        color: 'black'
+                        color: 'black',
+                        fontFamily : 'serif',
                     }}>
                         {Title}
                     </Text>
-                    <Text  numberOfLines={3} style = {{fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
+                    <Text  numberOfLines={3} style = {{lineHeight: 25,fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
                         {Description+'...'}
                     </Text>
                     <View style = {{
@@ -184,10 +194,10 @@ const styles = StyleSheet.create({
     },
     listcontainer: {
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex:1,
         backgroundColor: 'white',
-        marginLeft: 8,
-        marginRight: 12,
+        marginLeft: 0.03*screenWidth,
+        marginRight: 0.04*screenWidth,
     }
 });

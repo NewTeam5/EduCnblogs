@@ -384,9 +384,9 @@ class MyBar extends Component{
         this.hours= [];
         this.minutes= [];		
           for (var i= 0;i<24;i++)
-              this.hours.push(i);
+              this.hours.push((i<10?'0':'')+i);
           for (var i= 0;i<60;i++)
-              this.minutes.push(i);		
+              this.minutes.push((i<10?'0':'')+i);
     }
     render(){
         return(
