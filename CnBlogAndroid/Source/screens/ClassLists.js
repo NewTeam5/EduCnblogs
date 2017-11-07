@@ -39,6 +39,13 @@ export default class ClassLists extends Component{
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    UpdateData = ()=>{
+        this.setState({
+            classed:[],
+            imgs:[],
+        })
+        this.componentDidMount();
+    }
     componentDidMount=()=>{
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData)=>{
@@ -46,16 +53,26 @@ export default class ClassLists extends Component{
                 classes: jsonData,
             })
         }).then(()=>{
+            let classIndexes = [];
             for(var i in this.state.classes)
             {
-                let url2 = 'https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[i].schoolClassId;
-                Service.Get(url2).then((jsonData)=>{
-                    this.setState({
-                        imgs: this.state.imgs.concat(jsonData.icon),
-                    })
-                })
+                classIndexes.push(i);
             }
-        })    }
+            return promises = classIndexes.map((classIndex)=>{
+                return Service.Get('https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[classIndex].schoolClassId)
+            })
+        })
+        .then((promises)=>{
+            Promise.all(promises).then((posts)=>{
+                for(var i in posts)
+                {
+                    this.setState({
+                        imgs: this.state.imgs.concat(posts[i].icon),
+                    })
+                }
+            })
+        })
+    }
     render(){
     var data= [];   
     for(var i in this.state.classes)
@@ -75,7 +92,6 @@ export default class ClassLists extends Component{
                 backgroundColor: 'white'
             }}
         >
-
         <View style= {{        
             flexDirection: 'row',  
             justifyContent:'flex-start',
@@ -86,7 +102,6 @@ export default class ClassLists extends Component{
         }}>
             <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
         </View>
-
             <View 
                 style= {{        
                     flexDirection: 'row', 
@@ -100,6 +115,8 @@ export default class ClassLists extends Component{
 
             >
                 <FlatList
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
                     data={data}
                     ItemSeparatorComponent={this._separator}
                     renderItem={
@@ -109,9 +126,10 @@ export default class ClassLists extends Component{
                                 justifyContent:'flex-start',
                                 alignItems: 'flex-start',  
                                 alignSelf: 'stretch',    
-                                marginTop: 0.02*screenHeight,
+                                marginTop: 0.01*screenHeight,
                                 marginLeft: 0.02*screenWidth,
-                                marginRight: 0.04*screenWidth,
+                                marginRight: 0.02*screenWidth,
+                                marginBottom: 0.01*screenHeight,
                                 flex:1,
                             }}
                                 onPress={()=>this.props.navigation.navigate('ClassHome',{classId:item.key})}
@@ -164,7 +182,7 @@ export default class ClassLists extends Component{
                     }/>
                 </View>
             </View>
-    );        
+    );  
     }
 }
 

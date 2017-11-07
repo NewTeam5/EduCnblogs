@@ -71,8 +71,11 @@ export default class BlogComment extends Component{
             })
         })
     }
+    UpdateData = ()=>{
+        this.componentDidMount();
+    }
     _separator = () => {
-        return <View style={{ height: 2, backgroundColor: 'rgb(204,204,204)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
     _renderItem = (item)=>{
         let item1 = item;
@@ -117,6 +120,8 @@ export default class BlogComment extends Component{
                     ItemSeparatorComponent={this._separator}
                     renderItem={this._renderItem}
                     data={data}
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
                 />
                 <TouchableOpacity
                     style= {styles.button}
@@ -162,11 +167,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     button: {
-        height: 0.2*0.5*screenWidth,
+        height: screenHeight/12,
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 0,
-        backgroundColor: 'rgb(51,204,255)',  
+        backgroundColor: '#1C86EE',  
     }
 });

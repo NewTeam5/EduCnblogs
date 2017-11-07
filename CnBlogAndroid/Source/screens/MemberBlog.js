@@ -32,6 +32,15 @@ export default class MemberBlog extends Component{
             postCount: 0,//随笔总数
         };
     }
+    UpdateData = ()=>{
+        this.setState({
+            blogs: [],//博客随笔信息列表
+            blogTitle: '',//博客标题
+            pageSize: 0,//博客页容量
+            postCount: 0,//随笔总数
+        });
+        this.componentDidMount();
+    }
     componentDidMount=()=>{
         let blogUrl = this.props.navigation.state.params.blogUrl;
         let blogId = this.props.navigation.state.params.blogId;
@@ -93,7 +102,6 @@ export default class MemberBlog extends Component{
         let blogApp = arr[3];
         return(
             <View>
-                <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
                 <TouchableOpacity 
                     style = {styles.listcontainer}
                     onPress = {()=>{
@@ -151,6 +159,8 @@ export default class MemberBlog extends Component{
                         ItemSeparatorComponent={this._separator}
                         renderItem={this._renderItem}
                         data={data}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
                     />
                 </View>
             </View>

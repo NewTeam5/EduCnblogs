@@ -31,15 +31,6 @@ const head = '<!DOCTYPE html><head>'+
 '<script src="//common.cnblogs.com/script/jquery.js" type="text/javascript"></script>'+
 '<script src="/bundles/blog-common.js?v=hm0KZwWzsEv1qy3Vf9Vq9zW3uMF7kiGWJjjCrkS4nJY1" type="text/javascript"></script>'+
 '</head>';
-function inject(){ 
-    var objs = document.getElementsByTagName('img');
-    for(var i=0;i<objs.length;i++)
-    { 
-        var img = objs[i];
-        img.style.width = 200;
-        img.style.height= 200;
-    }
-}
 // 传入博客Id和blogApp和CommentCount作为参数
 export default class BlogDetail extends Component{
     constructor(props){
@@ -78,7 +69,7 @@ export default class BlogDetail extends Component{
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
                         <Image source = {require('../images/comment.png')} style = {styles.imagestyle}/>
-                        <Text style = {{fontSize: 10}}>{this.props.navigation.state.params.CommentCount}</Text>
+                        <Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -97,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        height: 35,
+        height: height/13,
         width: width,
         backgroundColor: 'white'
     },
@@ -105,12 +96,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: 50,
-        height: 35,
+        width: height/13,
+        height: height/13,
     },
     imagestyle: {
-        width: 30,
-        height: 20,
+        width: height/13-10,
+        height: height/13-18,
         resizeMode: 'stretch',
     }
 })

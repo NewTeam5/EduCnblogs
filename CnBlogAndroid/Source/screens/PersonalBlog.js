@@ -18,6 +18,7 @@ import {
 import {
     StackNavigator,
     TabNavigator,
+    NavigationActions,
 } from 'react-navigation';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
@@ -34,6 +35,13 @@ export default class PersonalBlog extends Component{
     }
     // 更新博客显示数据
     UpdateData = ()=>{
+        // 先清零数据
+        this.setState({
+            blogs: [],//博客随笔信息列表
+            blogTitle: '',//博客标题
+            pageSize: 0,//博客页容量
+            postCount: 0,//随笔总数
+        });
         this.componentDidMount();
     };
     componentDidMount = ()=>{
@@ -101,7 +109,6 @@ export default class PersonalBlog extends Component{
         var Id = item1.item.key;
         return(
             <View>
-                <View style={{ height: 0.75, backgroundColor: 'rgb(100,100,100)'}}/>
                 <TouchableOpacity
                     style = {styles.listcontainer} 
                     onPress = {()=>this.props.navigation.navigate('BlogDetail',
