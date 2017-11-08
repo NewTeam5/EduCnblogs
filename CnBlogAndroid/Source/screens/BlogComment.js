@@ -150,6 +150,7 @@ export default class BlogComment extends Component{
                 >
 	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加/回复评论</Text>
                 </TouchableOpacity>
+            	}
             </View>
         )
     }

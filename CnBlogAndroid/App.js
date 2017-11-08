@@ -339,6 +339,7 @@ const SimpleNavigation = StackNavigator({
         screen: HomeworkLists,
         navigationOptions: {
             //header: null,
+            headerTintColor:'white',            
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
@@ -352,6 +353,7 @@ const SimpleNavigation = StackNavigator({
     HomeworkDetail: {
         screen: HomeworkDetail,
         navigationOptions: {
+            headerTintColor:'white',                        
             headerTitle: '作业详情',
             headerStyle: {
                 height: 40,
@@ -371,6 +373,7 @@ const SimpleNavigation = StackNavigator({
     ClassCreate: {
         screen: ClassCreate,
         navigationOptions: {
+            headerTintColor:'white',                                    
             headerTitle: '创建班级',
             headerStyle: {
                 height: 40,
@@ -396,6 +399,7 @@ const SimpleNavigation = StackNavigator({
     PersonalSettings:{
         screen: PersonalSettings,
         navigationOptions: {
+            headerTintColor:'white',                                    
             headerTitle: '个人设置',
             headerStyle: {
                 height: 40,
@@ -415,6 +419,7 @@ const SimpleNavigation = StackNavigator({
     ClassHome: {
         screen: ClassHome,
         navigationOptions: {
+            headerTintColor:'white',                                    
             headerTitle: '班级博客',
             headerStyle: {
                 height: 40,
@@ -428,6 +433,7 @@ const SimpleNavigation = StackNavigator({
     HomeworkPost: {
         screen: HomeworkPost,
         navigationOptions: {
+            headerTintColor:'white',                                    
             headerTitle: '作业发布',
             headerStyle: {
                 height: 40,
@@ -441,6 +447,7 @@ const SimpleNavigation = StackNavigator({
     BlogDetail: {
         screen: BlogDetail,
         navigationOptions: {
+            headerTintColor:'white',                                    
             headerTitle: '博文详情',
             headerStyle: {
                 height: 40,
@@ -454,6 +461,7 @@ const SimpleNavigation = StackNavigator({
     BlogComment: {
         screen: BlogComment,
         navigationOptions:{
+            headerTintColor:'white',                                    
             headerTitle: '评论',
             headerStyle:{
                 height: 40,
@@ -467,6 +475,7 @@ const SimpleNavigation = StackNavigator({
     ClassMember: {
         screen: ClassMember,
         navigationOptions:{
+            headerTintColor:'white',                                    
             headerTitle: '班级成员',
             headerStyle: {
                 height:40,
@@ -480,6 +489,7 @@ const SimpleNavigation = StackNavigator({
     ClassMemberAdd: {
         screen: ClassMemberAdd,
         navigationOptions:{
+            headerTintColor:'white',                                    
             headerTitle: '添加班级成员',
             headerStyle: {
                 height:40,
@@ -490,6 +500,7 @@ const SimpleNavigation = StackNavigator({
     MemberBlog: {
         screen: MemberBlog,
         navigationOptions:{
+            headerTintColor:'white',                                    
             headerTitle: '他的博客',
             headerStyle: {
                 height:40,
@@ -503,6 +514,7 @@ const SimpleNavigation = StackNavigator({
     CommentAdd: {
         screen: CommentAdd,
         navigationOptions:{
+            headerTintColor:'white',                                    
             headerTitle: '添加评论',
             headerStyle: {
                 height:40,
