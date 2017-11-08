@@ -179,7 +179,7 @@ export default class HomeworkLists extends Component {
                 marginLeft: 0.03*screenWidth,
                 marginRight: 0.04*screenWidth,
                 marginBottom: 0.005*screenHeight,
-                alignSelf: 'stretch',          
+                alignSelf: 'stretch',
             }}
             >
                 <Text
@@ -242,15 +242,15 @@ const HomeworkStyles = StyleSheet.create({
     container: {  
         flexDirection: 'column',  
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex:1,
         alignSelf: 'stretch',
         marginLeft: 0.03*screenWidth,
         marginRight: 0.04*screenWidth,
     },
     titleTextStyle:{
-        fontSize: titleFontSize-5,  
-        color: '#000000',  
+        fontSize: titleFontSize-5,
+        color: '#000000',
         textAlign: 'center',
         marginTop: 10,
         marginBottom: 2,
@@ -258,17 +258,17 @@ const HomeworkStyles = StyleSheet.create({
         fontFamily : 'serif',
     },
     abstractTextStyle:{
-        fontSize: abstractFontSize+2,  
-        color:'rgb(70,70,70)',  
+        fontSize: abstractFontSize+2,
+        color:'rgb(70,70,70)',
         textAlign: 'left',
         marginBottom: 8,
-        lineHeight: 25   
+        lineHeight: 25
     },
     informationTextStyle:{
         alignSelf: "flex-end",
-        fontSize: informationFontSize-2,  
-        color: '#000000',  
+        fontSize: informationFontSize-2,
+        color: '#000000',
         textAlign: 'center',
-        marginBottom: 8      
+        marginBottom: 8
     }
 });  
