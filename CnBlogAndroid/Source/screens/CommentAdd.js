@@ -44,7 +44,9 @@ export default class CommentAdd extends Component{
 			else{
 				ToastAndroid.show("添加失败，请稍后重试！",ToastAndroid.SHORT);
 			}
-		})
+		}).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
 	
     render(){

@@ -54,7 +54,9 @@ export default class ClassHome extends Component{
                     bulletinCount: jsonData.bulletinCount,
                 })
             }
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
     componentWillUnmount=()=>{
         this._isMounted = false;
