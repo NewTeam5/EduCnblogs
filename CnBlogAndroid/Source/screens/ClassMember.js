@@ -52,7 +52,9 @@ export default class ClassMember extends Component{
                     })
                 }
             }
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
         //是否有添加成员的权限
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
@@ -64,7 +66,9 @@ export default class ClassMember extends Component{
                     })
                 }
             })
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
     UpdateData = ()=>{
         this.setState({

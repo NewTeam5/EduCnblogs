@@ -61,7 +61,9 @@ export default class BlogDetail extends Component{
             else{
                 ToastAndroid.show("网络异常！请稍后重试！",ToastAndroid.SHORT);
             }
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
     componentWillUnmount = ()=>{
         this._isMounted=false;
