@@ -5,7 +5,7 @@ import {authData} from './Source/config'
 import {StorageKey} from './Source/config'
 import * as Service from './Source/request/request.js'
 import * as storage from './Source/Storage/storage.js'
-
+import fetch from 'react-native-fetch-polyfill'
 import React, { Component,} from 'react';
 import CookieManager from 'react-native-cookies'
 
@@ -76,7 +76,8 @@ class Welcome extends Component{
     render(){
         return (
             <View style = {styles.container}>
-                <Text> 欢迎使用博客园 </Text>
+                <Image style = {{width: width, height: height, resizeMode: 'stretch'}}
+                source = {require('./Source/images/start.jpg')}/>
             </View>
         )
     }
@@ -114,7 +115,7 @@ class Welcome extends Component{
                         {
                             let url = Config.apiDomain+'api/users/';
                             Service.GetInfo(url,token.access_token)
-                                .then((jsonData)=>{
+                            .then((jsonData)=>{
                                 if(jsonData !== "rejected")
                                 {
                                     this.toPersonalBlog();
@@ -129,6 +130,9 @@ class Welcome extends Component{
                                     })
                                 }
                             })
+                            .catch((error) => {
+                                ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+                            });
                         }
                         else
                         {
@@ -185,16 +189,17 @@ class UrlLogin extends Component{
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack
-            })
-            .then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
-            .then((responseJson)=>{
-                //let data = {access_token : responseJson.access_token};
-                storage.setItem(StorageKey.USER_TOKEN,responseJson);
-                this.toPerson();
-            })
-            .catch((error)=>{
-                throw error;
+            body: 'client_id=' + authData.clientId + '&client_secret=' + authData.clientSecret + '&grant_type=authorization_code' + '&code=' + Code + '&redirect_uri=' + Config.CallBack,
+            timeout: 5*1000
+        })
+        .then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
+        .then((responseJson)=>{
+            //let data = {access_token : responseJson.access_token};
+            storage.setItem(StorageKey.USER_TOKEN,responseJson);
+            this.toPerson();
+        })
+        .catch((error)=>{
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
         })
     }
     render()

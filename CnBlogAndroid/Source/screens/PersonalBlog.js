@@ -51,21 +51,21 @@ export default class PersonalBlog extends Component{
         this._isMounted=true;
         // 获取当前登录用户信息，存放于global
         let user_url = Config.apiDomain + api.user.info;
-		Service.Get(user_url)
-		.then((jsonData)=>{
+        Service.Get(user_url)
+        .then((jsonData)=>{
             if(jsonData!=='rejected')
             {
                 this.setState({
                     isRequestSuccess: true,
                 })
-			    global.user_information = {
-				    userId : jsonData.UserId,
-				    SpaceUserId : jsonData.SpaceUserId,
-				    BlogId : jsonData.BlogId,
-				    DisplayName : jsonData.DisplayName,
-				    face : jsonData.Face,
-				    Seniority : jsonData.Seniority,  //园龄
-				    BlogApp : jsonData.BlogApp,
+                global.user_information = {
+                    userId : jsonData.UserId,
+                    SpaceUserId : jsonData.SpaceUserId,
+                    BlogId : jsonData.BlogId,
+                    DisplayName : jsonData.DisplayName,
+                    face : jsonData.Face,
+                    Seniority : jsonData.Seniority,  //园龄
+                    BlogApp : jsonData.BlogApp,
                 }
             }
             else{
@@ -116,7 +116,9 @@ export default class PersonalBlog extends Component{
                 })
             })
             }
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     };
     componentWillUnmount = ()=>{
         this._isMounted=false;

@@ -87,7 +87,7 @@ export default class HomeworkLists extends Component {
                     })
                 }
             })
-        })
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
         // 获取身份信息，判断是否可以发布作业
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
@@ -99,7 +99,7 @@ export default class HomeworkLists extends Component {
                     })
                 }
             })       
-        })
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
     };
     UpdateData=()=>{
         this.setState({
