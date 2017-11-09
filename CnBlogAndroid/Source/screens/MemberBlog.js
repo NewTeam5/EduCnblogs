@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         flex:1,
         backgroundColor: 'white',
-        marginLeft: 0.03*screenWidth,
-        marginRight: 0.04*screenWidth,
+        width:screenWidth,
+        paddingLeft: 0.03*screenWidth,
+        paddingRight: 0.04*screenWidth,
     }
 });

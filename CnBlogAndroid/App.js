@@ -346,7 +346,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-//                color: 'white'
+                fontSize: 18,
             }
         },
     },
@@ -360,7 +360,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-                //color: 'white'
+                fontSize: 18,
             }
         },
     },
@@ -380,7 +380,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-                //color: 'white'
+                fontSize: 18,
             }
         }        
     },
@@ -406,7 +406,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor:'#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+               fontSize: 18,
             }
         }
     },
@@ -426,7 +426,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+                fontSize: 18,
             }
         }
     },
@@ -440,7 +440,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+                fontSize: 18,
             }
         }
     },
@@ -454,7 +454,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-                //color: 'white'
+                fontSize: 18,
             },
         }
     },
@@ -468,7 +468,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+                fontSize: 18,
             }
         }
     },
@@ -482,7 +482,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+                fontSize: 18,
             }
         }
     },
@@ -494,6 +494,9 @@ const SimpleNavigation = StackNavigator({
             headerStyle: {
                 height:40,
                 backgroundColor: '#1C86EE',
+            },
+            headerTitleStyle: {
+                fontSize: 18,
             }
         }
     },
@@ -507,7 +510,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor: '#1C86EE',
             },
             headerTitleStyle: {
-              //  color: 'white'
+                fontSize: 18,
             }
         }
     },
@@ -521,7 +524,7 @@ const SimpleNavigation = StackNavigator({
                 backgroundColor:'#1C86EE',
             },
             headerTitleStyle: {
-               // color: 'white'
+                fontSize: 18,
             }
         }
     }

@@ -241,10 +241,11 @@ const styles = StyleSheet.create({
     },
     listcontainer: {
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex:1,
+        width: screenWidth,
         backgroundColor: 'white',
-        marginLeft: 0.03*screenWidth,
-        marginRight: 0.04*screenWidth,
+        paddingLeft: 0.03*screenWidth,
+        paddingRight: 0.04*screenWidth,
     }
 });
