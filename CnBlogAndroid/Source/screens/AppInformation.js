@@ -63,11 +63,11 @@ export default class AppInformation extends Component {
         var fills=[
             {
                 title:"当前版本",
-                description: "1.0"
+                description: "alpha"
             },
             {
                 title: "意见反馈",
-                description: "给作者发邮件吧"
+                description: "https://www.wjx.cn/jq/18034457.aspx"
             },
             {
                 title: "项目地址",
