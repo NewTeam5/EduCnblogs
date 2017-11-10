@@ -140,13 +140,27 @@ export default class UserInformation extends Component{
                 justifyContent:'center',
                 alignItems: 'flex-start',
                 height: 0.1*screenHeight,
-                marginBottom: 0.2*screenHeight,
+                marginBottom: 0.05*screenHeight,
                 backgroundColor: 'white',
                 paddingLeft: 0.05*screenWidth,
             }}>
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>园龄:</Text>
                 <Text style = {{fontSize: 15}}>{this.state.Seniority}</Text>
             </View>
+            <TouchableHighlight 
+                underlayColor="white"
+                activeOpacity={0.5}
+                onPress={()=>{this.props.navigation.navigate('AppInformation');}}//关联函数
+                style = {{
+                    justifyContent:'center',
+                    alignItems: 'flex-start',
+                    height: 0.07*screenHeight,
+                    marginBottom: 0.05*screenHeight,
+                    backgroundColor: 'white',
+                    paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>关于App</Text>
+            </TouchableHighlight>
             <TouchableOpacity style = {{
                 justifyContent:'center',
                 alignItems: 'flex-start',

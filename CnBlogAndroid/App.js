@@ -46,6 +46,7 @@ import MemberBlog from './Source/screens/MemberBlog'
 import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
 import CommentAdd from './Source/screens/CommentAdd'
+import AppInformation from './Source/screens/AppInformation'
 const { height, width } = Dimensions.get('window');
 const CODE_URL = [
   'https://oauth.cnblogs.com/connect/authorize',
@@ -524,6 +525,20 @@ const SimpleNavigation = StackNavigator({
         navigationOptions:{
             headerTintColor:'white',                                    
             headerTitle: '添加评论',
+            headerStyle: {
+                height:40,
+                backgroundColor:'#1C86EE',
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
+    },
+    AppInformation: {
+        screen: AppInformation,
+        navigationOptions:{
+            headerTintColor:'white',                                    
+            headerTitle: '关于app',
             headerStyle: {
                 height:40,
                 backgroundColor:'#1C86EE',
