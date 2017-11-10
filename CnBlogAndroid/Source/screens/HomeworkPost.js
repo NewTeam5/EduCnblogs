@@ -87,7 +87,7 @@ export default class App extends Component {
             {
                 ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
             }
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态"！,ToastAndroid.SHORT)})
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态!",ToastAndroid.SHORT)})
     }
     setStartModalVisible(visible) {
         this.setState({startModalVisible: visible});
