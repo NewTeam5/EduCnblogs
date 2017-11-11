@@ -47,7 +47,9 @@ import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
 import CommentAdd from './Source/screens/CommentAdd'
 import AppInformation from './Source/screens/AppInformation'
+
 import ContactPage from './Source/screens/ContactPage'
+
 const { height, width } = Dimensions.get('window');
 const CODE_URL = [
   'https://oauth.cnblogs.com/connect/authorize',
@@ -548,6 +550,7 @@ const SimpleNavigation = StackNavigator({
                 fontSize: 18,
             }
         }
+
     },
     ContactPage: {
         screen: ContactPage,
@@ -562,6 +565,7 @@ const SimpleNavigation = StackNavigator({
                 fontSize: 18,
             }
         }
+
     }
 },{
     initialRouteName: 'Welcome',

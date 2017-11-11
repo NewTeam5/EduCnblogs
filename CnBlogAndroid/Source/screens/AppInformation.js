@@ -39,11 +39,13 @@ export default class AppInformation extends Component {
         return (
             <View>
                 <TouchableOpacity
+
                     onPress = {()=>{
                         if(item1.item.key == 2 || item1.item.key == 1){
                             this.props.navigation.navigate('ContactPage',{url: description})
                         }
                         }}
+
                     style = {styles.container}
                 >
                     <Text style= {styles.titleTextStyle}>
