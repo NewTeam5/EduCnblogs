@@ -25,6 +25,7 @@ const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
 // 该页面使用navigate参数为classId
+
 export default class AppInformation extends Component {
     constructor(props){
         super(props);
@@ -38,7 +39,13 @@ export default class AppInformation extends Component {
         return (
             <View>
                 <TouchableOpacity
-                    onPress = {()=>{}}
+
+                    onPress = {()=>{
+                        if(item1.item.key == 2 || item1.item.key == 1){
+                            this.props.navigation.navigate('ContactPage',{url: description})
+                        }
+                        }}
+
                     style = {styles.container}
                 >
                     <Text style= {styles.titleTextStyle}>
