@@ -50,16 +50,10 @@
     <re><th>安万贺</th><th>王梓嘉</th><th>李奕君</th><th>李欣泽</th><th>索一奇</th></tr>
   </thead>
   <tbody>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>+1<b>完成了保持用户登录状态的功能</b></td><td>+2<b>完成了整个客户端的页面跳转框架</b></td><td>+2<b>添加了时间日期选择组件，限制了时间格式</b></td><td>+2<b>完成了测试报告</b></td><td>-2<i>分工不合理，界面和交互不易分开</i></td></tr>
+    <tr><td>+1<b>完成了用户记录的埋点</b></td><td>+1<b>对界面进行了优化，调整字体和颜色</b></td><td></td><td></td><td>-1<i>多个平台未发布成功</i></td></tr>
+    <tr><td></td><td>+1<b>修复了作业发布没有对表单内容进行检查的bug</b></td><td></td><td></td><td></td></tr>
+
   </tbody>
 </table>
 </div>
