@@ -29,7 +29,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class UserInformation extends Component{
     constructor(props){
@@ -42,9 +42,9 @@ export default class UserInformation extends Component{
         }
     }
     _logout=()=>{
-		storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
-			CookieManager.clearAll()
-			.then((res)=>{
+        storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
+            CookieManager.clearAll()
+            .then((res)=>{
 //                this.props.navigation.navigate('Loginer');
                 const resetAction = NavigationActions.reset({
                     index: 0,
@@ -53,26 +53,26 @@ export default class UserInformation extends Component{
                     ]
                 });
                 this.props.navigation.dispatch(resetAction);
-			})
-		})
+            })
+        })
     }
     _isMounted;
     componentWillUnmount=()=>{
         this._isMounted=false;
     }
-	componentWillMount=()=>{
+    componentWillMount=()=>{
         this._isMounted=true;
         let user_url = Config.apiDomain + api.user.info;
-		Service.Get(user_url)
-		.then((jsonData)=>{
-			global.user_information = {
-				userId : jsonData.UserId,
-				SpaceUserId : jsonData.SpaceUserId,
-				BlogId : jsonData.BlogId,
-				DisplayName : jsonData.DisplayName,
-				face : jsonData.Face,
-				Seniority : jsonData.Seniority,  //园龄
-				BlogApp : jsonData.BlogApp
+        Service.Get(user_url)
+        .then((jsonData)=>{
+            global.user_information = {
+                userId : jsonData.UserId,
+                SpaceUserId : jsonData.SpaceUserId,
+                BlogId : jsonData.BlogId,
+                DisplayName : jsonData.DisplayName,
+                face : jsonData.Face,
+                Seniority : jsonData.Seniority,  //园龄
+                BlogApp : jsonData.BlogApp
             }
         }).then(()=>{
             if(this._isMounted){
@@ -92,10 +92,10 @@ export default class UserInformation extends Component{
                 flex: 1,
             }}
         >
-            <View style= {{        
-                flexDirection: 'row',  
+            <View style= {{
+                flexDirection: 'row',
                 justifyContent:'flex-start',
-                alignItems: 'center',  
+                alignItems: 'center',
                 marginBottom: 0.03*screenHeight,
                 backgroundColor: '#1C86EE',
                 height: screenHeight/12,
@@ -103,10 +103,10 @@ export default class UserInformation extends Component{
             }}>
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>个人信息</Text>
             </View>
-            <View style= {{        
-                flexDirection: 'row',  
+            <View style= {{
+                flexDirection: 'row',
                 justifyContent:'flex-start',
-                alignItems: 'center',  
+                alignItems: 'center',
                 marginBottom: 0.05*screenHeight,
                 backgroundColor: 'white',
                 height: 0.15*screenHeight,
@@ -147,7 +147,7 @@ export default class UserInformation extends Component{
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>园龄:</Text>
                 <Text style = {{fontSize: 15}}>{this.state.Seniority}</Text>
             </View>
-            <TouchableHighlight 
+            <TouchableHighlight
                 underlayColor="white"
                 activeOpacity={0.5}
                 onPress={()=>{this.props.navigation.navigate('AppInformation');}}//关联函数
