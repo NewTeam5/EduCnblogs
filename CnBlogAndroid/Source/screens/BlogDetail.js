@@ -26,7 +26,6 @@ const head = '<!DOCTYPE html><head>'+
 '<meta charset="utf-8"/>'+
 '<meta name="viewport" content="width=device-width, initial-scale=1" />'+
 '<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=ChDk9h03-S75WEqNhGvXkWireJ5cCWdK1xRM9NIXfnM1"/>'+
-//'<link id="MainCss" type="text/css" rel="stylesheet" href="/skins/AnotherEon001/bundle-AnotherEon001.css?v=dNz80TfH9-81kuLR86t4JWgT2tb_J0B779DQM4kw0WU1"/>'+
 '<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet"'+
 'href="https://www.cnblogs.com/skins/UnlimitedSunlight/bundle-UnlimitedSunlight-mobile.css"/>'+
 '<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=ChDk9h03-S75WEqNhGvXkWireJ5cCWdK1xRM9NIXfnM1"/>'+

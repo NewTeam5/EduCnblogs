@@ -26,7 +26,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class HomeworkLists extends Component {
     constructor(props){
@@ -122,10 +122,12 @@ export default class HomeworkLists extends Component {
         var description = item1.item.description;//作业描述
         var deadline = (item1.item.deadline != null ? item1.item.deadline :"Tundefine");//作业截止日期
         var url = item1.item.url;//作业地址
+        var Id = item1.item.key;//作业Id
         return (
             <View>
                 <TouchableOpacity
-                    onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url})}
+                    onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url, Id: Id,
+                                            classId: this.props.navigation.state.params.classId})}
                     style = {HomeworkStyles.container}
                 >
                     <Text style= {HomeworkStyles.titleTextStyle}>

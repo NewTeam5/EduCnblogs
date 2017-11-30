@@ -50,7 +50,7 @@ import AppInformation from './Source/screens/AppInformation'
 import ScheduleReminding from './Source/screens/ScheduleReminding'
 
 import ContactPage from './Source/screens/ContactPage'
-
+import Submitted from './Source/screens/Submitted';
 const { height, width } = Dimensions.get('window');
 const CODE_URL = [
   'https://oauth.cnblogs.com/connect/authorize',
@@ -580,7 +580,20 @@ const SimpleNavigation = StackNavigator({
                 fontSize: 18,
             }
         }
-
+    },
+    Submitted: {
+        screen: Submitted,
+        navigationOptions:{
+            headerTintColor:'white',                                    
+            headerTitle: '提交列表',
+            headerStyle: {
+                height:40,
+                backgroundColor:'#1C86EE',
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
     }
 },{
     initialRouteName: 'Welcome',
