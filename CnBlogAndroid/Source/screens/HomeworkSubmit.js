@@ -91,11 +91,8 @@ export default class HomeworkSubmit extends Component {
             [
                 {text: '取消'},
                 {text: '确认提交', onPress: ()=>{
-                    ToastAndroid.show(submitUrl, ToastAndroid.SHORT);
-                    ToastAndroid.show(body, ToastAndroid.SHORT);
                     Service.UserAction(submitUrl, body, 'POST')
                     .then((response)=>{
-                        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
                         if(response.status !== 200)
                             return null;
                         else
@@ -103,7 +100,7 @@ export default class HomeworkSubmit extends Component {
                     })
                     .then((jsonData)=>{
                         if(jsonData==null)
-                            ToastAndroid.show("请求失败！",ToastAndroid.SHORT);
+                            ToastAndroid.show("请求失败，您的身份可能不对！",ToastAndroid.SHORT);
                         else if(jsonData.isSuccess)
                         {
                             ToastAndroid.show('添加成功，请刷新查看！',ToastAndroid.SHORT);
