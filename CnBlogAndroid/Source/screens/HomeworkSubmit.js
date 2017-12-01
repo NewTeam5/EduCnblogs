@@ -90,9 +90,12 @@ export default class HomeworkSubmit extends Component {
             title,
             [
                 {text: '取消'},
-                {text: '确认提交', onPress: (body, submitUrl)=>{
+                {text: '确认提交', onPress: ()=>{
+                    ToastAndroid.show(submitUrl, ToastAndroid.SHORT);
+                    ToastAndroid.show(body, ToastAndroid.SHORT);
                     Service.UserAction(submitUrl, body, 'POST')
                     .then((response)=>{
+                        ToastAndroid.show(response.status.toString(), ToastAndroid.SHORT);
                         if(response.status !== 200)
                             return null;
                         else
