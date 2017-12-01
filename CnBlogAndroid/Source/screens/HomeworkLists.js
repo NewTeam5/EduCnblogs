@@ -120,7 +120,7 @@ export default class HomeworkLists extends Component {
         let item1 = item;
         var title = item1.item.title;//作业标题
         var description = item1.item.description;//作业描述
-        var deadline = (item1.item.deadline != null ? item1.item.deadline :"Tundefine");//作业截止日期
+        var deadline = item1.item.deadline;//作业截止日期
         var url = item1.item.url;//作业地址
         var Id = item1.item.key;//作业Id
         return (

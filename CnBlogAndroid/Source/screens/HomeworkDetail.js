@@ -19,6 +19,7 @@ import {
 } from 'react-navigation';
 const { height, width } = Dimensions.get('window');
 HtmlDecode = (str)=>{
+    if(str==null) return '';
     var s = "";
     if(str.length == 0) return "";
     s = str.replace(/&amp;/g,"&");
@@ -70,7 +71,7 @@ export default class HomeWorkDetail extends Component{
         return(
             <View style = {styles.container}>
                 {<WebView
-                    source={{html: formatTyle===1?content:HtmlDecode(convertedContent),
+                    source={{html: convertedContent==null?content:HtmlDecode(convertedContent),
                         baseUrl: 'https://edu.cnblogs.com'+url}}
                     style={{height: height-40, width: width}}
                     startInLoadingState={true}
@@ -85,8 +86,17 @@ export default class HomeWorkDetail extends Component{
                     onPress = {()=>this.props.navigation.navigate('Submitted',{Id: Id})}
                     style = {styles.button}
                     >
-                        <Text style = {{fontSize: 18, textAlign: 'center'}}>
-                            已提交({answerCount}人)列表
+                        <Text style = {{fontSize: 15, textAlign: 'center'}}>
+                            已提交列表({answerCount}人)
+                        </Text>
+                    </TouchableOpacity>
+                    <View style = {{backgroundColor: 'white', width: width/6}}/>
+                    <TouchableOpacity
+                    onPress = {()=>this.props.navigation.navigate('HomeworkSubmit',{homeworkId: Id, classId: classId})}
+                    style = {styles.button}
+                    >
+                        <Text style = {{fontSize: 15, textAlign: 'center'}}>
+                            选择并提交作业
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -110,10 +120,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     button:{
-        width: width,
-        height: height/16,
+        width: width/2.8,
+        height: height/18,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(51,204,255)'
+        backgroundColor: 'rgb(51,204,255)',
+        borderRadius: 8,
     }
 })
