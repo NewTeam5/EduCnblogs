@@ -2,6 +2,7 @@ import Config from '../config';
 import api from '../api/api.js';
 import {authData} from '../config'
 import {StorageKey} from '../config'
+import {err_info} from '../config'
 import * as storage from '../Storage/storage.js'
 import fetch from 'react-native-fetch-polyfill'
 import {
@@ -31,7 +32,7 @@ export function GetInfo(url, token){
             resolve(jsonData);
         })
         .catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
             reject("rejected");   //如果失败了，那么就返回rejected
         });
     });
@@ -47,7 +48,7 @@ export function Get(url){
 			resolve(jsonData)
 		})
 		.catch((error) => {
-			ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+			ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
 			reject("rejected");
 		});
 	})
@@ -62,7 +63,7 @@ export function UserAction(url,content,type){  //此处的body为修改的内容
 			resolve(response);
 		})
 		.catch((error) => {
-		    ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+		    ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
 			reject("rejected");
 		});   
 	})
@@ -83,7 +84,7 @@ function PostInfo(url,token,content,type){
             resolve(response);
         })
         .catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
             reject("rejected");     //如果失败了，那么就返回一个rejected
         });
     });
