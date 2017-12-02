@@ -58,7 +58,9 @@ export default class CommentAdd extends Component{
                     defaultValue={this.props.navigation.state.params.Author!=''?'@'+this.props.navigation.state.params.Author+'\n':''}
                     multiline={true}
                     underlineColorAndroid="transparent"
-					accessibilityLabel = "CommentAdd_inputBox"
+                    accessibilityLabel = "CommentAdd_inputBox"
+                    autoCorrect = {false}
+                    blurOnSubmit={false}
                 />
                 <View style={{flex:1}}>
                 </View>
