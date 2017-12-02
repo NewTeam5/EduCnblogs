@@ -9,30 +9,6 @@ import {
 	AsyncStorage,
 }from 'react-native';
 
-/**
-function GetToken(){
-    //先获取token，然后再获取信息
-	var token = storage.getItem("USER_TOKEN");
-    var Body = "client_id=" + authData.clientId + "&client_secret=" + authData.clientSecret + "&grant_type=client_credentials";
-    return new Promise((resolve,reject)=>{
-        fetch(Config.AccessToken,{
-            method : 'POST',
-            headers:{
-                'Content-Type' : 'application/x-www-form-urlencoded',
-            },
-            body : Body
-        })
-        .then((response)=>response.json())
-        .then((responseJson)=>{
-            resolve("Bearer" + " " + token);
-        })
-        .catch((error) => {
-            throw error;
-            reject();
-        });
-    });
-}*/
-
 //这里修改为返回Promise对象(by ZiJiaW)
 export function GetInfo(url, token){
     return new Promise((resolve,reject)=>{

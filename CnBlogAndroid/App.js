@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
         height: height/7,
         width: width/1.5,
         resizeMode: 'stretch',
-    }
+    },
 });
 
 const HomeTab = TabNavigator({
@@ -301,16 +301,15 @@ const HomeTab = TabNavigator({
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-//        showIcon: true,
         showLabel: true,
         style: {
 //            height: 30,
         },
         labelStyle: {
-            //fontSize: 14
+            //fontSize: 10
         },
         tabStyle: {
-            backgroundColor: '#1C86EE',
+			backgroundColor: '#1C86EE',
             height: height/13,
         },
     },
