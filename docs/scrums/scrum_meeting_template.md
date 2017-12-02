@@ -17,11 +17,36 @@
     <tr><th>团队成员</th><th>完成任务</th><th>计划任务</th></tr>
   </thead>
   <tbody>
-    <tr><th>安万贺</th><td><br><a href = ""></a></td><td><br><a href = ""></a></td></tr>
-    <tr><th>李奕君</th><td><br><a href = ""></a></td><td><br><a href = ""></a></td></tr>
-    <tr><th>王梓嘉</th><td><br><a href = ""></a></td><td><br><a href = ""></a></td></tr>
-    <tr><th>李欣泽</th><td><br><a href = ""></a></td><td><br><a href = ""></a></td></tr>
-    <tr><th>索一奇</th><td><br><a href = ""></a></td><td><br><a href = ""></a></td></tr> 
+    <tr>
+      <th>安万贺</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr>
+    <tr>
+      <th>李奕君</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr>
+    <tr>
+      <th>王梓嘉</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr>
+    <tr>
+      <th>窦鑫泽</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr>
+    <tr>
+      <th>李欣泽</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr>
+    <tr>
+      <th>索一奇</th>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/">Pull Request #</a></td>
+      <td><br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/">Issue #</a></td>
+    </tr> 
   </tbody>
 </table>
 </div>
