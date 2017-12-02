@@ -36,20 +36,21 @@ export default class App extends Component {
         this.state = { 
             modalVisible: false,
             myMarkedDates:{
-                '2017-11-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
-                '2017-11-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
-                '2017-11-18': {selected: true,title:"bbb",description:"description",deadline:"deadline",url:"url"},
-                '2017-11-19': {selected: true,title:"aaa",description:"description",deadline:"deadline",url:"url"}, 
-                '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
-                '2017-11-21': {selected: true,title:"ddd",description:"description",deadline:"deadline",url:"url"},
-                '2017-11-22': {selected: true,title:"nnn",description:"description",deadline:"deadline",url:"url"}
+                // '2017-11-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
+                // '2017-11-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
+                // '2017-11-18': {selected: true,title:"bbb",description:"description",deadline:"deadline",url:"url"},
+                // '2017-11-19': {selected: true,title:"aaa",description:"description",deadline:"deadline",url:"url"}, 
+                // '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
+                // '2017-11-21': {selected: true,title:"ddd",description:"description",deadline:"deadline",url:"url"},
+                // '2017-11-22': {selected: true,title:"nnn",description:"description",deadline:"deadline",url:"url"}
             },
+            data:[],
             classes: [],
             isEmpty: true,
             homeworks: [],
             counts: 0,
-            isRequestSuccess: false,
-        };
+            isRequestSuccess: false,            
+        };                
     }
     componentWillMount = () => {
         this._isMounted = true;
@@ -92,22 +93,25 @@ export default class App extends Component {
                             });
                         }
                     })
-                    .then(() => {
-                        let c = {};
-                        for(let i in this.state.homeworks) {
-                            if(this.state.homeworks[i].isFinished !== false) {
-                                let t = this.state.homeworks[i].deadline;
-                                t = t.split('T');
-                                c[t[0]] = {
-                                    title: this.state.homeworks[i].title,
-                                    description: this.state.homeworks[i].description,
-                                    url : this.state.homeworks[i].url,
-                                    class: this.state.homeworks[i].schoolClassId
-                                };
-                            }
-                        }
-                        // alert(JSON.stringify(c));
-                    })
+                    // .then(() => {
+                    //     // let c = {};
+                    //     for(let i in this.state.homeworks) {
+                    //         if(this.state.homeworks[i].isFinished == false) {
+                    //             let t = this.state.homeworks[i].deadline;
+                    //             t = t.split('T');
+                    //             this.state.myMarkedDates[t[0]]={
+                    //                 selected: true,
+                    //             };
+                    //             // c[t[0]] = {
+                    //             //     title: this.state.homeworks[i].title,
+                    //             //     description: this.state.homeworks[i].description,
+                    //             //     url : this.state.homeworks[i].url,
+                    //             //     class: this.state.homeworks[i].schoolClassId
+                    //             // };
+                    //         }
+                    //     }                        
+                    //     // alert(JSON.stringify(c));
+                    // })
                 })
             }
         }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
@@ -152,19 +156,17 @@ export default class App extends Component {
             </View>
         )
     }    
-    render() {  
-    var data = [];
-    for(var i in this.state.myMarkedDates)
-    {
-        //ToastAndroid.show(this.state.myMarkedDates[i].title,ToastAndroid.SHORT);
-        data.push({
-            key: i,//日期
-            title: this.state.myMarkedDates[i].title,//作业标题
-            url: this.state.myMarkedDates[i].url,//作业网址
-            description: this.state.myMarkedDates[i].description,//作业描述
-            deadline: this.state.myMarkedDates[i].deadline,//作业截止日期
-        })
-    }
+    render() {     
+        this.state.myMarkedDates={};
+        for(let i in this.state.homeworks) {
+            if(this.state.homeworks[i].isFinished == false) {
+                let t = this.state.homeworks[i].deadline;
+                t = t.split('T');
+                this.state.myMarkedDates[t[0]]={
+                    selected: true,
+                };
+            }
+        }                        
     return (
         <View
             style= {{
@@ -184,7 +186,7 @@ export default class App extends Component {
                      marginTop: 22
                  }}>
                     <FlatList
-                        data={data}
+                        data={this.state.data}
                         ItemSeparatorComponent = {this._separator}
                         renderItem={this._renderItem}
                     />
@@ -192,9 +194,27 @@ export default class App extends Component {
                  </View>
             </Modal>        
             <Calendar
-                markedDates={this.state.myMarkedDates} 
+                markedDates={this.state.myMarkedDates}                 
                 onDayPress={(day) => {
                     if (day.dateString in this.state.myMarkedDates){
+                        this.state.data=[];
+                        for(var i in this.state.homeworks)
+                        {          
+                            if(this.state.homeworks[i].isFinished == false) {                                              
+                                let t = this.state.homeworks[i].deadline;
+                                t = t.split('T');
+                                if (t[0]===day.dateString){
+                                    this.state.data.push({
+                                        key: t[0],//日期
+                                        title: this.state.homeworks[i].title,//作业标题
+                                        url: this.state.homeworks[i].url,//作业网址
+                                        description: this.state.homeworks[i].description,//作业描述
+                                        deadline: t[1],//作业截止日期
+                                        class: this.state.homeworks[i].schoolClassId//班级Id
+                                    })
+                                }
+                            }
+                        }                        
                         this.setState({modalVisible:true});
                     }
                 }}                           
