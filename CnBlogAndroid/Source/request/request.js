@@ -3,7 +3,7 @@ import api from '../api/api.js';
 import {authData} from '../config'
 import {StorageKey} from '../config'
 import * as storage from '../Storage/storage.js'
-
+import fetch from 'react-native-fetch-polyfill'
 import {
     ToastAndroid,
 	AsyncStorage,
@@ -17,7 +17,7 @@ export function GetInfo(url, token){
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Bearer' + ' ' + token,
-            },
+            },timeout: 5*1000
         })
         .then((response)=>{
             if(response.status!=200)
@@ -31,7 +31,7 @@ export function GetInfo(url, token){
             resolve(jsonData);
         })
         .catch((error) => {
-            console.error(error);
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
             reject("rejected");   //如果失败了，那么就返回rejected
         });
     });
@@ -39,7 +39,7 @@ export function GetInfo(url, token){
 //异步依赖异步回调的Primise用法 参考https://segmentfault.com/a/1190000005894077?_ea=943171
 //这里将上面两个异步作了进一步封装(by ZiJiaW)，promise返回值为该url的json对象
 export function Get(url){
-	return new Promise((resolve,reject)=>{	
+	return new Promise((resolve,reject)=>{
 		storage.getItem(StorageKey.USER_TOKEN).then((token)=>{
 			return GetInfo(url, token.access_token);
 		})
@@ -47,7 +47,7 @@ export function Get(url){
 			resolve(jsonData)
 		})
 		.catch((error) => {
-			console.error(error);
+			ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
 			reject("rejected");
 		});
 	})
@@ -62,7 +62,7 @@ export function UserAction(url,content,type){  //此处的body为修改的内容
 			resolve(response);
 		})
 		.catch((error) => {
-		    console.error(error);
+		    ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
 			reject("rejected");
 		});   
 	})
@@ -77,13 +77,13 @@ function PostInfo(url,token,content,type){
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Authorization': 'Bearer' + ' ' + token,
             },
-			body : content
+			body : content,timeout: 5*1000
         })
         .then((response)=>{
             resolve(response);
         })
         .catch((error) => {
-            console.error(error);
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
             reject("rejected");     //如果失败了，那么就返回一个rejected
         });
     });

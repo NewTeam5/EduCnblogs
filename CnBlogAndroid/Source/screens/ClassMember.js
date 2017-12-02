@@ -33,28 +33,51 @@ export default class ClassMember extends Component{
         this.state = {
             members: [],
             membership: 1,
+            isRequestSuccess: false,//初始认为请求未成功，不进行渲染，以防App崩溃
         }
-        //是否有添加成员的权限
-        let url = Config.apiDomain + api.user.info;
-        Service.Get(url).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
-            })
-        })
     }
-    componentDidMount = ()=>{
+    _isMounted;
+    componentWillMount = ()=>{
+        this._isMounted=true;
         let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                members: jsonData,
+            if(jsonData!=='rejected')
+            {
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted){
+                    this.setState({
+                        members: jsonData,
+                    })
+                }
+            }
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
+        //是否有添加成员的权限
+        let url1 = Config.apiDomain + api.user.info;
+        Service.Get(url1).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                if(this._isMounted){
+                    this.setState({
+                        membership: jsonData.membership,
+                    })
+                }
             })
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
     UpdateData = ()=>{
-        this.componentDidMount();
+        this.setState({
+            isRequestSuccess: false,
+        })
+        this.componentWillMount();
+    }
+    componentWillUnmount=()=>{
+        this._isMounted=false;
     }
     _renderItem = (item)=>{
         let item1 = item;
@@ -93,6 +116,8 @@ export default class ClassMember extends Component{
     }
     render(){
         var data = [];
+        // 在请求成功的情况下渲染列表
+        if(this.state.isRequestSuccess){
         for(var i in this.state.members)
         {
             data.push({
@@ -104,7 +129,7 @@ export default class ClassMember extends Component{
                 realName: this.state.members[i].realName,//真实姓名
                 blogId: this.state.members[i].blogId,
             })
-        }
+        }}
         return(
             <View style = {styles.container}>
 	            <View style= {{        
@@ -139,7 +164,9 @@ export default class ClassMember extends Component{
 	                        添加成员
 	                    </Text>
 	                </TouchableHighlight>
-                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width:screenWidth, marginTop: 0.005*screenHeight,}}/>         
+
+                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width: screenWidth, marginTop: 0.005*screenHeight,}} />  
+
 	            </View>
                 <FlatList
                     ItemSeparatorComponent={this._separator}

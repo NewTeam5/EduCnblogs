@@ -29,7 +29,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class UserInformation extends Component{
     constructor(props){
@@ -42,9 +42,9 @@ export default class UserInformation extends Component{
         }
     }
     _logout=()=>{
-		storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
-			CookieManager.clearAll()
-			.then((res)=>{
+        storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
+            CookieManager.clearAll()
+            .then((res)=>{
 //                this.props.navigation.navigate('Loginer');
                 const resetAction = NavigationActions.reset({
                     index: 0,
@@ -53,30 +53,36 @@ export default class UserInformation extends Component{
                     ]
                 });
                 this.props.navigation.dispatch(resetAction);
-			})
-		})
-	}
-	componentWillMount=()=>{
+            })
+        })
+    }
+    _isMounted;
+    componentWillUnmount=()=>{
+        this._isMounted=false;
+    }
+    componentWillMount=()=>{
+        this._isMounted=true;
         let user_url = Config.apiDomain + api.user.info;
-		Service.Get(user_url)
-		.then((jsonData)=>{
-			global.user_information = {
-				userId : jsonData.UserId,
-				SpaceUserId : jsonData.SpaceUserId,
-				BlogId : jsonData.BlogId,
-				DisplayName : jsonData.DisplayName,
-				face : jsonData.Face,
-				Seniority : jsonData.Seniority,  //园龄
-				BlogApp : jsonData.BlogApp
+        Service.Get(user_url)
+        .then((jsonData)=>{
+            global.user_information = {
+                userId : jsonData.UserId,
+                SpaceUserId : jsonData.SpaceUserId,
+                BlogId : jsonData.BlogId,
+                DisplayName : jsonData.DisplayName,
+                face : jsonData.Face,
+                Seniority : jsonData.Seniority,  //园龄
+                BlogApp : jsonData.BlogApp
             }
         }).then(()=>{
+            if(this._isMounted){
             this.setState({
                 faceurl: global.user_information.face,
                 DisplayName: global.user_information.DisplayName,
                 BlogApp: global.user_information.BlogApp,
                 Seniority: global.user_information.Seniority,
-            })
-        })
+            })}
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
     }
     render() {
     return (
@@ -86,10 +92,10 @@ export default class UserInformation extends Component{
                 flex: 1,
             }}
         >
-            <View style= {{        
-                flexDirection: 'row',  
+            <View style= {{
+                flexDirection: 'row',
                 justifyContent:'flex-start',
-                alignItems: 'center',  
+                alignItems: 'center',
                 marginBottom: 0.03*screenHeight,
                 backgroundColor: '#1C86EE',
                 height: screenHeight/12,
@@ -97,11 +103,11 @@ export default class UserInformation extends Component{
             }}>
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>个人信息</Text>
             </View>
-            <View style= {{        
-                flexDirection: 'row',  
+            <View style= {{
+                flexDirection: 'row',
                 justifyContent:'flex-start',
-                alignItems: 'center',  
-                marginBottom: 0.05*screenHeight,
+                alignItems: 'center',
+                marginBottom: 0.02*screenHeight,
                 backgroundColor: 'white',
                 height: 0.15*screenHeight,
                 paddingLeft: 0.05*screenWidth,
@@ -123,7 +129,7 @@ export default class UserInformation extends Component{
                 justifyContent:'center',
                 alignItems: 'flex-start',
                 height: 0.1*screenHeight,
-                marginBottom: 0.05*screenHeight,
+                marginBottom: 0.02*screenHeight,
                 backgroundColor: 'white',
                 paddingLeft: 0.05*screenWidth,
             }}>
@@ -134,13 +140,41 @@ export default class UserInformation extends Component{
                 justifyContent:'center',
                 alignItems: 'flex-start',
                 height: 0.1*screenHeight,
-                marginBottom: 0.2*screenHeight,
+                marginBottom: 0.02*screenHeight,
                 backgroundColor: 'white',
                 paddingLeft: 0.05*screenWidth,
             }}>
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>园龄:</Text>
                 <Text style = {{fontSize: 15}}>{this.state.Seniority}</Text>
             </View>
+            <TouchableHighlight
+                underlayColor="white"
+                activeOpacity={0.5}
+                onPress={()=>{this.props.navigation.navigate('ScheduleReminding');}}//关联函数
+                style = {{
+                    justifyContent:'center',
+                    alignItems: 'flex-start',
+                    height: 0.07*screenHeight,
+                    marginBottom: 0.02*screenHeight,
+                    backgroundColor: 'white',
+                    paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>日程提醒</Text>
+            </TouchableHighlight>            
+            <TouchableHighlight
+                underlayColor="white"
+                activeOpacity={0.5}
+                onPress={()=>{this.props.navigation.navigate('AppInformation');}}//关联函数
+                style = {{
+                    justifyContent:'center',
+                    alignItems: 'flex-start',
+                    height: 0.07*screenHeight,
+                    marginBottom: 0.05*screenHeight,
+                    backgroundColor: 'white',
+                    paddingLeft: 0.05*screenWidth,
+            }}>
+                <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>关于App</Text>
+            </TouchableHighlight>
             <TouchableOpacity style = {{
                 justifyContent:'center',
                 alignItems: 'flex-start',

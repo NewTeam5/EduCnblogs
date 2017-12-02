@@ -37,14 +37,16 @@ export default class CommentAdd extends Component{
         let content = JSON.stringify({body: content1});
 		Service.UserAction(add_url,content,"POST").then((result)=>{
 			if(result.status == 200){
-				ToastAndroid.show("添加成功",ToastAndroid.SHORT);
+				ToastAndroid.show("添加成功，请刷新查看！",ToastAndroid.SHORT);
                 this.refs.commentRef.clear();
                 this.props.navigation.goBack();
 			}
 			else{
-				ToastAndroid.show("添加失败，请稍后重试",ToastAndroid.SHORT);
+				ToastAndroid.show("添加失败，请稍后重试！",ToastAndroid.SHORT);
 			}
-		})
+		}).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
 	
     render(){
@@ -56,6 +58,7 @@ export default class CommentAdd extends Component{
                     value={this.state.text}
                     multiline={true}
                     underlineColorAndroid="transparent"
+					accessibilityLabel = "CommentAdd_inputBox"
                 />
                 <View style={{flex:1}}>
                 <Text style = {{color: 'rgb(51,51,51)',fontSize: 15}}>回复请在评论第一行写上:@用户昵称</Text>
@@ -64,7 +67,7 @@ export default class CommentAdd extends Component{
                     style= {styles.button}
                     onPress = {this.onSubmit.bind(this)}
                 >
-                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>提交</Text>
+                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
                 </TouchableOpacity>
                 
             </View>

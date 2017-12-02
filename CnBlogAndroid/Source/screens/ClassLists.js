@@ -34,24 +34,40 @@ export default class ClassLists extends Component{
         this.state={
             classes: [],
             imgs: [],
+            isEmpty: true,//初始认为请求未成功，不进行渲染，以防App崩溃
         }
     }
     _separator = () => {
         return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
     }
+    _isMounted;
+    componentWillUnmount = ()=>{
+        this._isMounted=false;
+    }
     UpdateData = ()=>{
         this.setState({
-            classed:[],
+            classes:[],
             imgs:[],
+            isEmpty: true
         })
-        this.componentDidMount();
+        this.componentWillMount();
     }
-    componentDidMount=()=>{
+    componentWillMount=()=>{
+        this._isMounted=true;
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                classes: jsonData,
-            })
+            if(this._isMounted){
+                this.setState({
+                    classes: jsonData,
+                })
+                if(jsonData!=='rejected')
+                {
+                    this.setState({
+                        isEmpty: false,
+                    })
+                }
+                //ToastAndroid.show(jsonData,ToastAndroid.SHORT);
+            }
         }).then(()=>{
             let classIndexes = [];
             for(var i in this.state.classes)
@@ -66,15 +82,19 @@ export default class ClassLists extends Component{
             Promise.all(promises).then((posts)=>{
                 for(var i in posts)
                 {
+                    if(this._isMounted){
                     this.setState({
                         imgs: this.state.imgs.concat(posts[i].icon),
-                    })
+                    })}
                 }
             })
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     }
     render(){
-    var data= [];   
+    var data= [];
+    if(this.state.isEmpty===false){
     for(var i in this.state.classes)
     {
         data.push({
@@ -83,7 +103,7 @@ export default class ClassLists extends Component{
             universityNameCn: this.state.classes[i].universityNameCn,
             imgurl: this.state.imgs[i],
         })
-    }
+    }}
     return (
         <View
             style= {{
@@ -95,7 +115,7 @@ export default class ClassLists extends Component{
         <View style= {{        
             flexDirection: 'row',  
             justifyContent:'flex-start',
-            alignItems: 'center',  
+            alignItems: 'center',
             backgroundColor: '#1C86EE',
             height: screenHeight/12,
             paddingLeft: 0.05*screenWidth,
@@ -111,16 +131,14 @@ export default class ClassLists extends Component{
                     marginLeft: 0.02*screenWidth,
                     marginRight: 0.04*screenWidth,
                     flex:1,
-                }}          
-
-            >
+                }}>
                 <FlatList
                     onRefresh = {this.UpdateData}
                     refreshing= {false}
                     data={data}
                     ItemSeparatorComponent={this._separator}
                     renderItem={
-                        ({item}) => 
+                        ({item}) =>
                             <TouchableOpacity style= {{        
                                 flexDirection: 'row',  
                                 justifyContent:'flex-start',
@@ -146,19 +164,20 @@ export default class ClassLists extends Component{
                                 alignItems: 'flex-start',  
                                 alignSelf: 'stretch',                                
                                 marginLeft: 0.02*screenWidth,
+                                paddingLeft: 0.01*screenWidth,
                                 height: 0.1*screenHeight,
                                 flex:1,
                             }}>
                                 <View
                                     style= {{
-                                        alignSelf:'flex-start',
-                                        backgroundColor:"transparent",
+                                        flexDirection: 'row',
+                                        justifyContent:'flex-start',
+                                        alignItems: 'flex-start',
                                     }}             
                                 >
                                     <Text style= {{
                                         fontSize: titleFontSize-5,  
                                         color: 'rgb(51,51,51)',  
-                                        textAlign: 'center',
                                     }}>
                                         {item.universityNameCn}
                                     </Text>                 
@@ -171,7 +190,6 @@ export default class ClassLists extends Component{
                                     <Text style= {{
                                         fontSize: btnFontSize+2,
                                         color: 'rgb(51,51,51)',  
-                                        textAlign: 'center',
                                         marginRight: 0.02*screenWidth,   
                                     }}>
                                         {item.nameCn}

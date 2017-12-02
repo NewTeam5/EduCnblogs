@@ -42,7 +42,7 @@ export default class ClassMemberAdd extends Component {
             studentNo: this.state.studentNo,
         }
         let body = JSON.stringify(postBody);
-		let url = Config.apiDomain + Config.ClassDomain + Config.AddMemberByName;
+        let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
         Service.UserAction(url, body, 'POST').then((response)=>{
             if(response.status!==200)
             {
@@ -69,7 +69,9 @@ export default class ClassMemberAdd extends Component {
             {
                 ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
             }
-        })
+        }).catch((error) => {
+            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        });
     };
     render() {
     return (
@@ -146,6 +148,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_realName'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果 	                
                     onChangeText= {(text)=>{
                         this.setState({
@@ -227,6 +230,7 @@ export default class ClassMemberAdd extends Component {
                         borderColor: 'gray', 
                         borderWidth: 1
                     }}
+					accessibilityLabel = 'ClassMemberAdd_studentID'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果              
                     onChangeText={(text)=>{
                         this.setState({

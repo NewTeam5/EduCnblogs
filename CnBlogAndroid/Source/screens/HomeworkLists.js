@@ -26,7 +26,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class HomeworkLists extends Component {
     constructor(props){
@@ -35,40 +35,77 @@ export default class HomeworkLists extends Component {
             homeworks: [],
             counts: 0,
             membership: 1,
+            finishedcount: '',
+            isRequestSuccess: false,
         }
-        let url = Config.apiDomain + api.user.info;
-        Service.Get(url).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                this.setState({
-                    membership: jsonData.membership,
-                })
-            })       
-        })
+    }
+    // 标志位
+    _isMounted;
+    componentWillUnmount = ()=>{
+        this._isMounted = false;
     }
     //应该传进来班级ID作为属性
-    componentDidMount = ()=>{
+    componentWillMount = ()=>{
+        // 先设标志位为true，表示组件未卸载
+        this._isMounted = true;
         let classId = this.props.navigation.state.params.classId;
         let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/1-12";
         // 先获取作业数量，再按作业数量获取作业信息列表
         Service.Get(url).then((jsonData)=>{
-            this.setState({
-                counts: jsonData.totalCount,
-            });
+            if(jsonData!=='rejected')
+            {
+                this.setState({
+                    isRequestSuccess: true,
+                })
+                if(this._isMounted)
+                {
+                    this.setState({
+                        counts: jsonData.totalCount,
+                    });
+                }
+            }
         })
         .then(()=>{
-			if(this.state.counts !== 0){				
-				let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
-				Service.Get(url).then((jsonData)=>{
-					this.setState({
-						homeworks: jsonData.homeworks,
-					});
-				})
-			}
-        })
+            let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
+            Service.Get(url).then((jsonData)=>{
+                if(this._isMounted&&this.state.isRequestSuccess){
+                    this.setState({
+                        homeworks: jsonData.homeworks,
+                    });
+                }
+            }).then(()=>{
+                var c = 0;
+                for(var i in this.state.homeworks)
+                {
+                    if(this.state.homeworks[i].isFinished===false)
+                        c++;
+                }
+                if(this._isMounted)
+                {
+                    this.setState({
+                        finishedcount: c,
+                    })
+                }
+            })
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+        // 获取身份信息，判断是否可以发布作业
+        let url1 = Config.apiDomain + api.user.info;
+        Service.Get(url1).then((jsonData)=>{
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            Service.Get(url2).then((jsonData)=>{
+                if(this._isMounted && jsonData!=='rejected'){
+                    this.setState({
+                        membership: jsonData.membership,
+                    })
+                }
+            })       
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
     };
     UpdateData=()=>{
-        this.componentDidMount();
+        this.setState({
+            isRequestSuccess: false,
+        });
+        this.componentWillMount();
     };
     _onPress = ()=>{
         let url = Config.apiDomain + api.user.info;
@@ -85,10 +122,12 @@ export default class HomeworkLists extends Component {
         var description = item1.item.description;//作业描述
         var deadline = item1.item.deadline;//作业截止日期
         var url = item1.item.url;//作业地址
+        var Id = item1.item.key;//作业Id
         return (
             <View>
                 <TouchableOpacity
-                    onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url})}
+                    onPress = {()=>this.props.navigation.navigate('HomeworkDetail',{url: url, Id: Id,
+                                            classId: this.props.navigation.state.params.classId})}
                     style = {HomeworkStyles.container}
                 >
                     <Text style= {HomeworkStyles.titleTextStyle}>
@@ -114,6 +153,7 @@ export default class HomeworkLists extends Component {
     }
     render() {
         var data = [];
+        if(this.state.isRequestSuccess){
         for(var i in this.state.homeworks)
         {
             data.push({
@@ -123,7 +163,7 @@ export default class HomeworkLists extends Component {
                 description: this.state.homeworks[i].description,//作业描述
                 deadline: this.state.homeworks[i].deadline,//作业截止日期
             })
-        }
+        }}
         return (
         <View
             style= {{
@@ -137,22 +177,22 @@ export default class HomeworkLists extends Component {
                 flexDirection: 'row',  
                 justifyContent:'space-between',
                 alignItems: 'center',  
-                marginTop: 0.008*screenHeight,
-                marginHorizontal: 0.02*screenWidth,
-                marginBottom: 0.008*screenHeight,
-                alignSelf: 'stretch',          
+                marginTop: 0.005*screenHeight,
+                marginLeft: 0.03*screenWidth,
+                marginRight: 0.04*screenWidth,
+                marginBottom: 0.005*screenHeight,
+                alignSelf: 'stretch',
             }}
             >
                 <Text
                     style= {{  
-                        alignSelf: 'flex-start',
-                        fontSize: titleFontSize,  
-                        color: '#000000',  
-                        textAlign: 'center',  
-                        fontWeight: 'bold',
+                        alignSelf: 'center',
+                        fontSize: btnFontSize,
+                        textAlign: 'center',
+                        color: 'rgb(51,51,51)'
                     }}  		
                 >
-                    Homeworks
+                    未结束：{this.state.finishedcount}
                 </Text>
                 <TouchableHighlight
                     underlayColor="#0588fe"
@@ -173,7 +213,7 @@ export default class HomeworkLists extends Component {
                             fontWeight: 'bold',
                         }}   
                     >
-                      New HomeWork
+                        发布作业
                     </Text>
                 </TouchableHighlight>
             </View>
@@ -204,31 +244,33 @@ const HomeworkStyles = StyleSheet.create({
     container: {  
         flexDirection: 'column',  
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex:1,
         alignSelf: 'stretch',
-        marginLeft: 0.02*screenWidth,
+        marginLeft: 0.03*screenWidth,
         marginRight: 0.04*screenWidth,
     },
     titleTextStyle:{
-        fontSize: titleFontSize-5,  
-        color: '#000000',  
+        fontSize: titleFontSize-5,
+        color: '#000000',
         textAlign: 'center',
         marginTop: 10,
-        marginBottom: 8,
+        marginBottom: 2,
         fontWeight: 'bold',
+        fontFamily : 'serif',
     },
     abstractTextStyle:{
-        fontSize: abstractFontSize+2,  
-        color:'rgb(70,70,70)',  
+        fontSize: abstractFontSize+2,
+        color:'rgb(70,70,70)',
         textAlign: 'left',
-        marginBottom: 8,         
+        marginBottom: 8,
+        lineHeight: 25
     },
     informationTextStyle:{
         alignSelf: "flex-end",
-        fontSize: informationFontSize,  
-        color: '#000000',  
+        fontSize: informationFontSize-2,
+        color: '#000000',
         textAlign: 'center',
-        marginBottom: 8      
+        marginBottom: 8
     }
 });  
