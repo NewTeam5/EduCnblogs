@@ -2,7 +2,7 @@ import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import React, { Component} from 'react';
 import {
@@ -42,7 +42,8 @@ export default class ClassMemberAdd extends Component {
             studentNo: this.state.studentNo,
         }
         let body = JSON.stringify(postBody);
-        let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
+        //let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
+		let url = Config.AddMember;
         Service.UserAction(url, body, 'POST').then((response)=>{
             if(response.status!==200)
             {
@@ -70,7 +71,7 @@ export default class ClassMemberAdd extends Component {
                 ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
             }
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET ,ToastAndroid.SHORT);
         });
     };
     render() {

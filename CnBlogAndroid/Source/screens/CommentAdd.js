@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
@@ -45,7 +45,7 @@ export default class CommentAdd extends Component{
 				ToastAndroid.show("添加失败，请稍后重试！",ToastAndroid.SHORT);
 			}
 		}).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
 	

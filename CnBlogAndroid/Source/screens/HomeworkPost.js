@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -60,7 +60,8 @@ export default class App extends Component {
     _onPress=()=>{
         if(this.state.title!=''&&this.state.content!='')
         {
-            let url = 'https://api.cnblogs.com/api/edu/homework/publish';
+            //let url = 'https://api.cnblogs.com/api/edu/homework/publish';
+			let url = Config.HomeWorkPublish;
             let classId = Number(this.props.navigation.state.params.classId);
             let postBody = {
                 schoolClassId: classId,
@@ -108,7 +109,7 @@ export default class App extends Component {
                     {
                         ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
                     }
-                }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态!",ToastAndroid.SHORT)})
+                }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})  
             }
         }
         else

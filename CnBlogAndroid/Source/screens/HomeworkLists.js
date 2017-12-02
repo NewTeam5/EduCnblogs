@@ -5,6 +5,9 @@ import * as Service from '../request/request.js';
 import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js'
 import React, { Component} from 'react';
+import {StorageKey} from '../config'
+import {err_info} from '../config'
+
 import {
     Platform,
     StyleSheet,
@@ -33,9 +36,9 @@ export default class HomeworkLists extends Component {
         super(props);
         this.state = {
             homeworks: [],
-            counts: 0,
-            membership: 1,
-            finishedcount: '',
+            counts: 0,      //作业数量
+            membership: 1,  
+            finishedcount: '',   
             isRequestSuccess: false,
         }
     }
@@ -63,7 +66,33 @@ export default class HomeworkLists extends Component {
                         counts: jsonData.totalCount,
                     });
                 }
+				global.storage.save({key:StorageKey.HOMEWORK_COUNT,data:jsonData.totalCount});
             }
+			else
+			{
+				global.storage.load({key : StorageKey.HOMEWORK_COUNT})
+				.then((ret)=>{
+					this.setState({
+						counts : ret,
+					})
+				})
+				.then(()=>{
+					global.storage.load({key : StorageKey.CLASS_HOMEWORK})
+					.then((ret)=>{
+						this.setState({
+							homeworks: ret,
+						})
+					})
+				})
+				.then(()=>{
+					global.storage.load({key : StorageKey.MEMBER_SHIP})
+					.then((ret)=>{
+						this.setState({
+							membership: ret,
+						})
+					})
+				})
+			}
         })
         .then(()=>{
             let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
@@ -87,7 +116,10 @@ export default class HomeworkLists extends Component {
                     })
                 }
             })
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+			.then(()=>{
+				global.storage.save({key:StorageKey.CLASS_HOMEWORK,data:this.state.homeworks});
+			})
+        }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
         // 获取身份信息，判断是否可以发布作业
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
@@ -99,7 +131,11 @@ export default class HomeworkLists extends Component {
                     })
                 }
             })       
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+        })
+		.then(()=>{
+			global.storage.save({key : StorageKey.MEMBER_SHIP,data : this.state.membership});
+		})
+		.catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
     };
     UpdateData=()=>{
         this.setState({
@@ -120,7 +156,7 @@ export default class HomeworkLists extends Component {
         let item1 = item;
         var title = item1.item.title;//作业标题
         var description = item1.item.description;//作业描述
-        var deadline = item1.item.deadline;//作业截止日期
+        var deadline = (item1.item.deadline != null ? item1.item.deadline :"Tundefine");//作业截止日期
         var url = item1.item.url;//作业地址
         var Id = item1.item.key;//作业Id
         return (
@@ -151,6 +187,8 @@ export default class HomeworkLists extends Component {
             </View>
         );
     }
+	
+	
     render() {
         var data = [];
         if(this.state.isRequestSuccess){
