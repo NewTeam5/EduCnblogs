@@ -111,8 +111,22 @@ export default class BlogComment extends Component{
                     <View style = {{
                         flexDirection: 'row',
                         justifyContent: 'space-around',
-                        alignItems: 'flex-start'
+                        alignItems: 'flex-end'
                     }}>
+                        <TouchableOpacity
+                            onPress={()=>this.props.navigation.navigate
+                                ('CommentAdd',{
+                                    blogApp: this.props.navigation.state.params.blogApp,
+                                    Id: this.props.navigation.state.params.Id,
+                                    CommentCount: this.props.navigation.state.params.CommentCount,
+                                    Author: Author,
+                                })
+                            }
+                        >
+                        <Text style = {{fontSize: 10, color: 'rgb(153,153,153)',textAlign:'right',flex:1}}>
+                            回复
+                        </Text>
+                        </TouchableOpacity>
                         <Text style = {{fontSize: 10, color: 'black',textAlign:'right',flex:1}}>
                             {'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}
                         </Text>
@@ -143,6 +157,7 @@ export default class BlogComment extends Component{
                     data={data}
                     onRefresh = {this.UpdateData}
                     refreshing= {false}
+                    ListFooterComponent={this._separator}
                 />
                 {this.state.isRequestSuccess===false?null:
                 <TouchableOpacity
@@ -150,9 +165,12 @@ export default class BlogComment extends Component{
                     onPress={()=>this.props.navigation.navigate('CommentAdd',
                             {blogApp: this.props.navigation.state.params.blogApp,
                             Id: this.props.navigation.state.params.Id,
-                            CommentCount: this.props.navigation.state.params.CommentCount})}
+                            CommentCount: this.props.navigation.state.params.CommentCount,
+                            Author: ''
+                        })}
                 >
-	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加/回复评论</Text>
+                   <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} 
+                   accessibilityLabel = 'BlogComment_addreplyComment'>我要评论</Text>
                 </TouchableOpacity>
             	}
             </View>
@@ -190,7 +208,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     button: {
-        height: screenHeight/12,
+        height: screenHeight/14,
         width: screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
