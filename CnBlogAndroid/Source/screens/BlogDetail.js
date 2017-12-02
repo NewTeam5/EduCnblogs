@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component } from 'react';
@@ -45,7 +45,8 @@ export default class BlogDetail extends Component{
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted=true;
-        let contenturl = 'https://api.cnblogs.com/api/blogposts/'+this.props.navigation.state.params.Id+'/body';
+        //let contenturl = 'https://api.cnblogs.com/api/blogposts/'+this.props.navigation.state.params.Id+'/body';
+		let contenturl = Config.BlogDetail+this.props.navigation.state.params.Id+'/body';
         Service.Get(contenturl).then((jsonData)=>{
             if(jsonData!=='rejected'){
                 this.setState({
@@ -61,7 +62,7 @@ export default class BlogDetail extends Component{
                 ToastAndroid.show("网络异常！请稍后重试！",ToastAndroid.SHORT);
             }
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     componentWillUnmount = ()=>{

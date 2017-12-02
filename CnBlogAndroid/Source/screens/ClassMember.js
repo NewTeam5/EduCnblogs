@@ -4,6 +4,9 @@ import {authData} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+import {StorageKey} from '../config'
+import {err_info} from '../config'
+
 import {
     StyleSheet,
     Text,
@@ -39,7 +42,8 @@ export default class ClassMember extends Component{
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted=true;
-        let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
+        //let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
+		let url = Config.MemberList + this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected')
             {
@@ -52,9 +56,14 @@ export default class ClassMember extends Component{
                     })
                 }
             }
-        }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        })
+		.then(()=>{
+			global.storage.save({key:StorageKey.CLASS_MEMBER , data:this.state.members});
+		})
+		.catch((error) => {
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
+		
         //是否有添加成员的权限
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
@@ -67,7 +76,7 @@ export default class ClassMember extends Component{
                 }
             })
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     UpdateData = ()=>{
@@ -93,15 +102,15 @@ export default class ClassMember extends Component{
                         <Image source = {avatarUrl?{uri:avatarUrl}:require('../images/defaultface.png')} style = {styles.avatarstyle}/>
                     </View>
                     <View style = {styles.textcontainer}>
-                        <Text style = {{fontSize: 20, fontWeight: 'bold', color: 'black',flex:2}}>{displayName+realName}</Text>
-                        <Text style = {{fontSize: 15,flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
+                        <Text style = {{fontSize: 20,color: '#000000',flex:2}}>{displayName+realName}</Text>
+                        <Text style = {{fontSize: 15,color: '#616161',flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
         )
     }
     _separator = () => {
-        return <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)' }}/>;
+        return <View style={{ height: 2.5, backgroundColor: 'rgb(225,225,225)' }}/>;
     }
     _onPress = ()=>{
         if(this.state.membership===1)
@@ -130,6 +139,7 @@ export default class ClassMember extends Component{
                 blogId: this.state.members[i].blogId,
             })
         }}
+		
         return(
             <View style = {styles.container}>
 	            <View style= {{        
@@ -158,7 +168,7 @@ export default class ClassMember extends Component{
 	                            fontSize: btnFontSize,  
 	                            color: '#ffffff',  
 	                            textAlign: 'center',  
-	                            fontWeight: 'bold',
+	                            fontWeight: 'bold',   
 	                        }}   
 	                    >
 	                        添加成员
@@ -202,6 +212,8 @@ const styles = StyleSheet.create({
         height: 0.15*screenWidth,
         marginBottom: 5,
         marginTop: 5,
+		borderRadius : 40,
+		left : 2,
     },
     textcontainer: {
         justifyContent:'flex-start',

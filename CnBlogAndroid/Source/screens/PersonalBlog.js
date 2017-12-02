@@ -4,6 +4,11 @@ import {authData} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+import * as storage from '../Storage/storage.js'
+import {StorageKey} from '../config'
+import {UI} from '../config'
+import {err_info} from '../config'
+
 import {
     StyleSheet,
     Text,
@@ -15,11 +20,13 @@ import {
     Dimensions,
     FlatList,
 } from 'react-native';
+
 import {
     StackNavigator,
     TabNavigator,
     NavigationActions,
 } from 'react-navigation';
+
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 // 此页面传入的参数为blogApp(即个人博客名)
@@ -32,6 +39,7 @@ export default class PersonalBlog extends Component{
             pageSize: 0,//博客页容量
             postCount: 0,//随笔总数
             isRequestSuccess: false,
+			connec : true,
         };
     }
     _isMounted;
@@ -47,6 +55,7 @@ export default class PersonalBlog extends Component{
         });
         this.componentWillMount();
     };
+	
     componentWillMount = ()=>{
         this._isMounted=true;
         // 获取当前登录用户信息，存放于global
@@ -69,7 +78,18 @@ export default class PersonalBlog extends Component{
                 }
             }
             else{
-                ToastAndroid.show("网络异常，请稍后重试！",ToastAndroid.SHORT);
+				global.storage.load({key:StorageKey.PERSON_BLOG})
+				.then((ret)=>{
+					this.setState({
+						blogs: ret,
+					})
+				}).then(()=>{
+					ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+				})
+				.catch(err=>{
+					ToastAndroid.show("身份信息过期，请重新登录",ToastAndroid.SHORT);
+					this.props.navigation.navigate('Loginer');
+				})
             }
         })
         .then(()=>{
@@ -78,7 +98,7 @@ export default class PersonalBlog extends Component{
             let url = Config.apiDomain+'api/blogs/'+blogApp;
             if(this.state.isRequestSuccess){
             Service.Get(url)
-            .then((jsonData)=>{
+            .then((jsonData)=>{	
                 if(this._isMounted){
                     this.setState({
                         blogTitle: jsonData.title,
@@ -112,17 +132,23 @@ export default class PersonalBlog extends Component{
                                 blogs: this.state.blogs.concat(posts[i]),
                             })
                         }
-                    }
+                    }	
                 })
+				//将获取到的博客列表缓存
+				.then(()=>{
+					global.storage.save({key:StorageKey.PERSON_BLOG,data:this.state.blogs});
+				})
             })
             }
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     };
+	
     componentWillUnmount = ()=>{
         this._isMounted=false;
     }
+	
     _renderItem = (item)=>{
         let item1 = item;
         var Title = item1.item.Title;
@@ -171,6 +197,7 @@ export default class PersonalBlog extends Component{
             </View>
         )
     };
+	
     _separator = () => {
         return (
             <View style={{ height: 9.75, justifyContent: 'center'}}>
@@ -179,6 +206,15 @@ export default class PersonalBlog extends Component{
             </View>
         );
     }
+	/*
+	_separator = () => {
+        return (
+            <View style={{ height: 9.5, justifyContent: 'center'}}>
+            <View style={{ height: 0.5, backgroundColor: 'rgb(100,100,100)'}}/>
+            <View style={{ height: 9, backgroundColor: '#c5cae9'}}/>
+            </View>
+        );
+    }*/
     render(){
         var data = [];
         for(var i in this.state.blogs)
@@ -223,7 +259,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',  
         justifyContent:'flex-start',
         alignItems: 'center',  
-        backgroundColor: '#1C86EE',
+        backgroundColor: UI.TOP_COLOR,      
         height: screenHeight/12,
         paddingLeft: 0.03*screenWidth,
         width: screenWidth,

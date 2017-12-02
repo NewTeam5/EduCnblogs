@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config';
+import {authData,err_info} from '../config';
 import * as Service from '../request/request.js';
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
@@ -49,7 +49,7 @@ export default class Submitted extends Component {
     }
     componentWillMount = ()=>{
         _isMounted = true;
-        let url = 'https://api.cnblogs.com/api/edu/homework/answers/'+this.props.navigation.state.params.Id;
+        let url = Config.HomeWorkAnswer + this.props.navigation.state.params.Id;
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected' && _isMounted)
             {
@@ -58,7 +58,7 @@ export default class Submitted extends Component {
                 })
             }
             else{
-                ToastAndroid.show("网络连接失败，请检查连接状态！",ToastAndroid.SHORT);
+                ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
             }
         })
     }

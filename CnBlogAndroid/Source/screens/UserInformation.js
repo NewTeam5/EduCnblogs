@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData,StorageKey} from '../config'
+import {authData,StorageKey,err_info,UI} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
@@ -82,7 +82,7 @@ export default class UserInformation extends Component{
                 BlogApp: global.user_information.BlogApp,
                 Seniority: global.user_information.Seniority,
             })}
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+        }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
     }
     render() {
     return (
@@ -97,7 +97,7 @@ export default class UserInformation extends Component{
                 justifyContent:'flex-start',
                 alignItems: 'center',
                 marginBottom: 0.03*screenHeight,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
                 height: screenHeight/12,
                 paddingLeft: 0.05*screenWidth,
             }}>

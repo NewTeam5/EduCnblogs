@@ -5,6 +5,8 @@ import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import React, { Component} from 'react';
+import {err_info} from '../config'
+
 import {
     Platform,
     StyleSheet,
@@ -28,8 +30,7 @@ const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
-// 此页面应该传入classId作为属性
-// 现在暂时Id为238(BUAA软工的ID)
+
 export default class ClassHome extends Component{
     constructor(props){
         super(props);
@@ -40,11 +41,13 @@ export default class ClassHome extends Component{
             bulletinCount: 0, // 公告数目
         }
     }
+	
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted = true;
         let classId = this.props.navigation.state.params.classId;
-        let url = 'https://api.cnblogs.com/api/edu/schoolclass/'+classId;
+        //let url = 'https://api.cnblogs.com/api/edu/schoolclass/'+classId;
+		let url = Config.ClassInfo + classId;
         Service.Get(url).then((jsonData)=>{
             if(this._isMounted){
                 this.setState({
@@ -55,7 +58,7 @@ export default class ClassHome extends Component{
                 })
             }
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     componentWillUnmount=()=>{
