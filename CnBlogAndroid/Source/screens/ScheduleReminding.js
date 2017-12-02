@@ -43,9 +43,78 @@ export default class App extends Component {
                 '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
                 '2017-11-21': {selected: true,title:"ddd",description:"description",deadline:"deadline",url:"url"},
                 '2017-11-22': {selected: true,title:"nnn",description:"description",deadline:"deadline",url:"url"}
-            }
+            },
+            classes: [],
+            isEmpty: true,
+            homeworks: [],
+            counts: 0,
+            isRequestSuccess: false,
         };
-    }    
+    }
+    componentWillMount = () => {
+        this._isMounted = true;
+        let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
+        Service.Get(url).then((jsonData) => {
+            if(this._isMounted){
+                this.setState({
+                    classes: jsonData,
+                })
+                if(jsonData!=='rejected')
+                {
+                    this.setState({
+                        isEmpty: false,
+                    })
+                }
+            }
+        })
+        .then(() => {
+            for (let i in this.state.classes) {
+                let classId = this.state.classes[i].schoolClassId;
+                url = Config.apiDomain + api.ClassGet.homeworkList + "/false/" + classId + "/1-12";
+                Service.Get(url).then((jsonData) => {
+                    if (jsonData !== 'rejected') {
+                        this.setState({
+                            isRequestSuccess: true,
+                        })
+                        if (this._isMounted) {
+                            this.setState({
+                                counts: jsonData.totalCount,
+                            });
+                        }
+                    }
+                })
+                .then(() => {
+                    url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
+                    Service.Get(url).then((jsonData) => {
+                        if (this._isMounted && this.state.isRequestSuccess){
+                            this.setState({
+                                homeworks: jsonData.homeworks,
+                            });
+                        }
+                    })
+                    .then(() => {
+                        let c = {};
+                        for(let i in this.state.homeworks) {
+                            if(this.state.homeworks[i].isFinished !== false) {
+                                let t = this.state.homeworks[i].deadline;
+                                t = t.split('T');
+                                c[t[0]] = {
+                                    title: this.state.homeworks[i].title,
+                                    description: this.state.homeworks[i].description,
+                                    url : this.state.homeworks[i].url,
+                                    class: this.state.homeworks[i].schoolClassId
+                                };
+                            }
+                        }
+                        // alert(JSON.stringify(c));
+                    })
+                })
+            }
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+    }  
+    UpdateData = ()=>{
+        this.componentWillMount();
+    }
     _separator = () => {
         return (
             <View style={{ height: 9.75, justifyContent: 'center'}}>
@@ -83,7 +152,7 @@ export default class App extends Component {
             </View>
         )
     }    
-    render() {   
+    render() {  
     var data = [];
     for(var i in this.state.myMarkedDates)
     {
