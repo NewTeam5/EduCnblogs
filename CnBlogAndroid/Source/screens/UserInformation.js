@@ -24,6 +24,7 @@ import {
     TabNavigator,
     NavigationActions
 } from 'react-navigation';
+
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
@@ -41,6 +42,7 @@ export default class UserInformation extends Component{
             Seniority: ''
         }
     }
+	
     _logout=()=>{
         storage.removeItem(StorageKey.USER_TOKEN).then((res)=>{
             CookieManager.clearAll()
@@ -60,6 +62,7 @@ export default class UserInformation extends Component{
     componentWillUnmount=()=>{
         this._isMounted=false;
     }
+	
     componentWillMount=()=>{
         this._isMounted=true;
         let user_url = Config.apiDomain + api.user.info;
@@ -74,7 +77,8 @@ export default class UserInformation extends Component{
                 Seniority : jsonData.Seniority,  //园龄
                 BlogApp : jsonData.BlogApp
             }
-        }).then(()=>{
+        })
+		.then(()=>{
             if(this._isMounted){
             this.setState({
                 faceurl: global.user_information.face,
@@ -82,8 +86,43 @@ export default class UserInformation extends Component{
                 BlogApp: global.user_information.BlogApp,
                 Seniority: global.user_information.Seniority,
             })}
-        }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
+        }).then(()=>{
+			global.storage.save({key:StorageKey.DISPLAYNAME,data:this.state.DisplayName});
+		}).then(()=>{
+			global.storage.save({key:StorageKey.BLOGAPP,data:this.state.BlogApp});
+		}).then(()=>{
+			global.storage.save({key:StorageKey.SENIORITY,data:this.state.Seniority});
+		})
+		.catch((error)=>{
+			ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)
+			global.storage.load({key:StorageKey.DISPLAYNAME})
+			.then((ret)=>{
+				this.setState({
+					DisplayName : ret,
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.BLOGAPP})
+				.then((ret)=>{
+					this.setState({
+						BlogApp : ret,
+					})
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.SENIORITY})
+				.then((ret)=>{
+					this.setState({
+						Seniority : ret,
+						faceurl : '',
+					})
+				})
+			})
+			.catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
+		})
     }
+	
     render() {
     return (
         <View

@@ -25,8 +25,9 @@ export function GetInfo(url, token){
             {
                 resolve("rejected");
             }
-            else
+            else{
                 return response.json();
+			}
         })
         .then((jsonData)=>{
             resolve(jsonData);
@@ -37,6 +38,7 @@ export function GetInfo(url, token){
         });
     });
 }
+
 //异步依赖异步回调的Primise用法 参考https://segmentfault.com/a/1190000005894077?_ea=943171
 //这里将上面两个异步作了进一步封装(by ZiJiaW)，promise返回值为该url的json对象
 export function Get(url){
@@ -63,7 +65,7 @@ export function UserAction(url,content,type){  //此处的body为修改的内容
 			resolve(response);
 		})
 		.catch((error) => {
-		    ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+		    //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
 			reject("rejected");
 		});   
 	})

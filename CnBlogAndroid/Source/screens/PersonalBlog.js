@@ -39,10 +39,9 @@ export default class PersonalBlog extends Component{
             pageSize: 0,//博客页容量
             postCount: 0,//随笔总数
             isRequestSuccess: false,
-			connec : true,
         };
     }
-    _isMounted;
+	_isMounted;
     // 更新博客显示数据
     UpdateData = ()=>{
         // 先清零数据
@@ -53,96 +52,114 @@ export default class PersonalBlog extends Component{
             postCount: 0,//随笔总数
             isRequestSuccess: false,
         });
-        this.componentWillMount();
+		this.componentWillMount();
     };
 	
     componentWillMount = ()=>{
         this._isMounted=true;
         // 获取当前登录用户信息，存放于global
         let user_url = Config.apiDomain + api.user.info;
-        Service.Get(user_url)
-        .then((jsonData)=>{
-            if(jsonData!=='rejected')
-            {
-                this.setState({
-                    isRequestSuccess: true,
-                })
-                global.user_information = {
-                    userId : jsonData.UserId,
-                    SpaceUserId : jsonData.SpaceUserId,
-                    BlogId : jsonData.BlogId,
-                    DisplayName : jsonData.DisplayName,
-                    face : jsonData.Face,
-                    Seniority : jsonData.Seniority,  //园龄
-                    BlogApp : jsonData.BlogApp,
-                }
-            }
-            else{
-				global.storage.load({key:StorageKey.PERSON_BLOG})
-				.then((ret)=>{
-					this.setState({
-						blogs: ret,
+		Service.Get(user_url)
+		.then((jsonData)=>{
+			if(jsonData!=='rejected')
+			{
+				this.setState({
+					isRequestSuccess: true,
+				})
+				global.user_information = {
+					userId : jsonData.UserId,
+					SpaceUserId : jsonData.SpaceUserId,
+					BlogId : jsonData.BlogId,
+					DisplayName : jsonData.DisplayName,
+					face : jsonData.Face,
+					Seniority : jsonData.Seniority,  //园龄
+					BlogApp : jsonData.BlogApp,
+				}
+			}
+		})
+		.then(()=>{
+			let blogApp = global.user_information.BlogApp;
+			// 首先获取博客信息
+			let url = Config.apiDomain+'api/blogs/'+blogApp;
+			if(this.state.isRequestSuccess){
+				Service.Get(url)
+				.then((jsonData)=>{	
+					if(this._isMounted){
+						this.setState({
+							blogTitle: jsonData.title,
+							pageSize: jsonData.pageSize,
+							postCount: jsonData.postCount,
+						});
+					}
+				})
+				.then(()=>{
+					global.storage.save({key:StorageKey.BLOG_TITLE,data:this.state.blogTitle})
+					.catch((err)=>{
+						ToastAndroid.show("error",ToastAndroid.SHORT);
 					})
-				}).then(()=>{
+				})
+				
+				// 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
+				.then(()=>{
+					// 计算页数
+					let {pageSize, postCount} = this.state;
+					let pageCount  = Math.ceil(postCount/pageSize);
+					var pageIndexes = [];
+					for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
+					{
+						pageIndexes.push(pageIndex);
+					}
+					// 这里需要使用promise数组保证获取内容的顺序(不可在for循环中进行异步操作，顺序会乱)
+					return promises = pageIndexes.map((pageIndex)=>{
+						return Service.Get(Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex)
+					})
+				})
+				// 使用promise.all按顺序获取数组中的信息
+				.then((promises)=>{
+					Promise.all(promises).then((posts)=>{
+						for(var i in posts)
+						{
+							if(this._isMounted){
+								this.setState({
+									blogs: this.state.blogs.concat(posts[i]),
+								})
+							}
+						}	
+					})
+					//将获取到的博客列表缓存
+					.then(()=>{
+						global.storage.save({key:StorageKey.PERSON_BLOG,data:this.state.blogs})
+						.catch((err)=>{
+							ToastAndroid.show("SAVE_ERROR",ToastAndroid.SHORT);
+						})
+					})
+				})
+				.catch((err)=>{
 					ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
 				})
-				.catch(err=>{
-					ToastAndroid.show("身份信息过期，请重新登录",ToastAndroid.SHORT);
-					this.props.navigation.navigate('Loginer');
+			}
+		}).catch((error) => {
+			ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.PERSON_BLOG})
+			.then((ret)=>{
+				this.setState({
+					blogs : ret,
 				})
-            }
-        })
-        .then(()=>{
-            let blogApp = global.user_information.BlogApp;
-            // 首先获取博客信息
-            let url = Config.apiDomain+'api/blogs/'+blogApp;
-            if(this.state.isRequestSuccess){
-            Service.Get(url)
-            .then((jsonData)=>{	
-                if(this._isMounted){
-                    this.setState({
-                        blogTitle: jsonData.title,
-                        pageSize: jsonData.pageSize,
-                        postCount: jsonData.postCount,
-                    });
-                }
-            })
-            // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
-            .then(()=>{
-                // 计算页数
-                let {pageSize, postCount} = this.state;
-                let pageCount  = Math.ceil(postCount/pageSize);
-                var pageIndexes = [];
-                for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
-                {
-                    pageIndexes.push(pageIndex);
-                }
-                // 这里需要使用promise数组保证获取内容的顺序(不可在for循环中进行异步操作，顺序会乱)
-                return promises = pageIndexes.map((pageIndex)=>{
-                    return Service.Get(Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex)
-                })
-            })
-            // 使用promise.all按顺序获取数组中的信息
-            .then((promises)=>{
-                Promise.all(promises).then((posts)=>{
-                    for(var i in posts)
-                    {
-                        if(this._isMounted){
-                            this.setState({
-                                blogs: this.state.blogs.concat(posts[i]),
-                            })
-                        }
-                    }	
-                })
-				//将获取到的博客列表缓存
-				.then(()=>{
-					global.storage.save({key:StorageKey.PERSON_BLOG,data:this.state.blogs});
+			}).then(()=>{
+				global.storage.load({key:StorageKey.BLOG_TITLE})
+				.then((ret)=>{
+					this.setState({
+						blogTitle : ret,
+					})
 				})
-            })
-            }
-        }).catch((error) => {
-            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
-        });
+				.catch((err)=>{
+					ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				})
+			}).catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
+		});
     };
 	
     componentWillUnmount = ()=>{
@@ -159,7 +176,6 @@ export default class PersonalBlog extends Component{
         var CommentCount = item1.item.CommentCount;
         var Id = item1.item.key;
         return(
-            this.state.isRequestSuccess===false?null:
             <View>
                 <TouchableOpacity
                     style = {styles.listcontainer} 
@@ -206,15 +222,8 @@ export default class PersonalBlog extends Component{
             </View>
         );
     }
-	/*
-	_separator = () => {
-        return (
-            <View style={{ height: 9.5, justifyContent: 'center'}}>
-            <View style={{ height: 0.5, backgroundColor: 'rgb(100,100,100)'}}/>
-            <View style={{ height: 9, backgroundColor: '#c5cae9'}}/>
-            </View>
-        );
-    }*/
+	
+	
     render(){
         var data = [];
         for(var i in this.state.blogs)
@@ -238,7 +247,7 @@ export default class PersonalBlog extends Component{
                     <FlatList
                         ItemSeparatorComponent={this._separator}
                         renderItem={this._renderItem}
-                        data={data}
+						data= {data}
                         onRefresh = {this.UpdateData}
                         refreshing= {false}
                     />
