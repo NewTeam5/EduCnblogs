@@ -40,6 +40,7 @@ export default class ClassMember extends Component{
         }
     }
     _isMounted;
+	
     componentWillMount = ()=>{
         this._isMounted=true;
         //let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
@@ -62,6 +63,15 @@ export default class ClassMember extends Component{
 		})
 		.catch((error) => {
             ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.CLASS_MEMBER})
+			.then((ret)=>{
+				this.setState({
+					members : ret,
+				})
+			}).catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
         });
 		
         //是否有添加成员的权限
@@ -76,7 +86,7 @@ export default class ClassMember extends Component{
                 }
             })
         }).catch((error) => {
-            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+            //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     UpdateData = ()=>{
@@ -126,7 +136,6 @@ export default class ClassMember extends Component{
     render(){
         var data = [];
         // 在请求成功的情况下渲染列表
-        if(this.state.isRequestSuccess){
         for(var i in this.state.members)
         {
             data.push({
@@ -138,7 +147,7 @@ export default class ClassMember extends Component{
                 realName: this.state.members[i].realName,//真实姓名
                 blogId: this.state.members[i].blogId,
             })
-        }}
+        }
 		
         return(
             <View style = {styles.container}>

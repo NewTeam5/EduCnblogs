@@ -109,6 +109,7 @@ class Welcome extends Component{
         });
         this.props.navigation.dispatch(resetAction);
     }
+	
     componentDidMount(){
         this.timer = setTimeout(
             ()=>{
@@ -138,7 +139,7 @@ class Welcome extends Component{
                                 }
                             })
                             .catch((error) => {
-                                ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+                                this.toPersonalBlog();
                             });
                         }
                         else

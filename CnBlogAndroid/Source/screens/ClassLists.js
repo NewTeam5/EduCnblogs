@@ -73,13 +73,15 @@ export default class ClassLists extends Component{
                 }
             }
         }).then(()=>{
+			global.storage.save({key : StorageKey.CLASS_EMPTY,data : this.state.isEmpty});
+		})
+		.then(()=>{
             let classIndexes = [];
             for(var i in this.state.classes)
             {
                 classIndexes.push(i);
             }
             return promises = classIndexes.map((classIndex)=>{
-                //return Service.Get('https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[classIndex].schoolClassId)
 				return Service.Get(Config.ClassInfo + this.state.classes[classIndex].schoolClassId)
             })
         })
@@ -101,9 +103,38 @@ export default class ClassLists extends Component{
 			global.storage.save({key : StorageKey.CLASS_LIST_IMG,data : this.state.imgs});
 		})
 		.catch((error) => {
-            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+            //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			
+			global.storage.load({key:StorageKey.CLASS_EMPTY})
+			.then((ret)=>{
+				if(ret === false){
+					ToastAndroid.show("have class",ToastAndroid.SHORT);
+				}
+				this.setState({	
+					isEmpty : ret,
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.CLASS_IMG})
+				.then((ret)=>{
+					this.setState({
+						imgs : ret,
+					})
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.CLASS_LIST})
+				.then((ret)=>{
+					this.setState({
+						classes : ret,
+					})
+				})
+			})
+			.catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
         });
     }
+	
     render(){
 		var data= [];
 		if(this.state.isEmpty===false){

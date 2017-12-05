@@ -66,34 +66,10 @@ export default class HomeworkLists extends Component {
                         counts: jsonData.totalCount,
                     });
                 }
-				global.storage.save({key:StorageKey.HOMEWORK_COUNT,data:jsonData.totalCount});
             }
-			else
-			{
-				global.storage.load({key : StorageKey.HOMEWORK_COUNT})
-				.then((ret)=>{
-					this.setState({
-						counts : ret,
-					})
-				})
-				.then(()=>{
-					global.storage.load({key : StorageKey.CLASS_HOMEWORK})
-					.then((ret)=>{
-						this.setState({
-							homeworks: ret,
-						})
-					})
-				})
-				.then(()=>{
-					global.storage.load({key : StorageKey.MEMBER_SHIP})
-					.then((ret)=>{
-						this.setState({
-							membership: ret,
-						})
-					})
-				})
-			}
-        })
+        }).then(()=>{
+			global.storage.save({key:StorageKey.HOMEWORK_COUNT,data:this.state.counts});
+		})
         .then(()=>{
             let url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
             Service.Get(url).then((jsonData)=>{
@@ -102,7 +78,8 @@ export default class HomeworkLists extends Component {
                         homeworks: jsonData.homeworks,
                     });
                 }
-            }).then(()=>{
+            })
+			.then(()=>{
                 var c = 0;
                 for(var i in this.state.homeworks)
                 {
@@ -119,24 +96,50 @@ export default class HomeworkLists extends Component {
 			.then(()=>{
 				global.storage.save({key:StorageKey.CLASS_HOMEWORK,data:this.state.homeworks});
 			})
-        }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
-        // 获取身份信息，判断是否可以发布作业
-        let url1 = Config.apiDomain + api.user.info;
-        Service.Get(url1).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
-            Service.Get(url2).then((jsonData)=>{
-                if(this._isMounted && jsonData!=='rejected'){
-                    this.setState({
-                        membership: jsonData.membership,
-                    })
-                }
-            })       
+			.then(()=>{
+				let url1 = Config.apiDomain + api.user.info;
+				Service.Get(url1).then((jsonData)=>{
+					let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+					Service.Get(url2).then((jsonData)=>{
+						if(this._isMounted && jsonData!=='rejected'){
+							this.setState({
+								membership: jsonData.membership,
+							})
+						}
+					})       
+				})
+				.then(()=>{
+					global.storage.save({key : StorageKey.MEMBER_SHIP,data : this.state.membership});
+				})
+			})
         })
-		.then(()=>{
-			global.storage.save({key : StorageKey.MEMBER_SHIP,data : this.state.membership});
+		.catch((error)=>{
+			global.storage.load({key : StorageKey.HOMEWORK_COUNT})
+			.then((ret)=>{
+				this.setState({
+					counts : ret,
+				})
+			})
+			.then(()=>{
+				global.storage.load({key : StorageKey.CLASS_HOMEWORK})
+				.then((ret)=>{
+					this.setState({
+						homeworks: ret,
+					})
+				})
+			})
+			.then(()=>{
+				global.storage.load({key : StorageKey.MEMBER_SHIP})
+				.then((ret)=>{
+					this.setState({
+						membership: ret,
+					})
+				})
+			})
 		})
-		.catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
     };
+	
+	
     UpdateData=()=>{
         this.setState({
             isRequestSuccess: false,
@@ -191,7 +194,6 @@ export default class HomeworkLists extends Component {
 	
     render() {
         var data = [];
-        if(this.state.isRequestSuccess){
         for(var i in this.state.homeworks)
         {
             data.push({
@@ -201,7 +203,8 @@ export default class HomeworkLists extends Component {
                 description: this.state.homeworks[i].description,//作业描述
                 deadline: this.state.homeworks[i].deadline,//作业截止日期
             })
-        }}
+        }
+		
         return (
         <View
             style= {{
@@ -278,6 +281,7 @@ export default class HomeworkLists extends Component {
     );
   }
 }
+
 const HomeworkStyles = StyleSheet.create({  
     container: {  
         flexDirection: 'column',  
