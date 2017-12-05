@@ -55,13 +55,14 @@ export default class CommentAdd extends Component{
                 <TextInput ref="commentRef"
                     style={styles.textcontainer}
                     onChangeText={(text) => this.setState({text: text})}
-                    value={this.state.text}
+                    defaultValue={this.props.navigation.state.params.Author!=''?'@'+' '+this.props.navigation.state.params.Author+'\n':''}
                     multiline={true}
                     underlineColorAndroid="transparent"
-					accessibilityLabel = "CommentAdd_inputBox"
+                    accessibilityLabel = "CommentAdd_inputBox"
+                    autoCorrect = {false}
+                    blurOnSubmit={false}
                 />
                 <View style={{flex:1}}>
-                <Text style = {{color: 'rgb(51,51,51)',fontSize: 15}}>回复请在评论第一行写上:@用户昵称</Text>
                 </View>
                 <TouchableOpacity
                     style= {styles.button}

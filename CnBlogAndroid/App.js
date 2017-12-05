@@ -51,7 +51,8 @@ import AppInformation from './Source/screens/AppInformation'
 import ScheduleReminding from './Source/screens/ScheduleReminding'
 
 import ContactPage from './Source/screens/ContactPage'
-import Submitted from './Source/screens/Submitted';
+import Submitted from './Source/screens/Submitted'
+import HomeworkSubmit from './Source/screens/HomeworkSubmit'
 const { height, width } = Dimensions.get('window');
 
 const CODE_URL = [
@@ -592,6 +593,20 @@ const SimpleNavigation = StackNavigator({
             headerStyle: {
                 height:40,
                 backgroundColor:UI.TOP_COLOR,
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
+    },
+    HomeworkSubmit: {
+        screen: HomeworkSubmit,
+        navigationOptions:{
+            headerTintColor:'white',
+            headerTitle: '请选择你要提交的博文',
+            headerStyle: {
+                height:40,
+                backgroundColor:'#1C86EE',
             },
             headerTitleStyle: {
                 fontSize: 18,

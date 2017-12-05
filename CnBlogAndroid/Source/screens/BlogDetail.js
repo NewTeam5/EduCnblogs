@@ -93,7 +93,7 @@ export default class BlogDetail extends Component{
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
                         <Image source = {require('../images/comment.png')} style = {styles.imagestyle} accessibilityLabel = 'BlogDetail_commentImage'/>
-                        <Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>
+                        {/*<Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>*/}
                     </TouchableOpacity>
                 </View>
             </View>
@@ -117,15 +117,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     touchbutton: {
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
         width: height/14,
         height: height/14,
     },
     imagestyle: {
-        width: height/20,
-        height: height/26,
+        width: height/18,
+        height: height/22,
         resizeMode: 'stretch',
     }
 })
