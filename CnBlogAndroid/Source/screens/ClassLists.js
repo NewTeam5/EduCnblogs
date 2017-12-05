@@ -103,12 +103,15 @@ export default class ClassLists extends Component{
 			global.storage.save({key : StorageKey.CLASS_LIST_IMG,data : this.state.imgs});
 		})
 		.catch((error) => {
-            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+            //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
 			
-			global.storage.load({key:StorageKey.CLASS_LIST})
+			global.storage.load({key:StorageKey.CLASS_EMPTY})
 			.then((ret)=>{
-				this.setState({
-					classes : ret,
+				if(ret === false){
+					ToastAndroid.show("have class",ToastAndroid.SHORT);
+				}
+				this.setState({	
+					isEmpty : ret,
 				})
 			}).then(()=>{
 				global.storage.load({key:StorageKey.CLASS_IMG})
@@ -118,10 +121,10 @@ export default class ClassLists extends Component{
 					})
 				})
 			}).then(()=>{
-				global.storage.load({key:StorageKey.CLASS_EMPTY})
+				global.storage.load({key:StorageKey.CLASS_LIST})
 				.then((ret)=>{
 					this.setState({
-						isEmpty : ret,
+						classes : ret,
 					})
 				})
 			})

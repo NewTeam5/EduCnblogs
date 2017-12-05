@@ -13,6 +13,7 @@ import {
     Text,
     View,
     Image,
+	ToastAndroid,
     TouchableHighlight,    
     TextInput,
     FlatList,
