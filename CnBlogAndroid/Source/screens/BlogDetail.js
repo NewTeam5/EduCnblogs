@@ -29,10 +29,11 @@ const head = '<!DOCTYPE html><head>'+
 '<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet"'+
 'href="https://www.cnblogs.com/skins/UnlimitedSunlight/bundle-UnlimitedSunlight-mobile.css"/>'+
 '<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=ChDk9h03-S75WEqNhGvXkWireJ5cCWdK1xRM9NIXfnM1"/>'+
-'<style type="text/css"> .cnblogs_code {word-wrap:break-word; word-break:break-all;} .sourceCode{word-wrap:break-word; word-break:break-all;} a {word-wrap:break-word; word-break:break-all;}</style>'+
+'<style type="text/css"> * {word-wrap:break-word; word-break:break-all;}</style>'+
 '<script src="//common.cnblogs.com/script/jquery.js" type="text/javascript"></script>'+
 '<script src="/bundles/blog-common.js?v=hm0KZwWzsEv1qy3Vf9Vq9zW3uMF7kiGWJjjCrkS4nJY1" type="text/javascript"></script>'+
 '</head>';
+const tail = '</head>';
 // 传入博客Id和blogApp和CommentCount作为参数
 export default class BlogDetail extends Component{
     constructor(props){
@@ -80,7 +81,7 @@ export default class BlogDetail extends Component{
             this.state.isRequestSuccess===false?null:
             <View style = {styles.container}>
                 <WebView
-                    source={{html: head+this.state.content, baseUrl: this.props.navigation.state.params.Url}}
+                    source={{html: head+this.state.content+tail, baseUrl: this.props.navigation.state.params.Url}}
                     //source = {{uri: this.props.navigation.state.params.Url}}
                     style={{height: height-70, width: width}}
                     startInLoadingState={true}
