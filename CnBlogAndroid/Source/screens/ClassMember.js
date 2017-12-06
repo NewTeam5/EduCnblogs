@@ -120,7 +120,7 @@ export default class ClassMember extends Component{
         )
     }
     _separator = () => {
-        return <View style={{ height: 2.5, backgroundColor: 'rgb(225,225,225)' }}/>;
+        return <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)' }}/>;
     }
     _onPress = ()=>{
         if(this.state.membership===1)

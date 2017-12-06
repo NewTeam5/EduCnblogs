@@ -18,6 +18,12 @@ import {
     StackNavigator,
 } from 'react-navigation';
 const { height, width } = Dimensions.get('window');
+const head = '<!DOCTYPE html><html><head>'+
+'<meta charset="utf-8"/>'+
+'<meta name="viewport" content="width=device-width, initial-scale=1" />'+
+'<style type="text/css">  * {word-wrap:break-word; word-break:break-all;}</style>'+
+'</head>';
+const tail = '</html>';
 HtmlDecode = (str)=>{
     if(str == null) return '';
     var s = "";
@@ -28,6 +34,7 @@ HtmlDecode = (str)=>{
     s = s.replace(/&nbsp;/g," ");
     s = s.replace(/&#39;/g,"\'");
     s = s.replace(/&quot;/g,"\"");
+    //ToastAndroid.show(s,ToastAndroid.SHORT);
     return s;
 }
 export default class HomeWorkDetail extends Component{
@@ -67,13 +74,12 @@ export default class HomeWorkDetail extends Component{
         })
     }
     render(){
-        let {url, Id, classId} = this.props.navigation.state.params;
+        let {url, Id, classId, isFinished} = this.props.navigation.state.params;
         let {content, convertedContent, title, formatTyle, answerCount} = this.state;
         return(
             <View style = {styles.container}>
                 {<WebView
-                    source={{html: convertedContent==null?content:HtmlDecode(convertedContent),
-                        baseUrl: 'https://edu.cnblogs.com'+url}}
+                    source={{html: head + (convertedContent==null?content:HtmlDecode(convertedContent)) + tail}}
                     style={{height: height-40, width: width}}
                     startInLoadingState={true}
                     domStorageEnabled={true}
@@ -87,16 +93,17 @@ export default class HomeWorkDetail extends Component{
                     onPress = {()=>this.props.navigation.navigate('Submitted',{Id: Id})}
                     style = {styles.button}
                     >
-                        <Text style = {{fontSize: 15, textAlign: 'center'}}>
+                        <Text style = {{fontSize: 15, textAlign: 'center', color: 'white'}}>
                             已提交列表({answerCount}人)
                         </Text>
                     </TouchableOpacity>
                     <View style = {{backgroundColor: 'white', width: width/6}}/>
                     <TouchableOpacity
-                    onPress = {()=>this.props.navigation.navigate('HomeworkSubmit',{homeworkId: Id, classId: classId})}
+                    onPress = {isFinished == true ? ()=>ToastAndroid.show("此作业已经结束！", ToastAndroid.SHORT) : 
+                            ()=>this.props.navigation.navigate('HomeworkSubmit',{homeworkId: Id, classId: classId})}
                     style = {styles.button}
                     >
-                        <Text style = {{fontSize: 15, textAlign: 'center'}}>
+                        <Text style = {{fontSize: 15, textAlign: 'center', color: 'white'}}>
                             选择并提交作业
                         </Text>
                     </TouchableOpacity>
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
         height: height/18,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgb(51,204,255)',
+        backgroundColor: '#0588fe',
         borderRadius: 8,
     }
 })
