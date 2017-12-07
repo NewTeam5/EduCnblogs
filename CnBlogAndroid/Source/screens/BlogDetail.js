@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData,err_info} from '../config'
+import {authData,err_info,StorageKey} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component } from 'react';
@@ -46,7 +46,6 @@ export default class BlogDetail extends Component{
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted=true;
-        //let contenturl = 'https://api.cnblogs.com/api/blogposts/'+this.props.navigation.state.params.Id+'/body';
 		let contenturl = Config.BlogDetail+this.props.navigation.state.params.Id+'/body';
         Service.Get(contenturl).then((jsonData)=>{
             if(jsonData!=='rejected'){
@@ -59,11 +58,23 @@ export default class BlogDetail extends Component{
                     })
                 }
             }
-            else{
-                ToastAndroid.show("网络异常！请稍后重试！",ToastAndroid.SHORT);
-            }
-        }).catch((error) => {
+        }).then(()=>{
+			global.storage.save({key:StorageKey.BLOGDETAIL+this.props.navigation.state.params.Id,data:this.state.content})
+			.catch((err)=>{
+				ToastAndroid.show("error",ToastAndroid.SHORT);
+			})
+		})
+		.catch((error) => {
             ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.BLOGDETAIL+this.props.navigation.state.params.Id})
+			.then((ret)=>{
+				this.setState({
+					content: ret,
+				})
+			})
+			.catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT)
+			})
         });
     }
     componentWillUnmount = ()=>{
@@ -78,7 +89,7 @@ export default class BlogDetail extends Component{
     }
     render(){
         return(
-            this.state.isRequestSuccess===false?null:
+            //this.state.isRequestSuccess===false?null:
             <View style = {styles.container}>
                 <WebView
                     source={{html: head+this.state.content+tail, baseUrl: this.props.navigation.state.params.Url}}
