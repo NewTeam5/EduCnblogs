@@ -114,11 +114,14 @@ export default class ClassLists extends Component{
 					isEmpty : ret,
 				})
 			}).then(()=>{
-				global.storage.load({key:StorageKey.CLASS_IMG})
+				global.storage.load({key:StorageKey.CLASS_LIST_IMG})
 				.then((ret)=>{
 					this.setState({
 						imgs : ret,
 					})
+				})
+				.catch((err)=>{
+					ToastAndroid.show("Class_IMG",ToastAndroid.SHORT);
 				})
 			}).then(()=>{
 				global.storage.load({key:StorageKey.CLASS_LIST})
@@ -126,6 +129,8 @@ export default class ClassLists extends Component{
 					this.setState({
 						classes : ret,
 					})
+				}).catch((err)=>{
+					ToastAndroid.show("Class List",ToastAndroid.SHORT);
 				})
 			})
 			.catch((err)=>{
