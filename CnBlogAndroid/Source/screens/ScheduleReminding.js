@@ -137,10 +137,17 @@ export default class App extends Component {
         var description=item1.item.description
         var deadline=item1.item.deadline
         var url = item1.item.url;//作业地址
+        var Id = item1.item.key;//作业Id
+        var isFinished = item1.item.isFinished;   
+        var classId = item1.item.classId;   
         return (
             <View>
-                <TouchableOpacity
-                    onPress = {()=>{}}
+                <TouchableOpacity                    
+                    onPress = {()=>{
+                        this.setState({modalVisible:false});
+                        this.props.navigation.navigate('HomeworkDetail',{url: url, Id: Id,
+                                            classId: classId, isFinished: isFinished});
+                    }}
                     style = {HomeworkStyles.container}
                 >
                     <Text style= {HomeworkStyles.titleTextStyle}>
@@ -205,12 +212,13 @@ export default class App extends Component {
                                 t = t.split('T');
                                 if (t[0]===day.dateString){
                                     this.state.data.push({
-                                        key: t[0],//日期
+                                        key: this.state.homeworks[i].homeworkId,//作业ID
                                         title: this.state.homeworks[i].title,//作业标题
                                         url: this.state.homeworks[i].url,//作业网址
                                         description: this.state.homeworks[i].description,//作业描述
-                                        deadline: t[1],//作业截止日期
-                                        class: this.state.homeworks[i].schoolClassId//班级Id
+                                        deadline: this.state.homeworks[i].deadline,//作业截止日期
+                                        isFinished: this.state.homeworks[i].isFinished,// 作业是否结束
+                                        classId: this.state.homeworks[i].schoolClassId//班级Id
                                     })
                                 }
                             }
