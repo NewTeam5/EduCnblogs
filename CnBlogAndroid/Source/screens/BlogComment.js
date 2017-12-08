@@ -24,6 +24,7 @@ import {
 } from 'react-navigation';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
+var Authors = [];
 // 博客评论页面
 // 接受评论数量 CommentCount 和 博客名 blogApp 以及博文Id作为参数
 // 这里定义一个用于粗略解决返回的评论字符串内包含无法解析的html标签的函数
@@ -63,6 +64,7 @@ export default class BlogComment extends Component{
             isRequestSuccess: false,//初始认为页面请求失败，不渲染，否则会由于网络问题导致crash
         }
     }
+    
     _isMounted;
     componentWillMount=()=>{
         this._isMounted=true;
@@ -120,6 +122,7 @@ export default class BlogComment extends Component{
                                     Id: this.props.navigation.state.params.Id,
                                     CommentCount: this.props.navigation.state.params.CommentCount,
                                     Author: Author,
+                                    Authors: Authors
                                 })
                             }
                         >
@@ -147,8 +150,23 @@ export default class BlogComment extends Component{
                 DateAdded: this.state.comments[i].DateAdded,
                 AuthorUrl: this.state.comments[i].AuthorUrl,
                 FaceUrl: this.state.comments[i].FaceUrl,
-            })
-        }}
+            });
+            var isIn = false;
+            for(var author of Authors){
+                if(author.Author === this.state.comments[i].Author){
+                    isIn = true;
+                    break;
+                }
+            }
+            if(!isIn){
+                Authors.push({
+                    Author:this.state.comments[i].Author,
+                    FaceUrl: this.state.comments[i].FaceUrl
+                });
+            }    
+        }
+        }
+       
         return (
             <View style = {styles.container}>
                 <FlatList
@@ -165,7 +183,8 @@ export default class BlogComment extends Component{
                             {blogApp: this.props.navigation.state.params.blogApp,
                             Id: this.props.navigation.state.params.Id,
                             CommentCount: this.props.navigation.state.params.CommentCount,
-                            Author: ''})}
+                            Author: '',
+                            Authors: Authors})}
                 >
 	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加评论</Text>
                 </TouchableOpacity>
