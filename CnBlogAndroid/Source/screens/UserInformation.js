@@ -17,7 +17,8 @@ import {
     TextInput,
     Dimensions,
     Button,
-    TouchableHighlight
+    TouchableHighlight,
+    ScrollView
 } from 'react-native';
 import {
     StackNavigator,
@@ -125,6 +126,7 @@ export default class UserInformation extends Component{
 	
     render() {
     return (
+        <ScrollView>
         <View
             style= {{
                 flexDirection: 'column',
@@ -226,6 +228,7 @@ export default class UserInformation extends Component{
                 <Text style = {{fontSize: 18, fontWeight: 'bold', color:'rgb(51,51,51)'}}>退出登录</Text>
             </TouchableOpacity>
         </View>
+        </ScrollView>
     );
   }
 }

@@ -21,7 +21,8 @@ import {
     ToastAndroid,
     Modal,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView,
 } from 'react-native';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
@@ -175,6 +176,7 @@ export default class App extends Component {
             }
         }                        
     return (
+        <ScrollView>
         <View
             style= {{
                 flexDirection: 'column',
@@ -228,6 +230,7 @@ export default class App extends Component {
                 }}                           
             />        
         </View>
+        </ScrollView>
     );
   }
 }

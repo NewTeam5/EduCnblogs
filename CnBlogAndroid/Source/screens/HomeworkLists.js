@@ -273,25 +273,24 @@ export default class HomeworkLists extends Component {
                     </Text>
                 </TouchableHighlight>
             </View>
-            <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)'}}/>
-        <View
-            style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'flex-start',
-                alignSelf: 'stretch',
-                flex:1,
-            }}
-
-        >
-            <FlatList
-                data={data}
-                ItemSeparatorComponent = {this._separator}
-                renderItem={this._renderItem}
-                onRefresh = {this.UpdateData}
-                refreshing= {false}
-            />
-          </View>
+            <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)', }}/>
+            <View
+                style= {{
+                    flexDirection: 'row',
+                    justifyContent:'flex-start',
+                    alignItems: 'flex-start',
+                    alignSelf: 'stretch',
+                    flex:1,
+                }}
+            >
+                <FlatList
+                    data={data}
+                    ItemSeparatorComponent = {this._separator}
+                    renderItem={this._renderItem}
+                    onRefresh = {this.UpdateData}
+                    refreshing= {false}
+                />
+            </View>
       </View>
     );
   }

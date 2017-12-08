@@ -190,14 +190,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: screenWidth,
+        alignSelf: 'stretch',
     },
     listcontainer: {
         justifyContent:'flex-start',
         alignItems: 'flex-start',
         flex:1,
         backgroundColor: 'white',
-        width:screenWidth,
+        alignSelf: 'stretch',
         paddingLeft: 0.03*screenWidth,
         paddingRight: 0.04*screenWidth,
     }
