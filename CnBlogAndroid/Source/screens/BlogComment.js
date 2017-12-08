@@ -169,13 +169,23 @@ export default class BlogComment extends Component{
        
         return (
             <View style = {styles.container}>
-                <FlatList
-                    ItemSeparatorComponent={this._separator}
-                    renderItem={this._renderItem}
-                    data={data}
-                    onRefresh = {this.UpdateData}
-                    refreshing= {false}
-                />
+                <View
+                    style= {{
+                        flexDirection: 'row',
+                        justifyContent:'flex-start',
+                        alignItems: 'flex-start',
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
+                    <FlatList
+                        ItemSeparatorComponent={this._separator}
+                        renderItem={this._renderItem}
+                        data={data}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
+                    />
+                </View>
                 {this.state.isRequestSuccess===false?null:
                 <TouchableOpacity
                     style= {styles.button}
@@ -207,7 +217,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',  
         flex:1,
         backgroundColor: 'white',
-        width: screenWidth-20,
+        alignSelf: 'stretch',
         marginLeft: 8,
         marginRight: 12,
         marginBottom: 5,
@@ -225,7 +235,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: screenHeight/14,
-        width: screenWidth,
+        alignSelf: 'stretch',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 0,

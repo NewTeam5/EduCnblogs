@@ -14,13 +14,14 @@ import {
     View,
     Image,
 	ToastAndroid,
-    TouchableHighlight,    
+    TouchableHighlight,
     TextInput,
     FlatList,
     TouchableOpacity,
     Dimensions,
     PixelRatio,
     Button,
+    ScrollView
 } from 'react-native';
 import {
     StackNavigator,
@@ -30,7 +31,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= MyAdapter.btnFontSize;
 
 export default class ClassHome extends Component{
     constructor(props){
@@ -42,7 +43,7 @@ export default class ClassHome extends Component{
             bulletinCount: 0, // 公告数目
         }
     }
-	
+
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted = true;
@@ -66,21 +67,23 @@ export default class ClassHome extends Component{
         this._isMounted = false;
     }
     render() {
-	let classId = this.props.navigation.state.params.classId;	
+	let classId = this.props.navigation.state.params.classId;
     return (
         <View
-            style= {{
-            	flexDirection: 'column',
-            	flex: 1,
-            	backgroundColor: 'white'
-            }}
+        style= {{
+            flexDirection: 'column',
+            backgroundColor: 'white',
+            flex: 1,
+        }}
         >
-            <View style= {{        
-                flexDirection: 'row',  
+        <ScrollView>
+            <View style= {{
+                flexDirection: 'row',
                 justifyContent:'center',
-                alignItems: 'center',  
+                alignItems: 'center',
                 marginTop:0.05*screenHeight,
-            }}      	
+                flex: 1
+            }}
             >
                 <Image
                     style= {{
@@ -90,14 +93,16 @@ export default class ClassHome extends Component{
                     source={{uri: this.state.iconurl}}
                 />
             </View>
-            <View style= {{        
+            <View style= {{
                 flexDirection: 'column',
                 justifyContent:'center',
                 alignItems: 'center',
                 marginTop:0.04*screenHeight,
+                marginBottom:0.025*screenHeight,
+                flex: 1,
             }}
             >
-                <Text style= {{      
+                <Text style= {{
 	            	alignSelf:'center',
                     fontSize: titleFontSize+10,
                     fontWeight: 'bold',
@@ -107,9 +112,9 @@ export default class ClassHome extends Component{
                 }}>
                     {this.state.universityname}
                 </Text>
-                <Text style= {{      
+                <Text style= {{
 	            	alignSelf:'center',
-	                fontSize: titleFontSize,  
+	                fontSize: titleFontSize,
 	                color: 'rgb(51,51,51)',
                     textAlign: 'center',
                     marginLeft: 0.15*screenWidth,
@@ -119,27 +124,27 @@ export default class ClassHome extends Component{
                     {this.state.classname}
                 </Text>
             </View>
-            <View style= {{        
+            <View style= {{
                 flexDirection: 'column',
                 justifyContent:'center',
                 alignItems: 'center',
                 flex: 1
-            }}      	
+            }}
             >
                 <TouchableOpacity
                     style= {styles.button}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数                   
+                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数
                 >
 	                <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>所有作业</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style= {styles.button}
-                    onPress={()=>this.props.navigation.navigate('ClassMember',{classId:classId})}//关联函数                   
+                    onPress={()=>this.props.navigation.navigate('ClassMember',{classId:classId})}//关联函数
                 >
                     <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>班级成员</Text>
                 </TouchableOpacity>
             </View>
-
+        </ScrollView>
         </View>
     );
   }
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        backgroundColor: 'rgb(51,204,255)',  
+        backgroundColor: 'rgb(51,204,255)',
         marginBottom: 20,
     }
 });
