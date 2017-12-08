@@ -14,6 +14,7 @@ import {
     TextInput,
     Dimensions,
     FlatList,
+    Modal
 } from 'react-native';
 import {
     StackNavigator,
@@ -27,6 +28,8 @@ export default class CommentAdd extends Component{
         super(props);
         this.state = {
             text : '',
+            modalVisible: false,
+            length: 0,
         }
     }  
     onSubmit = ()=>{
@@ -48,14 +51,64 @@ export default class CommentAdd extends Component{
             ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
-	
+    
+    _separator = () => {
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
+    }
+    _renderItem = (item)=>{
+        let item1 = item;
+        let {Author,FaceUrl} = item1.item;
+        return(
+            <TouchableOpacity
+                 style = {styles.listcontainer}
+                 onPress = {()=>{
+                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author})}}
+            >
+                <View style = {{flex:1}}>
+                    <Image source = {FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} style = {styles.facestyle}/>
+                </View>
+                <View style = {styles.textcontainer1}>
+                    <Text style = {{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{Author}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    onShow(text){
+        this.setState({text: text});
+        var Authors = this.props.navigation.state.params.Authors;
+        if(text.length >this.state.length && text[text.length - 1] == '@' && Authors.length != 0){
+            this.setState({modalVisible:true});
+        }
+        this.setState({length:text.length});
+    }
+    
     render(){
         return(
             <View style = {styles.container}>
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => this.setState({modalVisible:false})}
+                >
+                    <View style = {styles.container}>
+                    <FlatList
+                        ItemSeparatorComponent={this._separator}
+                        renderItem={this._renderItem}
+                        data={this.props.navigation.state.params.Authors}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
+                    />
+                
+                    </View>
+                </Modal>
                 <TextInput ref="commentRef"
                     style={styles.textcontainer}
-                    onChangeText={(text) => this.setState({text: text})}
-                    defaultValue={this.props.navigation.state.params.Author!=''?'@'+' '+this.props.navigation.state.params.Author+'\n':''}
+                    onChangeText={(text) => this.onShow(text)}
+                    defaultValue={
+                        this.state.text != ''? this.state.text :
+                        (this.props.navigation.state.params.Author!=''?'@'+' '+this.props.navigation.state.params.Author+'\n':'')}
                     multiline={true}
                     underlineColorAndroid="transparent"
                     accessibilityLabel = "CommentAdd_inputBox"
@@ -82,6 +135,36 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
+    },
+    listcontainer: {
+        flexDirection: 'row',
+        justifyContent:'flex-start',
+        alignItems: 'flex-start',  
+        flex:1,
+        backgroundColor: 'white',
+        width: screenWidth-20,
+        marginLeft: 8,
+        marginRight: 12,
+        marginBottom: 5,
+    },
+    facestyle: {
+        width: 40,
+        height: 40,
+        marginTop: 5,
+    },
+    textcontainer1: {
+        justifyContent:'flex-start',
+        alignItems: 'flex-start',  
+        flex: 6,
+        backgroundColor: 'white',
+    },
+    button: {
+        height: screenHeight/14,
+        width: screenWidth,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 0,
+        backgroundColor: '#1C86EE',  
     },
     textcontainer: {
         color: 'black',
