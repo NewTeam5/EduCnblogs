@@ -91,17 +91,24 @@ export default class BlogDetail extends Component{
         return(
             //this.state.isRequestSuccess===false?null:
             <View style = {styles.container}>
+                <View
+                    style= {{
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
                 <WebView
                     source={{html: head+this.state.content+tail, baseUrl: this.props.navigation.state.params.Url}}
                     //source = {{uri: this.props.navigation.state.params.Url}}
-                    style={{height: height-70, width: width}}
+                    style={{height: height-70}}
                     startInLoadingState={true}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     scalesPageToFit={true}
                     onError = {()=>Alert.alert('网络异常，请稍后再试！')}
                 />
-                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', width: width}}/>
+                </View>
+                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', alignSelf:'stretch'}}/>
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
                         <Image source = {require('../images/comment.png')} style = {styles.imagestyle} accessibilityLabel = 'BlogDetail_commentImage'/>
@@ -119,6 +126,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         flex:1,
+        alignSelf: 'stretch',
     },
     bottom: {
         flexDirection: 'row',

@@ -77,16 +77,23 @@ export default class HomeWorkDetail extends Component{
         let {content, convertedContent, title, formatTyle, answerCount} = this.state;
         return(
             <View style = {styles.container}>
-                {<WebView
+                <View
+                    style= {{
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
+                <WebView
                     source={{html: head + (convertedContent==null?content:HtmlDecode(convertedContent)) + tail}}
-                    style={{height: height-40, width: width}}
+                    style={{height: height-40}}
                     startInLoadingState={true}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     scalesPageToFit={true}
                     onError = {()=>Alert.alert('网络异常，请稍后再试！')}
-                />}
-                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', width: width}}/>
+                />
+                </View>
+                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', alignSelf:'stretch'}}/>
                 <View style = {styles.bottom}>
                     <TouchableOpacity
                     onPress = {()=>this.props.navigation.navigate('Submitted',{Id: Id})}
@@ -117,13 +124,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         flex:1,
+        alignSelf: 'stretch',
     },
     bottom: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         height: height/16,
-        width: width,
+        alignSelf: 'stretch',
         backgroundColor: 'white'
     },
     button:{

@@ -20,14 +20,12 @@ export default class ContactPage extends Component{
     render(){
         return(
             <View style = {{
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'white',
+                alignSelf:'stretch',
                 flex:1
             }}>
                 <WebView
                     source={{uri: this.props.navigation.state.params.url}}
-                    style={{height: height-40, width: width}}
+                    style={{height: height-40}}
                     startInLoadingState={true}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}

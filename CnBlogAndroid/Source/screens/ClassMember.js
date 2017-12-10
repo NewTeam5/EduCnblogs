@@ -41,10 +41,10 @@ export default class ClassMember extends Component{
         }
     }
     _isMounted;
-	
+
     componentWillMount = ()=>{
         this._isMounted=true;
-		let url = Config.MemberList + this.props.navigation.state.params.classId;
+        let url = Config.MemberList + this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected')
             {
@@ -58,25 +58,25 @@ export default class ClassMember extends Component{
                 }
             }
         })
-		.then(()=>{
-			global.storage.save({key:StorageKey.CLASS_MEMBER , data:this.state.members});
-		})
-		.catch((error) => {
+        .then(()=>{
+            global.storage.save({key:StorageKey.CLASS_MEMBER , data:this.state.members});
+        })
+        .catch((error) => {
             ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
-			global.storage.load({key:StorageKey.CLASS_MEMBER})
-			.then((ret)=>{
-				this.setState({
-					members : ret,
-				})
-			}).catch((err)=>{
-				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
-				this.props.navigation.navigate('Loginer');
-			})
+            global.storage.load({key:StorageKey.CLASS_MEMBER})
+            .then((ret)=>{
+                this.setState({
+                    members : ret,
+                })
+            }).catch((err)=>{
+                ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+                this.props.navigation.navigate('Loginer');
+            })
         });
 		
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId;
             Service.Get(url2).then((jsonData)=>{
                 if(this._isMounted){
                     this.setState({
@@ -147,7 +147,7 @@ export default class ClassMember extends Component{
                 blogId: this.state.members[i].blogId,
             })
         }
-		
+
         return(
             <View style = {styles.container}>
 				<Fab
@@ -165,42 +165,50 @@ export default class ClassMember extends Component{
 	                alignSelf: 'stretch',    
 	                marginTop: 0.005*screenHeight,
                     marginHorizontal:0.01*screenWidth,
-	            }}
-	            >
-	                <TouchableHighlight
-	                    underlayColor="#0588fe"
-	                    activeOpacity={0.5}
-	                    style= {{
-	                    	width:0.35*screenWidth,
-	                        alignSelf: 'flex-end',
-	                        borderRadius: 0.01*screenHeight,
-	                        padding: 0.01*screenHeight,
-	                        backgroundColor:"#0588fe"
-	                    }}
+                }}
+                >
+                    <TouchableHighlight
+                        underlayColor="#0588fe"
+                        activeOpacity={0.5}
+                        style= {{
+                            width:0.35*screenWidth,
+                            alignSelf: 'flex-end',
+                            borderRadius: 0.01*screenHeight,
+                            padding: 0.01*screenHeight,
+                            backgroundColor:"#0588fe"
+                        }}
                         onPress={this._onPress}
-	                >
-	                    <Text
-	                        style= {{
-	                            fontSize: btnFontSize,  
-	                            color: '#ffffff',  
-	                            textAlign: 'center',  
-	                            fontWeight: 'bold',   
-	                        }}   
-	                    >
-	                        添加成员
-	                    </Text>
-	                </TouchableHighlight>
-
-                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width: screenWidth, marginTop: 0.005*screenHeight,}} />  
-
-	            </View>
-                <FlatList
-                    ItemSeparatorComponent={this._separator}
-                    renderItem={this._renderItem}
-                    data={data}
-                    onRefresh = {this.UpdateData}
-                    refreshing= {false}
-                />
+                    >
+                        <Text
+                            style= {{
+                                fontSize: btnFontSize,
+                                color: '#ffffff',
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                            }}
+                        >
+                            添加成员
+                        </Text>
+                    </TouchableHighlight>
+                </View>
+                <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)',  marginTop: 0.005*screenHeight, alignSelf:'stretch'}}/>
+                <View
+                    style= {{
+                        flexDirection: 'row',
+                        justifyContent:'flex-start',
+                        alignItems: 'flex-start',
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
+                    <FlatList
+                        ItemSeparatorComponent={this._separator}
+                        renderItem={this._renderItem}
+                        data={data}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
+                    />
+                </View>
             </View>
         )
     }
@@ -221,20 +229,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginLeft: 8,
         marginRight: 12,
-        width: screenWidth-20,
+        //alignSelf: 'stretch',
     },
     avatarstyle: {
         width: 0.15*screenWidth,
         height: 0.15*screenWidth,
         marginBottom: 5,
         marginTop: 5,
-		borderRadius : 40,
-		left : 2,
+        borderRadius : 40,
+        left : 2,
     },
     textcontainer: {
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex: 4,
         backgroundColor: 'white',
+        //alignSelf: 'stretch',
     }
 });
