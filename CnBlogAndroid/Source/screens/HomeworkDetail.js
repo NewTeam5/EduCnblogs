@@ -55,7 +55,6 @@ export default class HomeWorkDetail extends Component{
     componentWillMount = ()=>{
         this._isMounted = true;
         let {Id, classId} = this.props.navigation.state.params;
-        //let url = 'https://api.cnblogs.com/api/edu/homework/'+Id;
 		let url = Config.HomeWorkDetail + Id;
         Service.Get(url).then((jsonData)=>{
             if(jsonData !== 'rejected' && this._isMounted)
