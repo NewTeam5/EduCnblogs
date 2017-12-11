@@ -6,6 +6,7 @@ import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
 import {StorageKey} from '../config'
 import {err_info} from '../config'
+import { Container, Header, Fab, Button, Icon } from 'native-base';
 
 import {
     StyleSheet,
@@ -28,8 +29,8 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;
-// 传入classId作为参数
+const btnFontSize= MyAdapter.btnFontSize;   
+
 export default class ClassMember extends Component{
     constructor(props){
         super(props);
@@ -43,7 +44,6 @@ export default class ClassMember extends Component{
 
     componentWillMount = ()=>{
         this._isMounted=true;
-        //let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
         let url = Config.MemberList + this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected')
@@ -73,8 +73,7 @@ export default class ClassMember extends Component{
                 this.props.navigation.navigate('Loginer');
             })
         });
-
-        //是否有添加成员的权限
+		
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
             let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId;
@@ -151,12 +150,20 @@ export default class ClassMember extends Component{
 
         return(
             <View style = {styles.container}>
-                <View style= {{
-                    flexDirection: 'column',
-                    justifyContent:'center',
-                    alignItems: 'flex-end',
-                    alignSelf: 'stretch',
-                    marginTop: 0.005*screenHeight,
+				<Fab
+					active={true}
+					containerStyle={{ }}
+					style={{ backgroundColor: '#5067FF' }}
+					position="bottomRight"
+					onPress={this._onPress}>
+					<Icon name="share" />
+				</Fab>
+	            <View style= {{        
+	                flexDirection: 'column',           
+	                justifyContent:'center',
+	                alignItems: 'flex-end',  
+	                alignSelf: 'stretch',    
+	                marginTop: 0.005*screenHeight,
                     marginHorizontal:0.01*screenWidth,
                 }}
                 >

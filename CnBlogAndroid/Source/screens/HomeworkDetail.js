@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData,err_info} from '../config';
+import {authData,err_info,StorageKey} from '../config';
 import * as Service from '../request/request.js';
 import React, { Component } from 'react';
 import {
@@ -34,7 +34,6 @@ HtmlDecode = (str)=>{
     s = s.replace(/&nbsp;/g," ");
     s = s.replace(/&#39;/g,"\'");
     s = s.replace(/&quot;/g,"\"");
-    //ToastAndroid.show(s,ToastAndroid.SHORT);
     return s;
 }
 export default class HomeWorkDetail extends Component{
@@ -55,7 +54,6 @@ export default class HomeWorkDetail extends Component{
     componentWillMount = ()=>{
         this._isMounted = true;
         let {Id, classId} = this.props.navigation.state.params;
-        //let url = 'https://api.cnblogs.com/api/edu/homework/'+Id;
 		let url = Config.HomeWorkDetail + Id;
         Service.Get(url).then((jsonData)=>{
             if(jsonData !== 'rejected' && this._isMounted)
@@ -64,15 +62,29 @@ export default class HomeWorkDetail extends Component{
                     content: jsonData.content,
                     convertedContent: jsonData.convertedContent,
                     title: jsonData.title,
-                    formatTyle: jsonData.formatTyle,
+					formatTyle: jsonData.formatTyle,
                     answerCount: jsonData.answerCount,
                 })
             }
-            else{
-                ToastAndroid.show(err_info.NO_INTERNET, ToastAndroid.SHORT);
-            }
         })
+		.then(()=>{
+			global.storage.save({key : StorageKey.HOMEWORKDETAIL+Id,data : this.state});
+		})
+		.catch((err)=>{
+			ToastAndroid.show(err_info.NO_INTERNET, ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.HOMEWORKDETAIL+Id})
+			.then((ret)=>{
+				this.setState({
+                    content: ret.content,
+                    convertedContent: ret.convertedContent,
+                    title: ret.title,
+					formatTyle: ret.formatTyle,
+                    answerCount: ret.answerCount,
+                })
+			})
+		})
     }
+	
     render(){
         let {url, Id, classId, isFinished} = this.props.navigation.state.params;
         let {content, convertedContent, title, formatTyle, answerCount} = this.state;
@@ -119,6 +131,7 @@ export default class HomeWorkDetail extends Component{
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
