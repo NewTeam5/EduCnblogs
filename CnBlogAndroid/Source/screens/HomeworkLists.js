@@ -307,7 +307,7 @@ const HomeworkStyles = StyleSheet.create({
         marginRight: 0.04*screenWidth,
     },
     titleTextStyle:{
-        fontSize: titleFontSize-5,
+        fontSize: 18,
         color: '#000000',
         textAlign: 'center',
         marginTop: 10,
@@ -316,7 +316,7 @@ const HomeworkStyles = StyleSheet.create({
         fontFamily : 'serif',
     },
     abstractTextStyle:{
-        fontSize: abstractFontSize+2,
+        fontSize: 14,
         color:'rgb(70,70,70)',
         textAlign: 'left',
         marginBottom: 8,
@@ -324,7 +324,7 @@ const HomeworkStyles = StyleSheet.create({
     },
     informationTextStyle:{
         alignSelf: "flex-end",
-        fontSize: informationFontSize-2,
+        fontSize: 10,
         color: '#000000',
         textAlign: 'center',
         marginBottom: 8
