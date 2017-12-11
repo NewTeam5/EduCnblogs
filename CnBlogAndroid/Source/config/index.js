@@ -24,6 +24,7 @@ export const authData = {
 
 export const StorageKey = {
 	USER_TOKEN : "USER_TOKEN",
+	USER_INFO : "USERINFO",
 	PERSON_BLOG : "PERSONALBLOG",
 	CLASS_LIST : "CLASSES",
 	CLASS_LIST_IMG : "CLASSIMG",
@@ -37,7 +38,8 @@ export const StorageKey = {
 	FACEURL : "FACEURL",
 	BLOGAPP : "BLOGAPP",
 	SENIORITY : "SENIORITY",
-	BLOGDETAIL : "BLOGDETAIL"
+	BLOGDETAIL : "BLOGDETAIL",
+	HOMEWORKDETAIL : "HOMEWORKDETAIL"
 }
 
 export const ActionType = {
