@@ -20,7 +20,7 @@
     <tr>
       <th>安万贺</th>
       <td>完成了离线状态本地存储的读取<br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/133">Issue #133</a><br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/145">Pull Request #145</a></td>
-      <td>修复bug，完成博文详情的存储<br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/148">Issue #148</a></td>
+      <td>修复bug，完成博文详情的存储<br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/150">Issue #150</a></td>
     </tr>
     <tr>
       <th>李奕君</th>
@@ -45,7 +45,7 @@
     <tr>
       <th>索一奇</th>
       <td>Scrum Meeting<br><a href = "https://github.com/NewTeam5/EduCnblogs/pull/141">Pull Request #141</a></td>
-      <td>安装配置material-ui，完成个人博客页面的优化<br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/149">Issue #149</a></td>
+      <td>安装配置material-ui，完成个人博客页面的优化<br><a href = "https://github.com/NewTeam5/EduCnblogs/issues/151">Issue #151</a></td>
     </tr> 
   </tbody>
 </table>
