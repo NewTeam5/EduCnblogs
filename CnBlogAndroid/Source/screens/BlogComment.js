@@ -8,7 +8,6 @@ import {Fab } from 'native-base';
 import React, { Component} from 'react';
 import {
     StyleSheet,
-    Text,
     View,
     ToastAndroid,
     TouchableOpacity,
@@ -19,6 +18,7 @@ import {
     Button,
     Alert
 } from 'react-native';
+import {ListItem, Thumbnail, Text, Body, Left, Right} from 'native-base';
 import {
     StackNavigator,
     TabNavigator,
@@ -102,41 +102,28 @@ export default class BlogComment extends Component{
     }
     _renderItem = (item)=>{
         let item1 = item;
-        let {key,Body,Author,DateAdded,AuthorUrl,FaceUrl} = item1.item;
-        return(
-            <View style = {styles.listcontainer}>
-                <View style = {{flex:1}}>
-                    <Image source = {FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} style = {styles.facestyle}/>
-                </View>
-                <View style = {styles.textcontainer}>
-                    <Text style = {{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{Author}</Text>
-                    <Text style = {{color: 'black', fontSize: 12, marginBottom: 5, marginTop: 2}}>{CommemtHandler(Body)}</Text>
-                    <View style = {{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        alignItems: 'flex-end'
-                    }}>
-                        <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate
-                                ('CommentAdd',{
-                                    blogApp: this.props.navigation.state.params.blogApp,
-                                    Id: this.props.navigation.state.params.Id,
-                                    CommentCount: this.props.navigation.state.params.CommentCount,
-                                    Author: Author,
-                                    Authors: Authors
-                                })
-                            }
-                        >
-                        <Text style = {{fontSize: 10, color: 'rgb(153,153,153)',textAlign:'right',flex:1}}>
-                            回复
-                        </Text>
-                        </TouchableOpacity>
-                        <Text style = {{fontSize: 10, color: 'black',textAlign:'right',flex:1}}>
-                            {'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}
-                        </Text>
-                    </View>
-                </View>
-            </View>
+        let {key,Bodys,Author,DateAdded,AuthorUrl,FaceUrl} = item1.item;
+        return(         
+            <ListItem avatar
+                onPress={()=>this.props.navigation.navigate
+                    ('CommentAdd',{
+                        blogApp: this.props.navigation.state.params.blogApp,
+                        Id: this.props.navigation.state.params.Id,
+                        CommentCount: this.props.navigation.state.params.CommentCount,
+                        Author: Author,
+                        Authors: Authors
+                    })
+                }
+            >
+              <Left>
+                <Thumbnail source={FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} />
+              </Left>
+              <Body>
+                <Text>{Author}</Text>
+                <Text note>{CommemtHandler(Bodys)}</Text>
+                <Text style = {{fontSize: 10, textAlign: 'right', color: 'gray'}}>{'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}</Text>
+              </Body>  
+            </ListItem>
         )
     }
     render(){
@@ -146,7 +133,7 @@ export default class BlogComment extends Component{
         {
             data.push({
                 key: this.state.comments[i].Id,
-                Body: this.state.comments[i].Body,
+                Bodys: this.state.comments[i].Body,
                 Author: this.state.comments[i].Author,
                 DateAdded: this.state.comments[i].DateAdded,
                 AuthorUrl: this.state.comments[i].AuthorUrl,

@@ -16,6 +16,7 @@ import {
     FlatList,
     Modal
 } from 'react-native';
+import {ListItem, Thumbnail, Button, Item} from 'native-base';
 import {
     StackNavigator,
     TabNavigator,
@@ -62,14 +63,15 @@ export default class CommentAdd extends Component{
             <TouchableOpacity
                  style = {styles.listcontainer}
                  onPress = {()=>{
-                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author})}}
+                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author + '\n'})}}
             >
-                <View style = {{flex:1}}>
-                    <Image source = {FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} style = {styles.facestyle}/>
-                </View>
-                <View style = {styles.textcontainer1}>
-                    <Text style = {{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{Author}</Text>
-                </View>
+                <ListItem
+                onPress = {()=>{
+                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author + '\n'})}}
+                >
+                    <Thumbnail source={FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} />
+                    <Text style = {{fontWeight:'Medium', fontSize:18, color: 'black', marginLeft:8}}>{Author}</Text>                    
+                </ListItem>
             </TouchableOpacity>
         )
     }
@@ -103,6 +105,7 @@ export default class CommentAdd extends Component{
                 
                     </View>
                 </Modal>
+                <Item regular style = {{marginTop: 0.05*screenHeight,width: 0.95*screenWidth, borderColor: 'gray'}}>
                 <TextInput ref="commentRef"
                     style={styles.textcontainer}
                     onChangeText={(text) => this.onShow(text)}
@@ -115,15 +118,14 @@ export default class CommentAdd extends Component{
                     autoCorrect = {false}
                     blurOnSubmit={false}
                 />
-                <View style={{flex:1}}>
-                </View>
+                </Item>
                 <TouchableOpacity
                     style= {styles.button}
                     onPress = {this.onSubmit.bind(this)}
                 >
-                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
+                    <Text style = {{fontSize: 18, color: 'white'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
                 </TouchableOpacity>
-                
+                               
             </View>
         )
     }
@@ -143,9 +145,6 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: 'white',
         width: screenWidth-20,
-        marginLeft: 8,
-        marginRight: 12,
-        marginBottom: 5,
     },
     facestyle: {
         width: 40,
@@ -158,32 +157,25 @@ const styles = StyleSheet.create({
         flex: 6,
         backgroundColor: 'white',
     },
-    button: {
-        height: screenHeight/14,
-        width: screenWidth,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 0,
-        backgroundColor: '#1C86EE',  
-    },
     textcontainer: {
         color: 'black',
         flex: 5,
-        backgroundColor: 'rgb(225,225,225)',
-        height: 0.5*screenHeight,
-        width: 0.8*screenWidth,
+        height: 250,
+        width: 0.95*screenWidth,
         textAlignVertical: 'top',
-        marginTop: 0.1*screenHeight,
-        marginBottom: 0.01*screenHeight,
+        //borderColor: 'rgb(225,225,225)',
+        //borderWidth: 1,
     },
     button: {
-        height: 0.2*0.618*screenWidth,
-        width: 0.618*screenWidth,
+        height: 0.18*0.618*screenWidth,
+        width: 0.2 * screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        backgroundColor: 'rgb(51,204,255)',  
+        alignSelf:'flex-end',
+        borderRadius: 4,
+        backgroundColor: '#1C86EE',  
         marginTop: 0.05*screenHeight,
         marginBottom: 0.05*screenHeight,
+        marginRight: 0.025*screenWidth,
     }
 });
