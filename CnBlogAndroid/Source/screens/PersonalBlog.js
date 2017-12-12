@@ -193,8 +193,14 @@ export default class PersonalBlog extends Component{
                     }} accessibilityLabel = {Url}>
                         {Title}
                     </Text>
-                    <Text  numberOfLines={3} style = {{lineHeight: 25,fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
-                        {Description+'...'}
+                    <Text  numberOfLines={3} style = {{
+                        lineHeight: 25,
+                        fontSize: 14,
+                        marginBottom: 8,
+                        textAlign: 'left',
+                        color: 'rgb(70,70,70)',
+                    }}>
+                        {Description}
                     </Text>
                     <View style = {{
                         flexDirection: 'row',
@@ -222,8 +228,6 @@ export default class PersonalBlog extends Component{
             </View>
         );
     }
-	
-	
     render(){
         var data = [];
         for(var i in this.state.blogs)

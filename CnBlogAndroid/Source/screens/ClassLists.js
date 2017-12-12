@@ -173,12 +173,7 @@ export default class ClassLists extends Component{
 			</View>
 				<View 
 					style= {{        
-						flexDirection: 'row', 
-						justifyContent:'flex-start',
-						alignItems: 'flex-start',  
 						alignSelf: 'stretch',
-						marginLeft: 0.02*screenWidth,
-						marginRight: 0.04*screenWidth,
 						flex:1,
 					}}>
 					<FlatList
@@ -245,10 +240,11 @@ export default class ClassLists extends Component{
 										</Text>                             
 									</View>
 								</View>
-							</TouchableOpacity>
-						}/>
-					</View>
+								</TouchableOpacity>
+						}
+					/>
 				</View>
+			</View>
 		);  
     }
 }

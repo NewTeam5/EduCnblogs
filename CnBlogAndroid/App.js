@@ -111,7 +111,7 @@ class Welcome extends Component{
         });
         this.props.navigation.dispatch(resetAction);
     }
-	
+
     componentDidMount(){
         this.timer = setTimeout(
             ()=>{
@@ -159,7 +159,7 @@ class Loginer extends Component{
     mylogin = () => {
         this.props.navigation.navigate('LoginPage')
     };
-    render(){	
+    render(){
         return(
             <View style = {styles.container}>
                 <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
@@ -179,7 +179,7 @@ class UrlLogin extends Component{
             code : '',
         };
     }
-    
+
     toPerson()
     {
         // 这里重置路由，阻止用户返回登录界面
@@ -193,7 +193,7 @@ class UrlLogin extends Component{
         this.props.navigation.navigate('PersonalBlog');
     }
     getTokenFromApi(Code)
-    {		  
+    {
         fetch(Config.AccessToken,{
             method: 'POST',
             headers: {
@@ -206,8 +206,8 @@ class UrlLogin extends Component{
         .then((responseJson)=>{
             storage.setItem(StorageKey.USER_TOKEN,responseJson);
         }).then(()=>{
-			this.toPerson();
-		})
+            this.toPerson();
+        })
         .catch((error)=>{
             ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         })
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        backgroundColor: 'rgb(51,153,255)',    
+        backgroundColor: 'rgb(51,153,255)',
         marginTop: height/10,
     },
     btText: {
@@ -296,23 +296,23 @@ const HomeTab = TabNavigator({
         screen: PersonalBlog,
         navigationOptions: {
             tabBarLabel: '我的博客',
-            tabBarIcon: ({ tintColor, focused }) => (  
-                <Image 
-                    resizeMode='contain'   
-                    source={require('./Source/images/nav_blog.png')}  
+            tabBarIcon: ({ tintColor, focused }) => (
+                <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_blog.png')}
                     style={{height: 20}}
                 ></Image>
-            )  
+            )
         }
     },
     ClassLists: {
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
-            tabBarIcon: ({ tintColor, focused }) => (  
-               <Image 
-                    resizeMode='contain'   
-                    source={require('./Source/images/nav_class.png')}  
+            tabBarIcon: ({ tintColor, focused }) => (
+               <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_class.png')}
                     style={{height: 20}}
                 ></Image>
             )
@@ -322,10 +322,10 @@ const HomeTab = TabNavigator({
         screen: UserInformation,
         navigationOptions: {
             tabBarLabel: '我',
-            tabBarIcon: ({ tintColor, focused }) => (  
-                <Image 
-                    resizeMode='contain'   
-                    source={require('./Source/images/nav_i.png')}  
+            tabBarIcon: ({ tintColor, focused }) => (
+                <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_i.png')}
                     style={{height: 20}}
                 ></Image>
             )
@@ -357,7 +357,7 @@ const HomeTab = TabNavigator({
     },
 })
 
-const SimpleNavigation = StackNavigator({	
+const SimpleNavigation = StackNavigator({
     Welcome: {
         screen: Welcome,
         navigationOptions: {
@@ -380,7 +380,7 @@ const SimpleNavigation = StackNavigator({
         screen: HomeworkLists,
         navigationOptions: {
             //header: null,
-            headerTintColor:'white',            
+            headerTintColor:'white',
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
@@ -394,7 +394,7 @@ const SimpleNavigation = StackNavigator({
     HomeworkDetail: {
         screen: HomeworkDetail,
         navigationOptions: {
-            headerTintColor:'white',                        
+            headerTintColor:'white',
             headerTitle: '作业详情',
             headerStyle: {
                 height: 40,
@@ -414,7 +414,7 @@ const SimpleNavigation = StackNavigator({
     ClassCreate: {
         screen: ClassCreate,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '创建班级',
             headerStyle: {
                 height: 40,
@@ -423,7 +423,7 @@ const SimpleNavigation = StackNavigator({
             headerTitleStyle: {
                 fontSize: 18,
             }
-        }        
+        }
     },
     Notice: {
         screen: Notice,
@@ -440,7 +440,7 @@ const SimpleNavigation = StackNavigator({
     PersonalSettings:{
         screen: PersonalSettings,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '个人设置',
             headerStyle: {
                 height: 40,
@@ -460,7 +460,7 @@ const SimpleNavigation = StackNavigator({
     ClassHome: {
         screen: ClassHome,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '班级博客',
             headerStyle: {
                 height: 40,
@@ -474,7 +474,7 @@ const SimpleNavigation = StackNavigator({
     HomeworkPost: {
         screen: HomeworkPost,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '作业发布',
             headerStyle: {
                 height: 40,
@@ -488,7 +488,7 @@ const SimpleNavigation = StackNavigator({
     ScheduleReminding: {
         screen: ScheduleReminding,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '日程提醒',
             headerStyle: {
                 height: 40,
@@ -502,7 +502,7 @@ const SimpleNavigation = StackNavigator({
     BlogDetail: {
         screen: BlogDetail,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '博文详情',
             headerStyle: {
                 height: 40,
@@ -516,7 +516,7 @@ const SimpleNavigation = StackNavigator({
     BlogComment: {
         screen: BlogComment,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '评论',
             headerStyle:{
                 height: 40,
@@ -530,7 +530,7 @@ const SimpleNavigation = StackNavigator({
     ClassMember: {
         screen: ClassMember,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '班级成员',
             headerStyle: {
                 height:40,
@@ -544,7 +544,7 @@ const SimpleNavigation = StackNavigator({
     ClassMemberAdd: {
         screen: ClassMemberAdd,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '添加班级成员',
             headerStyle: {
                 height:40,
@@ -558,7 +558,7 @@ const SimpleNavigation = StackNavigator({
     MemberBlog: {
         screen: MemberBlog,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '他的博客',
             headerStyle: {
                 height:40,
@@ -572,7 +572,7 @@ const SimpleNavigation = StackNavigator({
     CommentAdd: {
         screen: CommentAdd,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '添加评论',
             headerStyle: {
                 height:40,
@@ -586,7 +586,7 @@ const SimpleNavigation = StackNavigator({
     AppInformation: {
         screen: AppInformation,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '关于app',
             headerStyle: {
                 height:40,
@@ -601,7 +601,7 @@ const SimpleNavigation = StackNavigator({
     ContactPage: {
         screen: ContactPage,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '联系开发者',
             headerStyle: {
                 height:40,
@@ -615,7 +615,7 @@ const SimpleNavigation = StackNavigator({
     Submitted: {
         screen: Submitted,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '提交列表',
             headerStyle: {
                 height:40,

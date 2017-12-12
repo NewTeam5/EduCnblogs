@@ -21,6 +21,7 @@ import {
 import {
     StackNavigator,
 } from 'react-navigation';
+import { Icon, Fab } from 'native-base';
 const { height, width } = Dimensions.get('window');
 const head = '<!DOCTYPE html><head>'+
 '<meta charset="utf-8"/>'+
@@ -111,8 +112,9 @@ export default class BlogDetail extends Component{
                 <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', alignSelf:'stretch'}}/>
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
-                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle} accessibilityLabel = 'BlogDetail_commentImage'/>
-                        {/*<Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>*/}
+                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle} 
+                        accessibilityLabel = 'BlogDetail_commentImage'/>
+                        
                     </TouchableOpacity>
                 </View>
             </View>
