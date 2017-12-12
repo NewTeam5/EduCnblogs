@@ -9,6 +9,7 @@ import * as storage from './Source/Storage/storage.js'
 import fetch from 'react-native-fetch-polyfill'
 import React, { Component,} from 'react';
 import CookieManager from 'react-native-cookies'
+import { Icon } from 'native-base';
 
 import {
     Platform,
@@ -294,19 +295,40 @@ const HomeTab = TabNavigator({
     PersonalBlog: {
         screen: PersonalBlog,
         navigationOptions: {
-            tabBarLabel: '我的博客'
+            tabBarLabel: '我的博客',
+            tabBarIcon: ({ tintColor, focused }) => (  
+                <Image 
+                    resizeMode='contain'   
+                    source={require('./Source/images/nav_blog.png')}  
+                    style={{height: 20}}
+                ></Image>
+            )  
         }
     },
     ClassLists: {
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
+            tabBarIcon: ({ tintColor, focused }) => (  
+               <Image 
+                    resizeMode='contain'   
+                    source={require('./Source/images/nav_class.png')}  
+                    style={{height: 20}}
+                ></Image>
+            )
         }
     },
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
-            tabBarLabel: '我'
+            tabBarLabel: '我',
+            tabBarIcon: ({ tintColor, focused }) => (  
+                <Image 
+                    resizeMode='contain'   
+                    source={require('./Source/images/nav_i.png')}  
+                    style={{height: 20}}
+                ></Image>
+            )
         }
     },
 },{
@@ -315,13 +337,18 @@ const HomeTab = TabNavigator({
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-//        showIcon: true,
+        showIcon: true,
         showLabel: true,
         style: {
 //            height: 30,
+
         },
         labelStyle: {
-            //fontSize: 14
+            marginTop: 0,
+            fontSize: 8
+        },
+        iconStyle: {
+            marginTop: 10,
         },
         tabStyle: {
             backgroundColor: UI.BOTTOM_COLOR,
