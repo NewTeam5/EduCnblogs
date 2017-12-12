@@ -173,7 +173,7 @@ export default class ClassMember extends Component{
 						activeOpacity={0.5}
 						style={{
 							position:'absolute',
-							bottom:40,
+							bottom:20,
 							right:10, 
 							backgroundColor: "#3b50ce",
 							width: 52, 

@@ -65,12 +65,12 @@ export default class BlogComment extends Component{
             isRequestSuccess: false,//初始认为页面请求失败，不渲染，否则会由于网络问题导致crash
         }
     }
-    
+
     _isMounted;
     componentWillMount=()=>{
         this._isMounted=true;
         //let url = 'https://api.cnblogs.com/api/blogs/'+this.props.navigation.state.params.blogApp
-		let url = Config.BlogComment + this.props.navigation.state.params.blogApp
+        let url = Config.BlogComment + this.props.navigation.state.params.blogApp
                 +'/posts/'+this.props.navigation.state.params.Id+'/comments?pageIndex=1&pageSize='
                 +this.props.navigation.state.params.CommentCount;
         Service.Get(url).then((jsonData)=>{
@@ -103,7 +103,7 @@ export default class BlogComment extends Component{
     _renderItem = (item)=>{
         let item1 = item;
         let {key,Bodys,Author,DateAdded,AuthorUrl,FaceUrl} = item1.item;
-        return(         
+        return(
             <ListItem avatar
                 onPress={()=>this.props.navigation.navigate
                     ('CommentAdd',{
@@ -122,11 +122,8 @@ export default class BlogComment extends Component{
                 <Text>{Author}</Text>
                 <Text note>{CommemtHandler(Bodys)}</Text>
                 <Text style = {{fontSize: 10, textAlign: 'right', color: 'gray'}}>{'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}</Text>
-              </Body>  
+              </Body>
             </ListItem>
-                
-
-
         )
     }
     render(){
@@ -154,10 +151,10 @@ export default class BlogComment extends Component{
                     Author:this.state.comments[i].Author,
                     FaceUrl: this.state.comments[i].FaceUrl
                 });
-            }    
+            }
         }
         }
-       
+
         return (
             <View style = {styles.container}>
                 <View
@@ -188,7 +185,7 @@ export default class BlogComment extends Component{
                             Author: '',
                             Authors: Authors})}
                 >
-	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加评论</Text>
+                   <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加评论</Text>
                 </TouchableOpacity>
                             */}
                 <Fab
@@ -204,7 +201,7 @@ export default class BlogComment extends Component{
                         Authors: Authors
                     })}
                 >
-                <Image 
+                <Image
                     source={require('../images/add.png')}
                     style={{height: 20}}
                     resizeMode = 'contain'
@@ -225,7 +222,7 @@ const styles = StyleSheet.create({
     listcontainer: {
         flexDirection: 'row',
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex:1,
         backgroundColor: 'white',
         alignSelf: 'stretch',
@@ -240,7 +237,7 @@ const styles = StyleSheet.create({
     },
     textcontainer: {
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex: 6,
         backgroundColor: 'white',
     },
@@ -250,6 +247,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 0,
-        backgroundColor: '#1C86EE',  
+        backgroundColor: '#1C86EE',
     }
 });
