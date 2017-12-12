@@ -20,14 +20,15 @@ import {
     Picker,
     ToastAndroid,
     Modal,
+    ScrollView
 } from 'react-native';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;
-const marginHorizontalNum= 0.07*screenWidth;
+const btnFontSize= 16;
+const marginHorizontalNum= 16;
 export default class App extends Component {
     constructor(props){
         super(props);
@@ -125,7 +126,7 @@ export default class App extends Component {
     }
     render() {
     return (
-        <View
+        <ScrollView
             style= {{
                 flexDirection: 'column',
                 flex: 1,
@@ -181,35 +182,17 @@ export default class App extends Component {
              </View>
             </Modal>
 
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     标题
                 </Text>
                 <TextInput
                     //onFocus= {this._onPress}
                     placeholder= ""
-                    style={{
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        height: 0.06*screenHeight,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果
                     onChangeText= {(text)=>{this.setState({title:text});}}
                 />
@@ -229,43 +212,18 @@ export default class App extends Component {
                 myThis= {this}
                 myPrefix= "end"
             />
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     格式类型
                 </Text>
                 <View
-                    style= {{
-                        flexDirection: 'row',
-                        justifyContent:'flex-start',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style= {styles.textInput}
                 >
                     <Picker
-                        style= {{
-                            flex:1,
-                            height: 0.06*screenHeight,
-                            color:'#000000',
-                        }}
+                        style= {styles.picker}
                         mode= 'dropdown'
                           selectedValue={this.state.formatType}
                           onValueChange={(type) => this.setState({formatType: type})}>
@@ -274,43 +232,18 @@ export default class App extends Component {
                     </Picker>
                 </View>
             </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     首页显示
                 </Text>
                 <View
-                    style= {{
-                        flexDirection: 'row',
-                        justifyContent:'flex-start',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style= {styles.textInput}
                 >
                     <Picker
-                        style= {{
-                            flex:1,
-                            height: 0.06*screenHeight,
-                            color:'#000000',
-                        }}
+                        style= {styles.picker}
                         mode= 'dropdown'
                           selectedValue={this.state.isShowInHome}
                           onValueChange={(type) => this.setState({isShowInHome: type})}>
@@ -319,34 +252,7 @@ export default class App extends Component {
                     </Picker>
                 </View>
             </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
-            >
-                <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
-                >
-                    内容
-                </Text>
-            </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <TextInput
                     style={{
@@ -369,7 +275,7 @@ export default class App extends Component {
                 justifyContent:'center',
                 alignItems: 'center',
                 alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
+                marginVertical:16,
                 marginHorizontal:marginHorizontalNum
             }}
             >
@@ -399,7 +305,7 @@ export default class App extends Component {
                     </Text>
                 </TouchableHighlight>
             </View>
-        </View>
+        </ScrollView>
     );
   }
 }
@@ -420,35 +326,17 @@ class MyBar extends Component{
     }
     render(){
         return(
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     {this.props.title}
                 </Text>
                 <TextInput
                     onFocus= {this.props.onPress}
                     placeholder= {this.props.placeholder}
-                    style={{
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        height: 0.06*screenHeight,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果
                 />
                 <View style= {{
@@ -456,10 +344,10 @@ class MyBar extends Component{
                     justifyContent:'flex-start',
                     alignItems: 'center',
                     alignSelf: 'stretch',
-                    marginLeft:0.02*screenWidth
+                    marginLeft:8
                 }}>
                     <Wheel
-                      style={{height: 0.06*screenHeight, width: 0.05*screenWidth}}
+                      style={{height: 48, width: 30}}
                       itemStyle={{textAlign: 'center'}}
                       items={this.hours}
                       onChange= {(index)=>{
@@ -472,7 +360,7 @@ class MyBar extends Component{
                     />
                     <Text>:</Text>
                     <Wheel
-                      style={{height: 0.06*screenHeight, width: 0.05*screenWidth}}
+                      style={{height: 48, width: 30}}
                       itemStyle={{textAlign: 'center'}}
                       items={this.minutes}
                       onChange= {(index)=>{
@@ -488,3 +376,32 @@ class MyBar extends Component{
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        marginTop:16,
+        marginHorizontal:16
+    },
+    text:{
+        width:0.2*screenWidth,
+        fontSize: 16,
+        color: 'black',
+        textAlign: 'left',
+    },
+    textInput:{
+        flex:1,
+        marginLeft:8,
+        height: 48,
+        borderColor: 'gray',
+        borderWidth: 1        
+    },
+    picker:{
+        flex:1,
+        height: 48,
+        color:'#000000',
+    }
+});
