@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 11,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
