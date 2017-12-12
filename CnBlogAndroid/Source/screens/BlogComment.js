@@ -4,6 +4,7 @@ import {authData} from '../config'
 import {err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
+import {Fab } from 'native-base';
 import React, { Component} from 'react';
 import {
     StyleSheet,
@@ -109,7 +110,7 @@ export default class BlogComment extends Component{
                 </View>
                 <View style = {styles.textcontainer}>
                     <Text style = {{fontSize: 15, fontWeight: 'bold', color: 'black'}}>{Author}</Text>
-                    <Text style = {{color: 'black', fontSize: 12}}>{CommemtHandler(Body)}</Text>
+                    <Text style = {{color: 'black', fontSize: 12, marginBottom: 5, marginTop: 2}}>{CommemtHandler(Body)}</Text>
                     <View style = {{
                         flexDirection: 'row',
                         justifyContent: 'space-around',
@@ -180,13 +181,14 @@ export default class BlogComment extends Component{
                 >
                     <FlatList
                         ItemSeparatorComponent={this._separator}
+                        ListFooterComponent={this._separator}
                         renderItem={this._renderItem}
                         data={data}
                         onRefresh = {this.UpdateData}
                         refreshing= {false}
                     />
                 </View>
-                {this.state.isRequestSuccess===false?null:
+                {/*this.state.isRequestSuccess===false?null:
                 <TouchableOpacity
                     style= {styles.button}
                     onPress={()=>this.props.navigation.navigate('CommentAdd',
@@ -198,7 +200,26 @@ export default class BlogComment extends Component{
                 >
 	               <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'BlogComment_addreplyComment'>添加评论</Text>
                 </TouchableOpacity>
-            	}
+                            */}
+                <Fab
+                    active={true}
+                    direction="up"
+                    style={{ backgroundColor: '#5067FF' }}
+                    position="bottomRight"
+                    onPress={()=>this.props.navigation.navigate('CommentAdd',{
+                        blogApp: this.props.navigation.state.params.blogApp,
+                        Id: this.props.navigation.state.params.Id,
+                        CommentCount: this.props.navigation.state.params.CommentCount,
+                        Author: '',
+                        Authors: Authors
+                    })}
+                >
+                <Image 
+                    source={require('../images/add.png')}
+                    style={{height: 20}}
+                    resizeMode = 'contain'
+                />
+                </Fab>
             </View>
         )
     }
@@ -220,7 +241,7 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
         marginLeft: 8,
         marginRight: 12,
-        marginBottom: 5,
+        marginVertical: 8,
     },
     facestyle: {
         width: 40,

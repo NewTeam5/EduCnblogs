@@ -174,7 +174,7 @@ export default class HomeworkLists extends Component {
                         {title}
                     </Text>
                     <Text numberOfLines={3} style= {HomeworkStyles.abstractTextStyle}>
-                        {description}...
+                        {description}
                     </Text>
                     <Text style= {HomeworkStyles.informationTextStyle}>
                         截止于:{deadline.split('T')[0]+' '+deadline.split('T')[1].substring(0,8)}
@@ -235,7 +235,7 @@ export default class HomeworkLists extends Component {
                 alignItems: 'center',
                 marginTop: 0.005*screenHeight,
                 marginLeft: 0.03*screenWidth,
-                marginRight: 0.04*screenWidth,
+                marginRight: 0.03*screenWidth,
                 marginBottom: 0.005*screenHeight,
                 alignSelf: 'stretch',
             }}

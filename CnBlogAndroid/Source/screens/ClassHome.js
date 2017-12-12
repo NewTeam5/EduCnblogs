@@ -5,8 +5,8 @@ import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import React, { Component} from 'react';
-import {err_info} from '../config'
-
+import {err_info} from '../config';
+import {Button, Content} from 'native-base';
 import {
     Platform,
     StyleSheet,
@@ -20,7 +20,6 @@ import {
     TouchableOpacity,
     Dimensions,
     PixelRatio,
-    Button,
     ScrollView
 } from 'react-native';
 import {
@@ -129,20 +128,21 @@ export default class ClassHome extends Component{
                 justifyContent:'center',
                 alignItems: 'center',
                 flex: 1
-            }}
-            >
-                <TouchableOpacity
-                    style= {styles.button}
-                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}//关联函数
+            }}>
+            <Content>
+                <Button primary 
+                    onPress={()=>this.props.navigation.navigate('HomeworkLists',{classId:classId})}
+                    style = {styles.button}
                 >
-	                <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>所有作业</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style= {styles.button}
-                    onPress={()=>this.props.navigation.navigate('ClassMember',{classId:classId})}//关联函数
+	                <Text style = {{fontSize: 20, color: 'white'}}>所有作业</Text>
+                </Button>
+                <Button primary 
+                    onPress={()=>this.props.navigation.navigate('ClassMember',{classId:classId})}
+                    style = {styles.button}
                 >
-                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}}>班级成员</Text>
-                </TouchableOpacity>
+	                <Text style = {{fontSize: 20, color: 'white'}}>班级成员</Text>
+                </Button>
+            </Content>
             </View>
         </ScrollView>
         </View>
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        backgroundColor: 'rgb(51,204,255)',
         marginBottom: 20,
     }
 });

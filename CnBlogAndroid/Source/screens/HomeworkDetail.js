@@ -97,7 +97,7 @@ export default class HomeWorkDetail extends Component{
                     }}
                 >
                 <WebView
-                    source={{html: head + (convertedContent==null?content:HtmlDecode(convertedContent)) + tail}}
+                    source={{html: head + (convertedContent==null?HtmlDecode(content):HtmlDecode(convertedContent)) + tail}}
                     style={{height: height-40}}
                     startInLoadingState={true}
                     domStorageEnabled={true}

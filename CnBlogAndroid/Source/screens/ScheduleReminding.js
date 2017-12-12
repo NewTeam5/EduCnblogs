@@ -155,10 +155,10 @@ export default class App extends Component {
                         {title}
                     </Text>
                     <Text numberOfLines={3} style= {HomeworkStyles.abstractTextStyle}>
-                        {description}...
+                        {description}
                     </Text>             
                     <Text style= {HomeworkStyles.informationTextStyle}>
-                        截止于:{deadline}
+                        截止于:{deadline.split('T')[0]+' '+deadline.split('T')[1].substring(0,8)}
                     </Text>
                 </TouchableOpacity>
             </View>

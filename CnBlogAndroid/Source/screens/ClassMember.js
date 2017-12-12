@@ -85,7 +85,7 @@ export default class ClassMember extends Component{
                 }
             })
         }).catch((error) => {
-            //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     UpdateData = ()=>{
