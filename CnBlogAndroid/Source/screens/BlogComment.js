@@ -73,6 +73,7 @@ export default class BlogComment extends Component{
         let url = Config.BlogComment + this.props.navigation.state.params.blogApp
                 +'/posts/'+this.props.navigation.state.params.Id+'/comments?pageIndex=1&pageSize='
                 +this.props.navigation.state.params.CommentCount;
+                
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected')
             {
@@ -116,7 +117,7 @@ export default class BlogComment extends Component{
                 }
             >
               <Left>
-                <Thumbnail source={FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} />
+                <Thumbnail  source={FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} />
               </Left>
               <Body>
                 <Text>{Author}</Text>
@@ -127,6 +128,7 @@ export default class BlogComment extends Component{
         )
     }
     render(){
+        Authors = [];
         var data = [];
         if(this.state.isRequestSuccess){
         for(var i in this.state.comments)
