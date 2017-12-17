@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf:'flex-end',
         borderRadius: 4,
-        backgroundColor: '#1C86EE',  
+        backgroundColor: '#3b50ce',  
         marginTop: 0.05*screenHeight,
         marginBottom: 0.05*screenHeight,
         marginRight: 0.025*screenWidth,

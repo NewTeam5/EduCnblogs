@@ -171,7 +171,7 @@ export default class App extends Component {
                 let t = this.state.homeworks[i].deadline;
                 t = t.split('T');
                 this.state.myMarkedDates[t[0]]={
-                    selected: true,
+                    selected: true                                        
                 };
             }
         }                        
@@ -203,7 +203,7 @@ export default class App extends Component {
                  </View>
             </Modal>        
             <Calendar
-                markedDates={this.state.myMarkedDates}                 
+                markedDates={this.state.myMarkedDates}                  
                 onDayPress={(day) => {
                     if (day.dateString in this.state.myMarkedDates){
                         this.state.data=[];
@@ -227,7 +227,12 @@ export default class App extends Component {
                         }                        
                         this.setState({modalVisible:true});
                     }
-                }}                           
+                }}     
+                theme={{
+                    selectedDayBackgroundColor: '#3b50ce',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: 'red'
+                  }}                                      
             />        
         </View>
         </ScrollView>
