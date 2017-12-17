@@ -6,7 +6,8 @@ import MyAdapter from './MyAdapter.js';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import {
     Stepper,
-    Wheel
+    Wheel,
+    Toast
 } from 'teaset';
 import React, { Component} from 'react';
 import {
@@ -137,7 +138,7 @@ export default class App extends Component {
               animationType={"slide"}
               transparent={false}
               visible={this.state.startModalVisible}
-              onRequestClose={() => {alert("选择一个日期")}}
+              onRequestClose={() => {ToastAndroid.show("请选择一个日期",ToastAndroid.SHORT);}}
               >
              <View style={{
                  flex: 1,
@@ -153,6 +154,11 @@ export default class App extends Component {
                       this.setState({startDate:day.dateString});
                       this.setStartModalVisible(!this.state.startModalVisible);
                   }}
+                  theme={{
+                    selectedDayBackgroundColor: '#3b50ce',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: 'red'
+                  }}                                                        
                 />
                 </View>
              </View>
@@ -161,7 +167,7 @@ export default class App extends Component {
               animationType={"slide"}
               transparent={false}
               visible={this.state.endModalVisible}
-              onRequestClose={() => {alert("选择一个日期")}}
+              onRequestClose={() => {ToastAndroid.show("请选择一个日期",ToastAndroid.SHORT);}}
               >
              <View style={{
                  flex: 1,
@@ -177,6 +183,11 @@ export default class App extends Component {
                       this.setState({endDate:day.dateString});
                     this.setEndModalVisible(!this.state.endModalVisible);
                   }}
+                  theme={{
+                    selectedDayBackgroundColor: '#3b50ce',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: 'red'
+                  }}                                                        
                 />
                 </View>
              </View>
@@ -280,14 +291,14 @@ export default class App extends Component {
             }}
             >
                 <TouchableHighlight
-                    underlayColor="#0588fe"
+                    underlayColor="#3b50ce"
                     activeOpacity={0.5}
                     style= {{
                         width:0.35*screenWidth,
                         alignSelf: 'flex-end',
                         borderRadius: 0.01*screenHeight,
                         padding: 0.01*screenHeight,
-                        backgroundColor:"#0588fe"
+                        backgroundColor:"#3b50ce"
                     }}
                     onPress={()=>{
                         this._onPress();

@@ -165,14 +165,14 @@ export default class ClassMemberAdd extends Component {
             <View style= {styles.container}
             >
                 <TouchableHighlight
-                    underlayColor="#0588fe"
+                    underlayColor="#3b50ce"
                     activeOpacity={0.5}
                     style= {{
                         width:0.35*screenWidth,
                         alignSelf: 'flex-end',
                         borderRadius: 0.01*screenHeight,
                         padding: 0.01*screenHeight,
-                        backgroundColor:"#0588fe"
+                        backgroundColor:"#3b50ce"
                     }}
                     onPress={this._onPress}//关联函数
                 >

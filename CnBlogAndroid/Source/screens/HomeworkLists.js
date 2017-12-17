@@ -250,28 +250,6 @@ export default class HomeworkLists extends Component {
                 >
                     未结束：{this.state.finishedcount}
                 </Text>
-                <TouchableHighlight
-                    underlayColor="#0588fe"
-                    activeOpacity={0.5}
-                    style= {{
-                        alignSelf: 'flex-end',
-                        borderRadius: 0.01*screenHeight,
-                        padding: 0.01*screenHeight,
-                        backgroundColor:"#0588fe"
-                    }}
-                    onPress={this._onPress}//关联函数
-                >
-                    <Text
-                        style= {{
-                            fontSize: btnFontSize,
-                            color: '#ffffff',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        发布作业
-                    </Text>
-                </TouchableHighlight>
             </View>
             <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)', }}/>
             <View
@@ -291,6 +269,34 @@ export default class HomeworkLists extends Component {
                     refreshing= {false}
                 />
             </View>
+            <TouchableHighlight 
+                underlayColor="#3b50ce"
+                activeOpacity={0.5}
+                style={{
+                    position:'absolute',
+                    bottom:20,
+                    right:10, 
+                    backgroundColor: "#3b50ce",
+                    width: 52, 
+                    height: 52, 
+                    borderRadius: 26,
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    margin: 20}} 
+                    onPress={this._onPress} >
+                
+                <Text
+                    style= {{
+                        fontSize: 30,
+                        color: '#ffffff',
+                        textAlign: 'center',
+                        fontWeight: '100',
+                    }}
+                >
+                    +
+                </Text>
+                
+            </TouchableHighlight>            
       </View>
     );
   }
