@@ -70,6 +70,7 @@ export default class App extends Component {
             }
         })
         .then(() => {
+            var unfinishedHomework = [];
             for (let i in this.state.classes) {
                 let classId = this.state.classes[i].schoolClassId;
                 url = Config.apiDomain + api.ClassGet.homeworkList + "/false/" + classId + "/1-12";
@@ -89,9 +90,10 @@ export default class App extends Component {
                     url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
                     Service.Get(url).then((jsonData) => {
                         if (this._isMounted && this.state.isRequestSuccess){
+                            unfinishedHomework =  unfinishedHomework.concat(jsonData.homeworks);  
                             this.setState({
-                                homeworks: jsonData.homeworks,
-                            });
+                                homeworks: unfinishedHomework,
+                            }); 
                         }
                     })
                     // .then(() => {
