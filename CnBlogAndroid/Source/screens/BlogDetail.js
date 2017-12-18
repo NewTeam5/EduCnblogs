@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info,StorageKey} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component } from 'react';
@@ -21,19 +21,20 @@ import {
 import {
     StackNavigator,
 } from 'react-navigation';
+import { Icon, Fab } from 'native-base';
 const { height, width } = Dimensions.get('window');
 const head = '<!DOCTYPE html><head>'+
 '<meta charset="utf-8"/>'+
 '<meta name="viewport" content="width=device-width, initial-scale=1" />'+
 '<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=ChDk9h03-S75WEqNhGvXkWireJ5cCWdK1xRM9NIXfnM1"/>'+
-//'<link id="MainCss" type="text/css" rel="stylesheet" href="/skins/AnotherEon001/bundle-AnotherEon001.css?v=dNz80TfH9-81kuLR86t4JWgT2tb_J0B779DQM4kw0WU1"/>'+
 '<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet"'+
 'href="https://www.cnblogs.com/skins/UnlimitedSunlight/bundle-UnlimitedSunlight-mobile.css"/>'+
 '<link type="text/css" rel="stylesheet" href="/bundles/blog-common.css?v=ChDk9h03-S75WEqNhGvXkWireJ5cCWdK1xRM9NIXfnM1"/>'+
-'<style type="text/css"> .cnblogs_code {word-wrap:break-word; word-break:break-all;} .sourceCode{word-wrap:break-word; word-break:break-all;} a {word-wrap:break-word; word-break:break-all;}</style>'+
+'<style type="text/css"> * {word-wrap:break-word; word-break:break-all;}</style>'+
 '<script src="//common.cnblogs.com/script/jquery.js" type="text/javascript"></script>'+
 '<script src="/bundles/blog-common.js?v=hm0KZwWzsEv1qy3Vf9Vq9zW3uMF7kiGWJjjCrkS4nJY1" type="text/javascript"></script>'+
 '</head>';
+const tail = '</head>';
 // 传入博客Id和blogApp和CommentCount作为参数
 export default class BlogDetail extends Component{
     constructor(props){
@@ -46,7 +47,7 @@ export default class BlogDetail extends Component{
     _isMounted;
     componentWillMount = ()=>{
         this._isMounted=true;
-        let contenturl = 'https://api.cnblogs.com/api/blogposts/'+this.props.navigation.state.params.Id+'/body';
+		let contenturl = Config.BlogDetail+this.props.navigation.state.params.Id+'/body';
         Service.Get(contenturl).then((jsonData)=>{
             if(jsonData!=='rejected'){
                 this.setState({
@@ -58,11 +59,23 @@ export default class BlogDetail extends Component{
                     })
                 }
             }
-            else{
-                ToastAndroid.show("网络异常！请稍后重试！",ToastAndroid.SHORT);
-            }
-        }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        }).then(()=>{
+			global.storage.save({key:StorageKey.BLOGDETAIL+this.props.navigation.state.params.Id,data:this.state.content})
+			.catch((err)=>{
+				ToastAndroid.show("error",ToastAndroid.SHORT);
+			})
+		})
+		.catch((error) => {
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.BLOGDETAIL+this.props.navigation.state.params.Id})
+			.then((ret)=>{
+				this.setState({
+					content: ret,
+				})
+			})
+			.catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT)
+			})
         });
     }
     componentWillUnmount = ()=>{
@@ -77,23 +90,31 @@ export default class BlogDetail extends Component{
     }
     render(){
         return(
-            this.state.isRequestSuccess===false?null:
+            //this.state.isRequestSuccess===false?null:
             <View style = {styles.container}>
+                <View
+                    style= {{
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
                 <WebView
-                    source={{html: head+this.state.content, baseUrl: this.props.navigation.state.params.Url}}
+                    source={{html: head+this.state.content+tail, baseUrl: this.props.navigation.state.params.Url}}
                     //source = {{uri: this.props.navigation.state.params.Url}}
-                    style={{height: height-70, width: width}}
+                    style={{height: height-70}}
                     startInLoadingState={true}
                     domStorageEnabled={true}
                     javaScriptEnabled={true}
                     scalesPageToFit={true}
                     onError = {()=>Alert.alert('网络异常，请稍后再试！')}
                 />
-                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', width: width}}/>
+                </View>
+                <View style = {{height: 1, backgroundColor: 'rgb(204,204,204)', alignSelf:'stretch'}}/>
                 <View style = {styles.bottom}>
                     <TouchableOpacity style = {styles.touchbutton} onPress = {this._onPress}>
-                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle} accessibilityLabel = 'BlogDetail_commentImage'/>
-                        <Text style = {{fontSize: 12}}>{this.props.navigation.state.params.CommentCount}</Text>
+                        <Image source = {require('../images/comment.png')} style = {styles.imagestyle} 
+                        accessibilityLabel = 'BlogDetail_commentImage'/>
+                        
                     </TouchableOpacity>
                 </View>
             </View>
@@ -107,6 +128,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         flex:1,
+        alignSelf: 'stretch',
     },
     bottom: {
         flexDirection: 'row',
@@ -117,15 +139,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     touchbutton: {
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
         width: height/14,
         height: height/14,
     },
     imagestyle: {
-        width: height/20,
-        height: height/26,
+        width: height/18,
+        height: height/22,
         resizeMode: 'stretch',
     }
 })

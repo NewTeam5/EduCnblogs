@@ -4,6 +4,10 @@ import {authData} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+import {StorageKey} from '../config'
+import {err_info} from '../config'
+import { Container, Header, Fab, Button, Icon } from 'native-base';
+
 import {
     StyleSheet,
     Text,
@@ -26,7 +30,7 @@ const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
-// 传入classId作为参数
+
 export default class ClassMember extends Component{
     constructor(props){
         super(props);
@@ -37,9 +41,10 @@ export default class ClassMember extends Component{
         }
     }
     _isMounted;
+
     componentWillMount = ()=>{
         this._isMounted=true;
-        let url = 'https://api.cnblogs.com/api/edu/schoolclass/members/'+this.props.navigation.state.params.classId;
+        let url = Config.MemberList + this.props.navigation.state.params.classId;
         Service.Get(url).then((jsonData)=>{
             if(jsonData!=='rejected')
             {
@@ -52,13 +57,26 @@ export default class ClassMember extends Component{
                     })
                 }
             }
-        }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        })
+        .then(()=>{
+            global.storage.save({key:StorageKey.CLASS_MEMBER , data:this.state.members});
+        })
+        .catch((error) => {
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+            global.storage.load({key:StorageKey.CLASS_MEMBER})
+            .then((ret)=>{
+                this.setState({
+                    members : ret,
+                })
+            }).catch((err)=>{
+                ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+                this.props.navigation.navigate('Loginer');
+            })
         });
-        //是否有添加成员的权限
+		
         let url1 = Config.apiDomain + api.user.info;
         Service.Get(url1).then((jsonData)=>{
-            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId; 
+            let url2= Config.apiDomain+"api/edu/member/"+jsonData.BlogId+"/"+this.props.navigation.state.params.classId;
             Service.Get(url2).then((jsonData)=>{
                 if(this._isMounted){
                     this.setState({
@@ -67,7 +85,7 @@ export default class ClassMember extends Component{
                 }
             })
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
     UpdateData = ()=>{
@@ -93,8 +111,8 @@ export default class ClassMember extends Component{
                         <Image source = {avatarUrl?{uri:avatarUrl}:require('../images/defaultface.png')} style = {styles.avatarstyle}/>
                     </View>
                     <View style = {styles.textcontainer}>
-                        <Text style = {{fontSize: 20, fontWeight: 'bold', color: 'black',flex:2}}>{displayName+realName}</Text>
-                        <Text style = {{fontSize: 15,flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
+                        <Text style = {{fontSize: 20,color: '#000000',flex:2}}>{displayName+realName}</Text>
+                        <Text style = {{fontSize: 15,color: '#616161',flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -117,7 +135,6 @@ export default class ClassMember extends Component{
     render(){
         var data = [];
         // 在请求成功的情况下渲染列表
-        if(this.state.isRequestSuccess){
         for(var i in this.state.members)
         {
             data.push({
@@ -129,52 +146,57 @@ export default class ClassMember extends Component{
                 realName: this.state.members[i].realName,//真实姓名
                 blogId: this.state.members[i].blogId,
             })
-        }}
+        }
+
         return(
             <View style = {styles.container}>
-	            <View style= {{        
-	                flexDirection: 'column',           
-	                justifyContent:'center',
-	                alignItems: 'flex-end',  
-	                alignSelf: 'stretch',    
-	                marginTop: 0.005*screenHeight,
-                    marginHorizontal:0.01*screenWidth,
-	            }}
-	            >
-	                <TouchableHighlight
-	                    underlayColor="#0588fe"
-	                    activeOpacity={0.5}
-	                    style= {{
-	                    	width:0.35*screenWidth,
-	                        alignSelf: 'flex-end',
-	                        borderRadius: 0.01*screenHeight,
-	                        padding: 0.01*screenHeight,
-	                        backgroundColor:"#0588fe"
-	                    }}
-                        onPress={this._onPress}
-	                >
-	                    <Text
-	                        style= {{
-	                            fontSize: btnFontSize,  
-	                            color: '#ffffff',  
-	                            textAlign: 'center',  
-	                            fontWeight: 'bold',
-	                        }}   
-	                    >
-	                        添加成员
-	                    </Text>
-	                </TouchableHighlight>
-
-                    <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)', width: screenWidth, marginTop: 0.005*screenHeight,}} />  
-
-	            </View>
-                <FlatList
-                    ItemSeparatorComponent={this._separator}
-                    renderItem={this._renderItem}
-                    data={data}
-                    onRefresh = {this.UpdateData}
-                    refreshing= {false}
-                />
+				
+                <View style={{ height: 1, backgroundColor: 'rgb(225,225,225)',  marginTop: 0.005*screenHeight, alignSelf:'stretch'}}/>
+                <View
+                    style= {{
+                        flexDirection: 'row',
+                        justifyContent:'flex-start',
+                        alignItems: 'flex-start',
+                        alignSelf: 'stretch',
+                        flex:1,
+                    }}
+                >
+                    <FlatList
+                        ItemSeparatorComponent={this._separator}
+                        renderItem={this._renderItem}
+                        data={data}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
+                    />
+					<TouchableHighlight 
+						underlayColor="#3b50ce"
+						activeOpacity={0.5}
+						style={{
+							position:'absolute',
+							bottom:20,
+							right:10, 
+							backgroundColor: "#3b50ce",
+							width: 52, 
+							height: 52, 
+							borderRadius: 26,
+							justifyContent: 'center', 
+							alignItems: 'center', 
+							margin: 20}} 
+							onPress={this._onPress} >
+						
+						<Text
+                            style= {{
+                                fontSize: 30,
+                                color: '#ffffff',
+                                textAlign: 'center',
+                                fontWeight: '100',
+                            }}
+                        >
+                            +
+                        </Text>
+						
+					</TouchableHighlight>
+                </View>
             </View>
         )
     }
@@ -195,18 +217,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginLeft: 8,
         marginRight: 12,
-        width: screenWidth-20,
+        //alignSelf: 'stretch',
     },
     avatarstyle: {
         width: 0.15*screenWidth,
         height: 0.15*screenWidth,
         marginBottom: 5,
         marginTop: 5,
+        borderRadius : 40,
+        left : 2,
     },
     textcontainer: {
         justifyContent:'flex-start',
-        alignItems: 'flex-start',  
+        alignItems: 'flex-start',
         flex: 4,
         backgroundColor: 'white',
+        //alignSelf: 'stretch',
     }
 });

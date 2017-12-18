@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component } from 'react';
@@ -85,7 +85,7 @@ export default class MemberBlog extends Component{
                     }
                 }
             })
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+        }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})
     }
     componentWillUnmount=()=>{
         this._isMounted=false;
@@ -187,17 +187,18 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 11,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: screenWidth,
+        alignSelf: 'stretch',
     },
     listcontainer: {
         justifyContent:'flex-start',
         alignItems: 'flex-start',
         flex:1,
         backgroundColor: 'white',
-        width:screenWidth,
+        alignSelf: 'stretch',
         paddingLeft: 0.03*screenWidth,
         paddingRight: 0.04*screenWidth,
     }

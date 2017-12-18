@@ -1,6 +1,6 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
@@ -14,7 +14,9 @@ import {
     TextInput,
     Dimensions,
     FlatList,
+    Modal
 } from 'react-native';
+import {ListItem, Thumbnail, Button, Item} from 'native-base';
 import {
     StackNavigator,
     TabNavigator,
@@ -27,6 +29,8 @@ export default class CommentAdd extends Component{
         super(props);
         this.state = {
             text : '',
+            modalVisible: false,
+            length: 0,
         }
     }  
     onSubmit = ()=>{
@@ -45,31 +49,83 @@ export default class CommentAdd extends Component{
 				ToastAndroid.show("添加失败，请稍后重试！",ToastAndroid.SHORT);
 			}
 		}).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         });
     }
-	
+    
+    _separator = () => {
+        return <View style={{ height: 1, backgroundColor: 'rgb(204,204,204)' }}/>;
+    }
+    _renderItem = (item)=>{
+        let item1 = item;
+        let {Author,FaceUrl} = item1.item;
+        return(
+            <TouchableOpacity
+                 style = {styles.listcontainer}
+                 onPress = {()=>{
+                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author + '\n'})}}
+            >
+                <ListItem
+                onPress = {()=>{
+                     this.setState({modalVisible:false, text: this.state.text + ' ' + Author + '\n'})}}
+                >
+                    <Thumbnail source={FaceUrl?{uri:FaceUrl}:require('../images/defaultface.png')} />
+                    <Text style = {{fontWeight:'Medium', fontSize:18, color: 'black', marginLeft:8}}>{Author}</Text>                    
+                </ListItem>
+            </TouchableOpacity>
+        )
+    }
+
+    onShow(text){
+        this.setState({text: text});
+        var Authors = this.props.navigation.state.params.Authors;
+        if(text.length >this.state.length && text[text.length - 1] == '@' && Authors.length != 0){
+            this.setState({modalVisible:true});
+        }
+        this.setState({length:text.length});
+    }
+    
     render(){
         return(
             <View style = {styles.container}>
+                <Modal
+                    animationType={"slide"}
+                    transparent={false}
+                    visible={this.state.modalVisible}
+                    onRequestClose={() => this.setState({modalVisible:false})}
+                >
+                    <View style = {styles.container}>
+                    <FlatList
+                        ItemSeparatorComponent={this._separator}
+                        renderItem={this._renderItem}
+                        data={this.props.navigation.state.params.Authors}
+                        onRefresh = {this.UpdateData}
+                        refreshing= {false}
+                    />
+                
+                    </View>
+                </Modal>
+                <Item regular style = {{marginTop: 0.05*screenHeight,width: 0.95*screenWidth, borderColor: 'gray'}}>
                 <TextInput ref="commentRef"
                     style={styles.textcontainer}
-                    onChangeText={(text) => this.setState({text: text})}
-                    value={this.state.text}
+                    onChangeText={(text) => this.onShow(text)}
+                    defaultValue={
+                        this.state.text != ''? this.state.text :
+                        (this.props.navigation.state.params.Author!=''?'@'+' '+this.props.navigation.state.params.Author+'\n':'')}
                     multiline={true}
                     underlineColorAndroid="transparent"
-					accessibilityLabel = "CommentAdd_inputBox"
+                    accessibilityLabel = "CommentAdd_inputBox"
+                    autoCorrect = {false}
+                    blurOnSubmit={false}
                 />
-                <View style={{flex:1}}>
-                <Text style = {{color: 'rgb(51,51,51)',fontSize: 15}}>回复请在评论第一行写上:@用户昵称</Text>
-                </View>
+                </Item>
                 <TouchableOpacity
                     style= {styles.button}
                     onPress = {this.onSubmit.bind(this)}
                 >
-                    <Text style = {{fontSize: 20, color: 'rgb(51,51,51)'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
+                    <Text style = {{fontSize: 18, color: 'white'}} accessibilityLabel = 'CommentAdd_submit'>提交</Text>
                 </TouchableOpacity>
-                
+                               
             </View>
         )
     }
@@ -82,24 +138,44 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
     },
+    listcontainer: {
+        flexDirection: 'row',
+        justifyContent:'flex-start',
+        alignItems: 'flex-start',  
+        flex:1,
+        backgroundColor: 'white',
+        width: screenWidth-20,
+    },
+    facestyle: {
+        width: 40,
+        height: 40,
+        marginTop: 5,
+    },
+    textcontainer1: {
+        justifyContent:'flex-start',
+        alignItems: 'flex-start',  
+        flex: 6,
+        backgroundColor: 'white',
+    },
     textcontainer: {
         color: 'black',
         flex: 5,
-        backgroundColor: 'rgb(225,225,225)',
-        height: 0.5*screenHeight,
-        width: 0.8*screenWidth,
+        height: 250,
+        width: 0.95*screenWidth,
         textAlignVertical: 'top',
-        marginTop: 0.1*screenHeight,
-        marginBottom: 0.01*screenHeight,
+        //borderColor: 'rgb(225,225,225)',
+        //borderWidth: 1,
     },
     button: {
-        height: 0.2*0.618*screenWidth,
-        width: 0.618*screenWidth,
+        height: 0.18*0.618*screenWidth,
+        width: 0.2 * screenWidth,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        backgroundColor: 'rgb(51,204,255)',  
+        alignSelf:'flex-end',
+        borderRadius: 4,
+        backgroundColor: '#3b50ce',  
         marginTop: 0.05*screenHeight,
         marginBottom: 0.05*screenHeight,
+        marginRight: 0.025*screenWidth,
     }
 });

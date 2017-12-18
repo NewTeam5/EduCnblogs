@@ -2,7 +2,7 @@ import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import React, { Component} from 'react';
 import {
@@ -21,7 +21,7 @@ const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;   
+const btnFontSize= 16;   
 // 该页面使用navigate参数为classId
 export default class ClassMemberAdd extends Component {
     constructor(props){
@@ -42,7 +42,8 @@ export default class ClassMemberAdd extends Component {
             studentNo: this.state.studentNo,
         }
         let body = JSON.stringify(postBody);
-        let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
+        //let url = 'https://api.cnblogs.com/api/edu/member/register/displayName';
+		let url = Config.AddMember;
         Service.UserAction(url, body, 'POST').then((response)=>{
             if(response.status!==200)
             {
@@ -70,7 +71,7 @@ export default class ClassMemberAdd extends Component {
                 ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
             }
         }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET ,ToastAndroid.SHORT);
         });
     };
     render() {
@@ -81,38 +82,20 @@ export default class ClassMemberAdd extends Component {
                 justifyContent:'flex-start',
                 flex: 1,
                 backgroundColor: 'white',
-                paddingTop: 0.1*screenHeight,
-                paddingBottom: 0.02*screenHeight
+                //paddingTop: 0.1*screenHeight,
+                //paddingBottom: 0.02*screenHeight
             }}
         >         
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:0.07*screenWidth
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     园子昵称
                 </Text>            
                 <TextInput
                     placeholder="使用博客园显示昵称添加"	            
-                    style={{
-                        flex:1, 
-                        marginLeft:0.04*screenWidth,
-                        height: 0.07*screenHeight, 
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果 	                
                     onChangeText={(text)=>{
                         this.setState({
@@ -121,33 +104,15 @@ export default class ClassMemberAdd extends Component {
                     }}
                 />      	
             </View>
-            <View style= {{        
-                flexDirection: 'row',  
-                justifyContent:'flex-start',
-                alignItems: 'center',  
-                alignSelf: 'stretch',    
-                marginTop:0.02*screenHeight,
-                marginHorizontal:0.07*screenWidth
-            }}      	
+            <View style= {styles.container}      	
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',       
-                    }}   
+                    style= {styles.text}   
                 >
                     真实姓名
                 </Text>            
                 <TextInput
-                    style={{
-                        flex:1, 
-                        marginLeft:0.04*screenWidth,
-                        height: 0.07*screenHeight, 
-                        borderColor: 'gray', 
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
 					accessibilityLabel = 'ClassMemberAdd_realName'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果 	                
                     onChangeText= {(text)=>{
@@ -157,43 +122,18 @@ export default class ClassMemberAdd extends Component {
                     }}
                 />      	
             </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:0.07*screenWidth
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     身份
                 </Text>   
                 <View
-                    style= {{
-                        flexDirection: 'row',           
-                        justifyContent:'flex-start',
-                        alignItems: 'center',  
-                        alignSelf: 'stretch',    						
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        borderColor: 'gray', 
-                        borderWidth: 1	                    
-                    }}
+                    style= {styles.textInput}
                 >                     
                     <Picker
-                        style= {{
-                            flex:1,
-                            height: 0.07*screenHeight, 							
-                            color:'#000000',
-                        }}
+                        style= {styles.picker}
                         mode= 'dropdown'
                           selectedValue={this.state.role}
                           onValueChange={(ident) => this.setState({role: ident})}>
@@ -203,33 +143,15 @@ export default class ClassMemberAdd extends Component {
                     </Picker>
                 </View>         	
             </View>
-            {this.state.role===1?(<View style= {{        
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',  
-                alignSelf: 'stretch',    
-                marginTop:0.02*screenHeight,
-                marginHorizontal:0.07*screenWidth
-            }}      	
+            {this.state.role===1?(<View style= {styles.container}      	
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,  
-                        color: 'black',  
-                        textAlign: 'right',  	                    
-                    }}   
+                    style= {styles.text}   
                 >
                     学号
                 </Text> 
                 <TextInput
-                    style={{
-                        flex:1, 
-                        marginLeft:0.04*screenWidth,
-                        height: 0.07*screenHeight, 
-                        borderColor: 'gray', 
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
 					accessibilityLabel = 'ClassMemberAdd_studentID'
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果              
                     onChangeText={(text)=>{
@@ -240,24 +162,17 @@ export default class ClassMemberAdd extends Component {
                 />      	
             </View>):(null)
             }            
-            <View style= {{        
-                flexDirection: 'row', 
-                justifyContent:'center',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop: 0.05*screenHeight,
-                marginHorizontal:0.07*screenWidth
-            }}
+            <View style= {styles.container}
             >
                 <TouchableHighlight
-                    underlayColor="#0588fe"
+                    underlayColor="#3b50ce"
                     activeOpacity={0.5}
                     style= {{
                         width:0.35*screenWidth,
                         alignSelf: 'flex-end',
                         borderRadius: 0.01*screenHeight,
                         padding: 0.01*screenHeight,
-                        backgroundColor:"#0588fe"
+                        backgroundColor:"#3b50ce"
                     }}
                     onPress={this._onPress}//关联函数
                 >
@@ -277,3 +192,31 @@ export default class ClassMemberAdd extends Component {
     );
   }
 }
+const styles = StyleSheet.create({
+    container:{
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        marginTop:16,
+        marginHorizontal:16
+    },
+    text:{
+        width:0.2*screenWidth,
+        fontSize: 16,
+        color: 'black',
+        textAlign: 'left',
+    },
+    textInput:{
+        flex:1,
+        marginLeft:8,
+        height: 48,
+        borderColor: 'gray',
+        borderWidth: 1        
+    },
+    picker:{
+        flex:1,
+        height: 48,
+        color:'#000000',
+    }
+});

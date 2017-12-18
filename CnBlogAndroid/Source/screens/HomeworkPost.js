@@ -1,12 +1,13 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import {
     Stepper,
-    Wheel
+    Wheel,
+    Toast
 } from 'teaset';
 import React, { Component} from 'react';
 import {
@@ -20,14 +21,15 @@ import {
     Picker,
     ToastAndroid,
     Modal,
+    ScrollView
 } from 'react-native';
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
-const btnFontSize= MyAdapter.btnFontSize;
-const marginHorizontalNum= 0.07*screenWidth;
+const btnFontSize= 16;
+const marginHorizontalNum= 16;
 export default class App extends Component {
     constructor(props){
         super(props);
@@ -60,7 +62,8 @@ export default class App extends Component {
     _onPress=()=>{
         if(this.state.title!=''&&this.state.content!='')
         {
-            let url = 'https://api.cnblogs.com/api/edu/homework/publish';
+            //let url = 'https://api.cnblogs.com/api/edu/homework/publish';
+			let url = Config.HomeWorkPublish;
             let classId = Number(this.props.navigation.state.params.classId);
             let postBody = {
                 schoolClassId: classId,
@@ -108,7 +111,7 @@ export default class App extends Component {
                     {
                         ToastAndroid.show('发生错误，请稍后重试！',ToastAndroid.SHORT);
                     }
-                }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态!",ToastAndroid.SHORT)})  
+                }).catch((error)=>{ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT)})  
             }
         }
         else
@@ -124,7 +127,7 @@ export default class App extends Component {
     }
     render() {
     return (
-        <View
+        <ScrollView
             style= {{
                 flexDirection: 'column',
                 flex: 1,
@@ -135,7 +138,7 @@ export default class App extends Component {
               animationType={"slide"}
               transparent={false}
               visible={this.state.startModalVisible}
-              onRequestClose={() => {alert("选择一个日期")}}
+              onRequestClose={() => {ToastAndroid.show("请选择一个日期",ToastAndroid.SHORT);}}
               >
              <View style={{
                  flex: 1,
@@ -151,6 +154,11 @@ export default class App extends Component {
                       this.setState({startDate:day.dateString});
                       this.setStartModalVisible(!this.state.startModalVisible);
                   }}
+                  theme={{
+                    selectedDayBackgroundColor: '#3b50ce',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: 'red'
+                  }}                                                        
                 />
                 </View>
              </View>
@@ -159,7 +167,7 @@ export default class App extends Component {
               animationType={"slide"}
               transparent={false}
               visible={this.state.endModalVisible}
-              onRequestClose={() => {alert("选择一个日期")}}
+              onRequestClose={() => {ToastAndroid.show("请选择一个日期",ToastAndroid.SHORT);}}
               >
              <View style={{
                  flex: 1,
@@ -175,40 +183,27 @@ export default class App extends Component {
                       this.setState({endDate:day.dateString});
                     this.setEndModalVisible(!this.state.endModalVisible);
                   }}
+                  theme={{
+                    selectedDayBackgroundColor: '#3b50ce',
+                    selectedDayTextColor: '#ffffff',
+                    todayTextColor: 'red'
+                  }}                                                        
                 />
                 </View>
              </View>
             </Modal>
 
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     标题
                 </Text>
                 <TextInput
                     //onFocus= {this._onPress}
                     placeholder= ""
-                    style={{
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        height: 0.06*screenHeight,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果
                     onChangeText= {(text)=>{this.setState({title:text});}}
                 />
@@ -228,43 +223,18 @@ export default class App extends Component {
                 myThis= {this}
                 myPrefix= "end"
             />
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     格式类型
                 </Text>
                 <View
-                    style= {{
-                        flexDirection: 'row',
-                        justifyContent:'flex-start',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style= {styles.textInput}
                 >
                     <Picker
-                        style= {{
-                            flex:1,
-                            height: 0.06*screenHeight,
-                            color:'#000000',
-                        }}
+                        style= {styles.picker}
                         mode= 'dropdown'
                           selectedValue={this.state.formatType}
                           onValueChange={(type) => this.setState({formatType: type})}>
@@ -273,43 +243,18 @@ export default class App extends Component {
                     </Picker>
                 </View>
             </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     首页显示
                 </Text>
                 <View
-                    style= {{
-                        flexDirection: 'row',
-                        justifyContent:'flex-start',
-                        alignItems: 'center',
-                        alignSelf: 'stretch',
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style= {styles.textInput}
                 >
                     <Picker
-                        style= {{
-                            flex:1,
-                            height: 0.06*screenHeight,
-                            color:'#000000',
-                        }}
+                        style= {styles.picker}
                         mode= 'dropdown'
                           selectedValue={this.state.isShowInHome}
                           onValueChange={(type) => this.setState({isShowInHome: type})}>
@@ -318,34 +263,7 @@ export default class App extends Component {
                     </Picker>
                 </View>
             </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
-            >
-                <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
-                >
-                    内容
-                </Text>
-            </View>
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <TextInput
                     style={{
@@ -368,19 +286,19 @@ export default class App extends Component {
                 justifyContent:'center',
                 alignItems: 'center',
                 alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
+                marginVertical:16,
                 marginHorizontal:marginHorizontalNum
             }}
             >
                 <TouchableHighlight
-                    underlayColor="#0588fe"
+                    underlayColor="#3b50ce"
                     activeOpacity={0.5}
                     style= {{
                         width:0.35*screenWidth,
                         alignSelf: 'flex-end',
                         borderRadius: 0.01*screenHeight,
                         padding: 0.01*screenHeight,
-                        backgroundColor:"#0588fe"
+                        backgroundColor:"#3b50ce"
                     }}
                     onPress={()=>{
                         this._onPress();
@@ -398,7 +316,7 @@ export default class App extends Component {
                     </Text>
                 </TouchableHighlight>
             </View>
-        </View>
+        </ScrollView>
     );
   }
 }
@@ -419,35 +337,17 @@ class MyBar extends Component{
     }
     render(){
         return(
-            <View style= {{
-                flexDirection: 'row',
-                justifyContent:'flex-start',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                marginTop:0.02*screenHeight,
-                marginHorizontal:marginHorizontalNum
-            }}
+            <View style= {styles.container}
             >
                 <Text
-                    style= {{
-                        width:0.2*screenWidth,
-                        fontSize: btnFontSize,
-                        color: 'black',
-                        textAlign: 'right',
-                    }}
+                    style= {styles.text}
                 >
                     {this.props.title}
                 </Text>
                 <TextInput
                     onFocus= {this.props.onPress}
                     placeholder= {this.props.placeholder}
-                    style={{
-                        flex:1,
-                        marginLeft:0.04*screenWidth,
-                        height: 0.06*screenHeight,
-                        borderColor: 'gray',
-                        borderWidth: 1
-                    }}
+                    style={styles.textInput}
                     underlineColorAndroid="transparent"//设置下划线背景色透明 达到去掉下划线的效果
                 />
                 <View style= {{
@@ -455,10 +355,10 @@ class MyBar extends Component{
                     justifyContent:'flex-start',
                     alignItems: 'center',
                     alignSelf: 'stretch',
-                    marginLeft:0.02*screenWidth
+                    marginLeft:8
                 }}>
                     <Wheel
-                      style={{height: 0.06*screenHeight, width: 0.05*screenWidth}}
+                      style={{height: 48, width: 30}}
                       itemStyle={{textAlign: 'center'}}
                       items={this.hours}
                       onChange= {(index)=>{
@@ -471,7 +371,7 @@ class MyBar extends Component{
                     />
                     <Text>:</Text>
                     <Wheel
-                      style={{height: 0.06*screenHeight, width: 0.05*screenWidth}}
+                      style={{height: 48, width: 30}}
                       itemStyle={{textAlign: 'center'}}
                       items={this.minutes}
                       onChange= {(index)=>{
@@ -487,3 +387,32 @@ class MyBar extends Component{
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center',
+        alignSelf: 'stretch',
+        marginTop:16,
+        marginHorizontal:16
+    },
+    text:{
+        width:0.2*screenWidth,
+        fontSize: 16,
+        color: 'black',
+        textAlign: 'left',
+    },
+    textInput:{
+        flex:1,
+        marginLeft:8,
+        height: 48,
+        borderColor: 'gray',
+        borderWidth: 1        
+    },
+    picker:{
+        flex:1,
+        height: 48,
+        color:'#000000',
+    }
+});

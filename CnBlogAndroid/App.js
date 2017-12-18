@@ -1,13 +1,15 @@
 import {url} from 'url'
 import Config from './Source/config';
 import api from './Source/api/api.js';
-import {authData} from './Source/config'
+import {authData,err_info} from './Source/config'
 import {StorageKey} from './Source/config'
+import {UI} from './Source/config'
 import * as Service from './Source/request/request.js'
 import * as storage from './Source/Storage/storage.js'
 import fetch from 'react-native-fetch-polyfill'
 import React, { Component,} from 'react';
 import CookieManager from 'react-native-cookies'
+import { Icon } from 'native-base';
 
 import {
     Platform,
@@ -47,10 +49,13 @@ import ClassCreate from './Source/screens/ClassCreate'
 import PersonalSettings from './Source/screens/PersonalSettings'
 import CommentAdd from './Source/screens/CommentAdd'
 import AppInformation from './Source/screens/AppInformation'
+import ScheduleReminding from './Source/screens/ScheduleReminding'
 
 import ContactPage from './Source/screens/ContactPage'
-
+import Submitted from './Source/screens/Submitted'
+import HomeworkSubmit from './Source/screens/HomeworkSubmit'
 const { height, width } = Dimensions.get('window');
+
 const CODE_URL = [
   'https://oauth.cnblogs.com/connect/authorize',
   '?client_id=' + authData.clientId,
@@ -71,12 +76,12 @@ class App extends Component {
             <View style={styles.container}>
                 <Welcome/>
             </View>
-        );	
+        );
     }
 }
 
 // 在App中调用的登录界面组件
-class Welcome extends Component{	
+class Welcome extends Component{
     render(){
         return (
             <View style = {styles.container}>
@@ -85,13 +90,13 @@ class Welcome extends Component{
             </View>
         )
     }
-    
+
     toPersonalBlog()
     {
         this.reset();
         this.props.navigation.navigate('PersonalBlog');
     }
-    
+
     toHome()
     {
         this.props.navigation.navigate('Loginer');
@@ -106,6 +111,7 @@ class Welcome extends Component{
         });
         this.props.navigation.dispatch(resetAction);
     }
+
     componentDidMount(){
         this.timer = setTimeout(
             ()=>{
@@ -135,7 +141,7 @@ class Welcome extends Component{
                                 }
                             })
                             .catch((error) => {
-                                ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+                                this.toPersonalBlog();
                             });
                         }
                         else
@@ -153,7 +159,7 @@ class Loginer extends Component{
     mylogin = () => {
         this.props.navigation.navigate('LoginPage')
     };
-    render(){	
+    render(){
         return(
             <View style = {styles.container}>
                 <Image source = {require('./Source/images/logo.png')} style = {styles.image}/>
@@ -173,7 +179,7 @@ class UrlLogin extends Component{
             code : '',
         };
     }
-    
+
     toPerson()
     {
         // 这里重置路由，阻止用户返回登录界面
@@ -187,7 +193,7 @@ class UrlLogin extends Component{
         this.props.navigation.navigate('PersonalBlog');
     }
     getTokenFromApi(Code)
-    {		  
+    {
         fetch(Config.AccessToken,{
             method: 'POST',
             headers: {
@@ -198,12 +204,12 @@ class UrlLogin extends Component{
         })
         .then((response)=>response.json())//还没有对返回状态进行判断，所以还不完整
         .then((responseJson)=>{
-            //let data = {access_token : responseJson.access_token};
             storage.setItem(StorageKey.USER_TOKEN,responseJson);
+        }).then(()=>{
             this.toPerson();
         })
         .catch((error)=>{
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+            ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
         })
     }
     render()
@@ -271,7 +277,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        backgroundColor: 'rgb(51,153,255)',    
+        backgroundColor: 'rgb(51,153,255)',
         marginTop: height/10,
     },
     btText: {
@@ -289,19 +295,40 @@ const HomeTab = TabNavigator({
     PersonalBlog: {
         screen: PersonalBlog,
         navigationOptions: {
-            tabBarLabel: '我的博客'
+            tabBarLabel: '我的博客',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_blog.png')}
+                    style={{height: 20}}
+                ></Image>
+            )
         }
     },
     ClassLists: {
         screen: ClassLists,
         navigationOptions: {
             tabBarLabel: '我的班级',
+            tabBarIcon: ({ tintColor, focused }) => (
+               <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_class.png')}
+                    style={{height: 20}}
+                ></Image>
+            )
         }
     },
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
-            tabBarLabel: '我'
+            tabBarLabel: '我',
+            tabBarIcon: ({ tintColor, focused }) => (
+                <Image
+                    resizeMode='contain'
+                    source={require('./Source/images/nav_i.png')}
+                    style={{height: 20}}
+                ></Image>
+            )
         }
     },
 },{
@@ -310,22 +337,27 @@ const HomeTab = TabNavigator({
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-//        showIcon: true,
+        showIcon: true,
         showLabel: true,
         style: {
 //            height: 30,
+
         },
         labelStyle: {
-            //fontSize: 14
+            marginTop: 0,
+            fontSize: 8
+        },
+        iconStyle: {
+            marginTop: 10,
         },
         tabStyle: {
-            backgroundColor: '#1C86EE',
+            backgroundColor: UI.BOTTOM_COLOR,
             height: height/13,
         },
     },
 })
 
-const SimpleNavigation = StackNavigator({	
+const SimpleNavigation = StackNavigator({
     Welcome: {
         screen: Welcome,
         navigationOptions: {
@@ -348,11 +380,11 @@ const SimpleNavigation = StackNavigator({
         screen: HomeworkLists,
         navigationOptions: {
             //header: null,
-            headerTintColor:'white',            
+            headerTintColor:'white',
             headerTitle: '作业列表',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -362,11 +394,11 @@ const SimpleNavigation = StackNavigator({
     HomeworkDetail: {
         screen: HomeworkDetail,
         navigationOptions: {
-            headerTintColor:'white',                        
+            headerTintColor:'white',
             headerTitle: '作业详情',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -382,16 +414,16 @@ const SimpleNavigation = StackNavigator({
     ClassCreate: {
         screen: ClassCreate,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '创建班级',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
             }
-        }        
+        }
     },
     Notice: {
         screen: Notice,
@@ -408,11 +440,11 @@ const SimpleNavigation = StackNavigator({
     PersonalSettings:{
         screen: PersonalSettings,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '个人设置',
             headerStyle: {
                 height: 40,
-                backgroundColor:'#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                fontSize: 18,
@@ -428,11 +460,11 @@ const SimpleNavigation = StackNavigator({
     ClassHome: {
         screen: ClassHome,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '班级博客',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -442,11 +474,25 @@ const SimpleNavigation = StackNavigator({
     HomeworkPost: {
         screen: HomeworkPost,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '作业发布',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
+    },
+    ScheduleReminding: {
+        screen: ScheduleReminding,
+        navigationOptions: {
+            headerTintColor:'white',
+            headerTitle: '日程提醒',
+            headerStyle: {
+                height: 40,
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -456,11 +502,11 @@ const SimpleNavigation = StackNavigator({
     BlogDetail: {
         screen: BlogDetail,
         navigationOptions: {
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '博文详情',
             headerStyle: {
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -470,11 +516,11 @@ const SimpleNavigation = StackNavigator({
     BlogComment: {
         screen: BlogComment,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '评论',
             headerStyle:{
                 height: 40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -484,11 +530,11 @@ const SimpleNavigation = StackNavigator({
     ClassMember: {
         screen: ClassMember,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '班级成员',
             headerStyle: {
                 height:40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -498,11 +544,11 @@ const SimpleNavigation = StackNavigator({
     ClassMemberAdd: {
         screen: ClassMemberAdd,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '添加班级成员',
             headerStyle: {
                 height:40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -512,11 +558,11 @@ const SimpleNavigation = StackNavigator({
     MemberBlog: {
         screen: MemberBlog,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '他的博客',
             headerStyle: {
                 height:40,
-                backgroundColor: '#1C86EE',
+                backgroundColor: UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -526,11 +572,11 @@ const SimpleNavigation = StackNavigator({
     CommentAdd: {
         screen: CommentAdd,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '添加评论',
             headerStyle: {
                 height:40,
-                backgroundColor:'#1C86EE',
+                backgroundColor:UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -540,11 +586,11 @@ const SimpleNavigation = StackNavigator({
     AppInformation: {
         screen: AppInformation,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '关于app',
             headerStyle: {
                 height:40,
-                backgroundColor:'#1C86EE',
+                backgroundColor:UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
@@ -555,8 +601,36 @@ const SimpleNavigation = StackNavigator({
     ContactPage: {
         screen: ContactPage,
         navigationOptions:{
-            headerTintColor:'white',                                    
+            headerTintColor:'white',
             headerTitle: '联系开发者',
+            headerStyle: {
+                height:40,
+                backgroundColor:UI.TOP_COLOR,
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
+    },
+    Submitted: {
+        screen: Submitted,
+        navigationOptions:{
+            headerTintColor:'white',
+            headerTitle: '提交列表',
+            headerStyle: {
+                height:40,
+                backgroundColor:UI.TOP_COLOR,
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        }
+    },
+    HomeworkSubmit: {
+        screen: HomeworkSubmit,
+        navigationOptions:{
+            headerTintColor:'white',
+            headerTitle: '请选择你要提交的博文',
             headerStyle: {
                 height:40,
                 backgroundColor:'#1C86EE',
@@ -565,7 +639,6 @@ const SimpleNavigation = StackNavigator({
                 fontSize: 18,
             }
         }
-
     }
 },{
     initialRouteName: 'Welcome',

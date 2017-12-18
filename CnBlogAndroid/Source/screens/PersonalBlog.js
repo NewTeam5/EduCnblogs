@@ -4,6 +4,11 @@ import {authData} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import React, { Component} from 'react';
+import * as storage from '../Storage/storage.js'
+import {StorageKey} from '../config'
+import {UI} from '../config'
+import {err_info} from '../config'
+
 import {
     StyleSheet,
     Text,
@@ -15,11 +20,13 @@ import {
     Dimensions,
     FlatList,
 } from 'react-native';
+
 import {
     StackNavigator,
     TabNavigator,
     NavigationActions,
 } from 'react-navigation';
+
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 // 此页面传入的参数为blogApp(即个人博客名)
@@ -34,7 +41,7 @@ export default class PersonalBlog extends Component{
             isRequestSuccess: false,
         };
     }
-    _isMounted;
+	_isMounted;
     // 更新博客显示数据
     UpdateData = ()=>{
         // 先清零数据
@@ -45,84 +52,120 @@ export default class PersonalBlog extends Component{
             postCount: 0,//随笔总数
             isRequestSuccess: false,
         });
-        this.componentWillMount();
+		this.componentWillMount();
     };
+	
     componentWillMount = ()=>{
         this._isMounted=true;
         // 获取当前登录用户信息，存放于global
         let user_url = Config.apiDomain + api.user.info;
-        Service.Get(user_url)
-        .then((jsonData)=>{
-            if(jsonData!=='rejected')
-            {
-                this.setState({
-                    isRequestSuccess: true,
-                })
-                global.user_information = {
-                    userId : jsonData.UserId,
-                    SpaceUserId : jsonData.SpaceUserId,
-                    BlogId : jsonData.BlogId,
-                    DisplayName : jsonData.DisplayName,
-                    face : jsonData.Face,
-                    Seniority : jsonData.Seniority,  //园龄
-                    BlogApp : jsonData.BlogApp,
-                }
-            }
-            else{
-                ToastAndroid.show("网络异常，请稍后重试！",ToastAndroid.SHORT);
-            }
-        })
-        .then(()=>{
-            let blogApp = global.user_information.BlogApp;
-            // 首先获取博客信息
-            let url = Config.apiDomain+'api/blogs/'+blogApp;
-            if(this.state.isRequestSuccess){
-            Service.Get(url)
-            .then((jsonData)=>{
-                if(this._isMounted){
-                    this.setState({
-                        blogTitle: jsonData.title,
-                        pageSize: jsonData.pageSize,
-                        postCount: jsonData.postCount,
-                    });
-                }
-            })
-            // 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
-            .then(()=>{
-                // 计算页数
-                let {pageSize, postCount} = this.state;
-                let pageCount  = Math.ceil(postCount/pageSize);
-                var pageIndexes = [];
-                for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
-                {
-                    pageIndexes.push(pageIndex);
-                }
-                // 这里需要使用promise数组保证获取内容的顺序(不可在for循环中进行异步操作，顺序会乱)
-                return promises = pageIndexes.map((pageIndex)=>{
-                    return Service.Get(Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex)
-                })
-            })
-            // 使用promise.all按顺序获取数组中的信息
-            .then((promises)=>{
-                Promise.all(promises).then((posts)=>{
-                    for(var i in posts)
-                    {
-                        if(this._isMounted){
-                            this.setState({
-                                blogs: this.state.blogs.concat(posts[i]),
-                            })
-                        }
-                    }
-                })
-            })
-            }
-        }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
-        });
+		Service.Get(user_url)
+		.then((jsonData)=>{
+			if(jsonData!=='rejected')
+			{
+				this.setState({
+					isRequestSuccess: true,
+				})
+				global.user_information = {
+					userId : jsonData.UserId,
+					SpaceUserId : jsonData.SpaceUserId,
+					BlogId : jsonData.BlogId,
+					DisplayName : jsonData.DisplayName,
+					face : jsonData.Face,
+					Seniority : jsonData.Seniority,  //园龄
+					BlogApp : jsonData.BlogApp,
+				}
+			}
+		})
+		.then(()=>{
+			let blogApp = global.user_information.BlogApp;
+			// 首先获取博客信息
+			let url = Config.apiDomain+'api/blogs/'+blogApp;
+			if(this.state.isRequestSuccess){
+				Service.Get(url)
+				.then((jsonData)=>{	
+					if(this._isMounted){
+						this.setState({
+							blogTitle: jsonData.title,
+							pageSize: jsonData.pageSize,
+							postCount: jsonData.postCount,
+						});
+					}
+				})
+				.then(()=>{
+					global.storage.save({key:StorageKey.BLOG_TITLE,data:this.state.blogTitle})
+					.catch((err)=>{
+						ToastAndroid.show("error",ToastAndroid.SHORT);
+					})
+				})
+				
+				// 然后利用获取到的博客文章数量获取文章列表，因为获取方式是分页的
+				.then(()=>{
+					// 计算页数
+					let {pageSize, postCount} = this.state;
+					let pageCount  = Math.ceil(postCount/pageSize);
+					var pageIndexes = [];
+					for(var pageIndex = 1; pageIndex <= pageCount; pageIndex++)
+					{
+						pageIndexes.push(pageIndex);
+					}
+					// 这里需要使用promise数组保证获取内容的顺序(不可在for循环中进行异步操作，顺序会乱)
+					return promises = pageIndexes.map((pageIndex)=>{
+						return Service.Get(Config.apiDomain+'api/blogs/'+blogApp+'/posts?pageIndex='+pageIndex)
+					})
+				})
+				// 使用promise.all按顺序获取数组中的信息
+				.then((promises)=>{
+					Promise.all(promises).then((posts)=>{
+						for(var i in posts)
+						{
+							if(this._isMounted){
+								this.setState({
+									blogs: this.state.blogs.concat(posts[i]),
+								})
+							}
+						}	
+					})
+					//将获取到的博客列表缓存
+					.then(()=>{
+						global.storage.save({key:StorageKey.PERSON_BLOG,data:this.state.blogs})
+						.catch((err)=>{
+							ToastAndroid.show("SAVE_ERROR",ToastAndroid.SHORT);
+						})
+					})
+				})
+				.catch((err)=>{
+					ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+				})
+			}
+		}).catch((error) => {
+			ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			global.storage.load({key:StorageKey.PERSON_BLOG})
+			.then((ret)=>{
+				this.setState({
+					blogs : ret,
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.BLOG_TITLE})
+				.then((ret)=>{
+					this.setState({
+						blogTitle : ret,
+					})
+				})
+				.catch((err)=>{
+					ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				})
+			}).catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
+		});
     };
+	
     componentWillUnmount = ()=>{
         this._isMounted=false;
     }
+	
     _renderItem = (item)=>{
         let item1 = item;
         var Title = item1.item.Title;
@@ -133,7 +176,6 @@ export default class PersonalBlog extends Component{
         var CommentCount = item1.item.CommentCount;
         var Id = item1.item.key;
         return(
-            this.state.isRequestSuccess===false?null:
             <View>
                 <TouchableOpacity
                     style = {styles.listcontainer} 
@@ -151,8 +193,14 @@ export default class PersonalBlog extends Component{
                     }} accessibilityLabel = {Url}>
                         {Title}
                     </Text>
-                    <Text  numberOfLines={3} style = {{lineHeight: 25,fontSize: 14, marginBottom: 8, textAlign: 'left', color:'rgb(70,70,70)'}}>
-                        {Description+'...'}
+                    <Text  numberOfLines={3} style = {{
+                        lineHeight: 25,
+                        fontSize: 14,
+                        marginBottom: 8,
+                        textAlign: 'left',
+                        color: 'rgb(70,70,70)',
+                    }}>
+                        {Description}
                     </Text>
                     <View style = {{
                         flexDirection: 'row',
@@ -171,6 +219,7 @@ export default class PersonalBlog extends Component{
             </View>
         )
     };
+	
     _separator = () => {
         return (
             <View style={{ height: 9.75, justifyContent: 'center'}}>
@@ -202,7 +251,7 @@ export default class PersonalBlog extends Component{
                     <FlatList
                         ItemSeparatorComponent={this._separator}
                         renderItem={this._renderItem}
-                        data={data}
+						data= {data}
                         onRefresh = {this.UpdateData}
                         refreshing= {false}
                     />
@@ -223,10 +272,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',  
         justifyContent:'flex-start',
         alignItems: 'center',  
-        backgroundColor: '#1C86EE',
+        backgroundColor: UI.TOP_COLOR,      
         height: screenHeight/12,
         paddingLeft: 0.03*screenWidth,
-        width: screenWidth,
+        alignSelf: 'stretch',
     },
     headertext: {
         fontSize: 22,
@@ -236,16 +285,17 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 11,
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
-        width: screenWidth,
+        alignSelf: 'stretch',
     },
     listcontainer: {
         justifyContent:'flex-start',
         alignItems: 'flex-start',
         flex:1,
-        width: screenWidth,
+        alignSelf: 'stretch',
         backgroundColor: 'white',
         paddingLeft: 0.03*screenWidth,
         paddingRight: 0.04*screenWidth,

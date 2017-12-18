@@ -1,10 +1,13 @@
 import Config from '../config';
 import api from '../api/api.js';
-import {authData} from '../config'
+import {authData,err_info,UI} from '../config'
 import * as Service from '../request/request.js'
 import MyAdapter from './MyAdapter.js';
 import HeaderNoBackComponent from './HeaderNoBackComponent.js';
 import React, { Component} from 'react';
+import {StorageKey} from '../config'
+
+
 import {
     StyleSheet,
     Text,
@@ -44,6 +47,7 @@ export default class ClassLists extends Component{
     componentWillUnmount = ()=>{
         this._isMounted=false;
     }
+	
     UpdateData = ()=>{
         this.setState({
             classes:[],
@@ -52,9 +56,10 @@ export default class ClassLists extends Component{
         })
         this.componentWillMount();
     }
+	
     componentWillMount=()=>{
         this._isMounted=true;
-        let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
+        let url = Config.ClassList;
         Service.Get(url).then((jsonData)=>{
             if(this._isMounted){
                 this.setState({
@@ -66,16 +71,18 @@ export default class ClassLists extends Component{
                         isEmpty: false,
                     })
                 }
-                //ToastAndroid.show(jsonData,ToastAndroid.SHORT);
             }
         }).then(()=>{
+			global.storage.save({key : StorageKey.CLASS_EMPTY,data : this.state.isEmpty});
+		})
+		.then(()=>{
             let classIndexes = [];
             for(var i in this.state.classes)
             {
                 classIndexes.push(i);
             }
             return promises = classIndexes.map((classIndex)=>{
-                return Service.Get('https://api.cnblogs.com/api/edu/schoolclass/'+this.state.classes[classIndex].schoolClassId)
+				return Service.Get(Config.ClassInfo + this.state.classes[classIndex].schoolClassId)
             })
         })
         .then((promises)=>{
@@ -88,119 +95,157 @@ export default class ClassLists extends Component{
                     })}
                 }
             })
-        }).catch((error) => {
-            ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT);
+        })
+		.then(()=>{
+			global.storage.save({key : StorageKey.CLASS_LIST,data : this.state.classes});
+		})
+		.then(()=>{
+			global.storage.save({key : StorageKey.CLASS_LIST_IMG,data : this.state.imgs});
+		})
+		.catch((error) => {
+            //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+			
+			global.storage.load({key:StorageKey.CLASS_EMPTY})
+			.then((ret)=>{
+				if(ret === false){
+					ToastAndroid.show("have class",ToastAndroid.SHORT);
+				}
+				this.setState({	
+					isEmpty : ret,
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.CLASS_LIST_IMG})
+				.then((ret)=>{
+					this.setState({
+						imgs : ret,
+					})
+				})
+				.catch((err)=>{
+					ToastAndroid.show("Class_IMG",ToastAndroid.SHORT);
+				})
+			}).then(()=>{
+				global.storage.load({key:StorageKey.CLASS_LIST})
+				.then((ret)=>{
+					this.setState({
+						classes : ret,
+					})
+				}).catch((err)=>{
+					ToastAndroid.show("Class List",ToastAndroid.SHORT);
+				})
+			})
+			.catch((err)=>{
+				ToastAndroid.show(err_info.TIME_OUT,ToastAndroid.SHORT);
+				this.props.navigation.navigate('Loginer');
+			})
         });
     }
+	
     render(){
-    var data= [];
-    if(this.state.isEmpty===false){
-    for(var i in this.state.classes)
-    {
-        data.push({
-            key: this.state.classes[i].schoolClassId,
-            nameCn: this.state.classes[i].nameCn,
-            universityNameCn: this.state.classes[i].universityNameCn,
-            imgurl: this.state.imgs[i],
-        })
-    }}
-    return (
-        <View
-            style= {{
-                flexDirection: 'column',
-                flex: 1,
-                backgroundColor: 'white'
-            }}
-        >
-        <View style= {{        
-            flexDirection: 'row',  
-            justifyContent:'flex-start',
-            alignItems: 'center',
-            backgroundColor: '#1C86EE',
-            height: screenHeight/12,
-            paddingLeft: 0.05*screenWidth,
-        }}>
-            <Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
-        </View>
-            <View 
-                style= {{        
-                    flexDirection: 'row', 
-                    justifyContent:'flex-start',
-                    alignItems: 'flex-start',  
-                    alignSelf: 'stretch',
-                    marginLeft: 0.02*screenWidth,
-                    marginRight: 0.04*screenWidth,
-                    flex:1,
-                }}>
-                <FlatList
-                    onRefresh = {this.UpdateData}
-                    refreshing= {false}
-                    data={data}
-                    ItemSeparatorComponent={this._separator}
-                    renderItem={
-                        ({item}) =>
-                            <TouchableOpacity style= {{        
-                                flexDirection: 'row',  
-                                justifyContent:'flex-start',
-                                alignItems: 'flex-start',  
-                                alignSelf: 'stretch',    
-                                marginTop: 0.01*screenHeight,
-                                marginLeft: 0.02*screenWidth,
-                                marginRight: 0.02*screenWidth,
-                                marginBottom: 0.01*screenHeight,
-                                flex:1,
-                            }}
-                                onPress={()=>this.props.navigation.navigate('ClassHome',{classId:item.key})}
-                            >
-                            <Image style= {{
-                                width: 0.1*screenHeight,
-                                height: 0.1*screenHeight
-                            }}
-                                source={{uri: item.imgurl}}
-                            />
-                            <View style= {{        
-                                flexDirection: 'column',  
-                                justifyContent:'center',
-                                alignItems: 'flex-start',  
-                                alignSelf: 'stretch',                                
-                                marginLeft: 0.02*screenWidth,
-                                paddingLeft: 0.01*screenWidth,
-                                height: 0.1*screenHeight,
-                                flex:1,
-                            }}>
-                                <View
-                                    style= {{
-                                        flexDirection: 'row',
-                                        justifyContent:'flex-start',
-                                        alignItems: 'flex-start',
-                                    }}             
-                                >
-                                    <Text style= {{
-                                        fontSize: titleFontSize-5,  
-                                        color: 'rgb(51,51,51)',  
-                                    }}>
-                                        {item.universityNameCn}
-                                    </Text>                 
-                                </View>
-                                <View style= {{        
-                                    flexDirection: 'row',
-                                    justifyContent:'flex-start',
-                                    alignItems: 'flex-start',
-                                }}>
-                                    <Text style= {{
-                                        fontSize: btnFontSize+2,
-                                        color: 'rgb(51,51,51)',  
-                                        marginRight: 0.02*screenWidth,   
-                                    }}>
-                                        {item.nameCn}
-                                    </Text>                             
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    }/>
-                </View>
-            </View>
-    );  
+		var data= [];
+		if(this.state.isEmpty===false){
+		for(var i in this.state.classes)
+		{
+			data.push({
+				key: this.state.classes[i].schoolClassId,
+				nameCn: this.state.classes[i].nameCn,
+				universityNameCn: this.state.classes[i].universityNameCn,
+				imgurl: this.state.imgs[i],
+			})
+		}}
+		
+		return (
+			<View
+				style= {{
+					flexDirection: 'column',
+					flex: 1,
+					backgroundColor: 'white'
+				}}
+			>
+			<View style= {{        
+				flexDirection: 'row',  
+				justifyContent:'flex-start',
+				alignItems: 'center',
+				backgroundColor: UI.TOP_COLOR,
+				height: screenHeight/12,
+				paddingLeft: 0.05*screenWidth,
+			}}>
+				<Text style = {{fontSize: 18, fontWeight: 'bold', color:'white'}}>班级列表</Text>
+			</View>
+				<View 
+					style= {{        
+						alignSelf: 'stretch',
+						flex:1,
+					}}>
+					<FlatList
+						onRefresh = {this.UpdateData}
+						refreshing= {false}
+						data={data}
+						ItemSeparatorComponent={this._separator}
+						renderItem={
+							({item}) =>
+								<TouchableOpacity style= {{        
+									flexDirection: 'row',  
+									justifyContent:'flex-start',
+									alignItems: 'flex-start',  
+									alignSelf: 'stretch',    
+									marginTop: 0.01*screenHeight,
+									marginLeft: 0.02*screenWidth,
+									marginRight: 0.02*screenWidth,
+									marginBottom: 0.01*screenHeight,
+									flex:1,
+								}}
+									onPress={()=>this.props.navigation.navigate('ClassHome',{classId:item.key})}
+								>
+								<Image style= {{
+									width: 0.1*screenHeight,
+									height: 0.1*screenHeight
+								}}
+									source={{uri: item.imgurl}}
+								/>
+								<View style= {{        
+									flexDirection: 'column',  
+									justifyContent:'center',
+									alignItems: 'flex-start',  
+									alignSelf: 'stretch',                                
+									marginLeft: 0.02*screenWidth,
+									paddingLeft: 0.01*screenWidth,
+									height: 0.1*screenHeight,
+									flex:1,
+								}}>
+									<View
+										style= {{
+											flexDirection: 'row',
+											justifyContent:'flex-start',
+											alignItems: 'flex-start',
+										}}             
+									>
+										<Text style= {{
+											fontSize: titleFontSize-5,  
+											color: 'rgb(51,51,51)',  
+										}}>
+											{item.universityNameCn}
+										</Text>                 
+									</View>
+									<View style= {{        
+										flexDirection: 'row',
+										justifyContent:'flex-start',
+										alignItems: 'flex-start',
+									}}>
+										<Text style= {{
+											fontSize: btnFontSize+2,
+											color: 'rgb(51,51,51)',  
+											marginRight: 0.02*screenWidth,   
+										}}>
+											{item.nameCn}
+										</Text>                             
+									</View>
+								</View>
+								</TouchableOpacity>
+						}
+					/>
+				</View>
+			</View>
+		);  
     }
 }
 
