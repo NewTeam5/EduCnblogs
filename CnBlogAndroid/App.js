@@ -54,6 +54,7 @@ import ScheduleReminding from './Source/screens/ScheduleReminding'
 import ContactPage from './Source/screens/ContactPage'
 import Submitted from './Source/screens/Submitted'
 import HomeworkSubmit from './Source/screens/HomeworkSubmit'
+import UnfinishedHomeworkList from './Source/screens/UnfinishedHomeworkList'
 const { height, width } = Dimensions.get('window');
 
 const CODE_URL = [
@@ -382,6 +383,21 @@ const SimpleNavigation = StackNavigator({
             //header: null,
             headerTintColor:'white',
             headerTitle: '作业列表',
+            headerStyle: {
+                height: 40,
+                backgroundColor: UI.TOP_COLOR,
+            },
+            headerTitleStyle: {
+                fontSize: 18,
+            }
+        },
+    },
+    UnfinishedHomeworkList: {
+        screen: UnfinishedHomeworkList,
+        navigationOptions: {
+            //header: null,
+            headerTintColor:'white',
+            headerTitle: '未完成作业列表',
             headerStyle: {
                 height: 40,
                 backgroundColor: UI.TOP_COLOR,

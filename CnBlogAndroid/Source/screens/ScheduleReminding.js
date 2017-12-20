@@ -226,8 +226,8 @@ export default class App extends Component {
                                     })
                                 }
                             }
-                        }                        
-                        this.setState({modalVisible:true});
+                        } 
+                        this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});                       
                     }
                 }}     
                 theme={{
