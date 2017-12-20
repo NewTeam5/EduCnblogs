@@ -18,24 +18,9 @@ import {
     StackNavigator,
 } from 'react-navigation';
 const { height, width } = Dimensions.get('window');
-const head = '<!DOCTYPE html><html><head>'+
-'<meta charset="utf-8"/>'+
-'<meta name="viewport" content="width=device-width, initial-scale=1" />'+
-'<style type="text/css">  * {word-wrap:break-word; word-break:break-all;}</style>'+
-'</head>';
-const tail = '</html>';
-HtmlDecode = (str)=>{
-    if(str == null) return '';
-    var s = "";
-    if(str.length == 0) return "";
-    s = str.replace(/&amp;/g,"&");
-    s = s.replace(/&lt;/g,"<");
-    s = s.replace(/&gt;/g,">");
-    s = s.replace(/&nbsp;/g," ");
-    s = s.replace(/&#39;/g,"\'");
-    s = s.replace(/&quot;/g,"\"");
-    return s;
-}
+const HtmlDecode = require('../DataHandler/HomeworkDetails/HtmlDecode');
+const ContentHandler = require('../DataHandler/HomeworkDetails/ContentHandler');
+const InfoHandler = require('../DataHandler/HomeworkDetails/InfoHandler');
 export default class HomeWorkDetail extends Component{
     constructor(props){
         super(props);
@@ -85,9 +70,9 @@ export default class HomeWorkDetail extends Component{
 		})
     }
 	
-    render(){
-        let {url, Id, classId, isFinished} = this.props.navigation.state.params;
-        let {content, convertedContent, title, formatTyle, answerCount} = this.state;
+    render(){        
+        let {url, Id, classId, isFinished} = InfoHandler(this.props.navigation.state.params);
+        let {content, convertedContent, title, formatTyle, answerCount} = ContentHandler(this.state);
         return(
             <View style = {styles.container}>
                 <View
@@ -97,7 +82,7 @@ export default class HomeWorkDetail extends Component{
                     }}
                 >
                 <WebView
-                    source={{html: head + (convertedContent==null?HtmlDecode(content):HtmlDecode(convertedContent)) + tail, baseUrl: ''}}
+                    source={{html: content, baseUrl: ''}}
                     style={{height: height-40}}
                     startInLoadingState={true}
                     domStorageEnabled={true}

@@ -649,7 +649,7 @@ const SimpleNavigation = StackNavigator({
             headerTitle: '请选择你要提交的博文',
             headerStyle: {
                 height:40,
-                backgroundColor:'#1C86EE',
+                backgroundColor:UI.TOP_COLOR,
             },
             headerTitleStyle: {
                 fontSize: 18,
