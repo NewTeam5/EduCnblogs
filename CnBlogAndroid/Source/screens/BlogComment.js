@@ -23,40 +23,15 @@ import {
     StackNavigator,
     TabNavigator,
 } from 'react-navigation';
+const CommentHandler = require('../DataHandler/BlogComment/CommentHandler');
+const ItemHandler = require('../DataHandler/BlogComment/ItemHandler');
+const getComments = require('../DataHandler/BlogComment/getComments');
 const screenWidth= MyAdapter.screenWidth;
 const screenHeight= MyAdapter.screenHeight;
 var Authors = [];
 // 博客评论页面
 // 接受评论数量 CommentCount 和 博客名 blogApp 以及博文Id作为参数
 // 这里定义一个用于粗略解决返回的评论字符串内包含无法解析的html标签的函数
-function CommemtHandler(data){
-    var s = data.split('');
-    var result = '';
-    var tag = 0;
-    for(var i in s)
-    {
-        if(s[i]=='>')
-        {
-            tag = 0;
-            if(s[i-1]=='/'&&s[i-2]=='r')
-            {
-                result+='\n';
-            }
-            continue;
-        }
-        if(s[i]=='<'||tag==1)
-        {
-            tag = 1;
-            continue;
-        }
-        if(s[i]=='引'||(s[i]=='用'&&s[i-1]=='引'))
-        {
-            continue;
-        }
-        result+=s[i];
-    }
-    return result;
-}
 export default class BlogComment extends Component{
     constructor(props){
         super(props);
@@ -103,7 +78,9 @@ export default class BlogComment extends Component{
     }
     _renderItem = (item)=>{
         let item1 = item;
-        let {key,Bodys,Author,DateAdded,AuthorUrl,FaceUrl} = item1.item;
+        item = ItemHandler(item);
+        let {key,Bodys,Author,DateAdded,AuthorUrl,FaceUrl} = item;
+        //FaceUrl = FaceUrlHandler();
         return(
             <ListItem avatar
                 onPress={()=>this.props.navigation.navigate
@@ -121,42 +98,16 @@ export default class BlogComment extends Component{
               </Left>
               <Body>
                 <Text>{Author}</Text>
-                <Text note>{CommemtHandler(Bodys)}</Text>
+                <Text note>{Bodys}</Text>
                 <Text style = {{fontSize: 10, textAlign: 'right', color: 'gray'}}>{'评论于: '+DateAdded.split('T')[0]+' '+DateAdded.split('T')[1].substring(0,8)}</Text>
               </Body>
             </ListItem>
         )
     }
     render(){
-        Authors = [];
-        var data = [];
-        if(this.state.isRequestSuccess){
-        for(var i in this.state.comments)
-        {
-            data.push({
-                key: this.state.comments[i].Id,
-                Bodys: this.state.comments[i].Body,
-                Author: this.state.comments[i].Author,
-                DateAdded: this.state.comments[i].DateAdded,
-                AuthorUrl: this.state.comments[i].AuthorUrl,
-                FaceUrl: this.state.comments[i].FaceUrl,
-            });
-            var isIn = false;
-            for(var author of Authors){
-                if(author.Author === this.state.comments[i].Author){
-                    isIn = true;
-                    break;
-                }
-            }
-            if(!isIn){
-                Authors.push({
-                    Author:this.state.comments[i].Author,
-                    FaceUrl: this.state.comments[i].FaceUrl
-                });
-            }
-        }
-        }
-
+        var tempVar = getComments(this.state);
+        Authors = tempVar.Authors;
+        var data = tempVar.data;
         return (
             <View style = {styles.container}>
                 <View
