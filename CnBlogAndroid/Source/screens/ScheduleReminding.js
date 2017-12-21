@@ -37,8 +37,8 @@ export default class App extends Component {
         this.state = { 
             modalVisible: false,
             myMarkedDates:{
-                // '2017-11-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
+                // '2017-12-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
+                // '2017-12-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
                 // '2017-11-18': {selected: true,title:"bbb",description:"description",deadline:"deadline",url:"url"},
                 // '2017-11-19': {selected: true,title:"aaa",description:"description",deadline:"deadline",url:"url"}, 
                 // '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
@@ -49,12 +49,15 @@ export default class App extends Component {
             classes: [],
             isEmpty: true,
             homeworks: [],
+            unsubmitHomeworks: [],
             counts: 0,
-            isRequestSuccess: false,            
+            isRequestSuccess: false,  
+            answers: {}      
         };                
     }
     componentWillMount = () => {
         this._isMounted = true;
+        this.state.myMarkedDates={};
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData) => {
             if(this._isMounted){
@@ -95,29 +98,39 @@ export default class App extends Component {
                                 homeworks: unfinishedHomework,
                             }); 
                         }
+                    }).then(() => {
+                        for (let j in this.state.homeworks) {
+                            if (this.state.homeworks[j].isFinished == true)
+                                continue;
+                            let url_t = Config.HomeWorkAnswer + this.state.homeworks[j].homeworkId;
+                            Service.Get(url_t).then((jsonData)=>{
+                                if(jsonData!=='rejected')
+                                {
+                                    this.setState({
+                                        answers: jsonData
+                                    })
+                                }
+                                else {
+                                    //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
+                                }
+                            }).then(() => {
+                                let flag = 0;
+                                for (let k in this.state.answers) {
+                                    if (global.user_information.DisplayName === this.state.answers[k].answerer) {
+                                        flag = 1;
+                                        break;
+                                    }
+                                }
+                                if (flag === 0) {
+                                    this.state.unsubmitHomeworks.push(this.state.homeworks[j]);
+                                }
+                            })
+                        }
                     })
-                    // .then(() => {
-                    //     // let c = {};
-                    //     for(let i in this.state.homeworks) {
-                    //         if(this.state.homeworks[i].isFinished == false) {
-                    //             let t = this.state.homeworks[i].deadline;
-                    //             t = t.split('T');
-                    //             this.state.myMarkedDates[t[0]]={
-                    //                 selected: true,
-                    //             };
-                    //             // c[t[0]] = {
-                    //             //     title: this.state.homeworks[i].title,
-                    //             //     description: this.state.homeworks[i].description,
-                    //             //     url : this.state.homeworks[i].url,
-                    //             //     class: this.state.homeworks[i].schoolClassId
-                    //             // };
-                    //         }
-                    //     }                        
-                    //     // alert(JSON.stringify(c));
-                    // })
                 })
             }
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+        })
+        .catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
     }  
     UpdateData = ()=>{
         this.componentWillMount();
@@ -166,17 +179,17 @@ export default class App extends Component {
             </View>
         )
     }    
-    render() {     
+    render() {
         this.state.myMarkedDates={};
-        for(let i in this.state.homeworks) {
-            if(this.state.homeworks[i].isFinished == false) {
-                let t = this.state.homeworks[i].deadline;
+        for(let i in this.state.unsubmitHomeworks) {
+            if(this.state.unsubmitHomeworks[i].isFinished == false) {
+                let t = this.state.unsubmitHomeworks[i].deadline;
                 t = t.split('T');
                 this.state.myMarkedDates[t[0]]={
                     selected: true                                        
                 };
             }
-        }                        
+        }
     return (
         <ScrollView>
         <View
@@ -226,8 +239,8 @@ export default class App extends Component {
                                     })
                                 }
                             }
-                        } 
-                        this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});                       
+                        }
+                        this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});
                     }
                 }}     
                 theme={{
