@@ -36,7 +36,6 @@ import HomeworkDetail from './Source/screens/HomeworkDetail'
 import HomeworkLists from './Source/screens/HomeworkLists'
 import PersonalBlog from './Source/screens/PersonalBlog'
 import ClassLists from './Source/screens/ClassLists'
-import Notice from './Source/screens/Notice'
 import UserInformation from './Source/screens/UserInformation'
 import ClassHome from './Source/screens/ClassHome'
 import HomeworkPost from './Source/screens/HomeworkPost'
@@ -45,12 +44,9 @@ import BlogComment from './Source/screens/BlogComment'
 import ClassMember from './Source/screens/ClassMember'
 import ClassMemberAdd from './Source/screens/ClassMemberAdd'
 import MemberBlog from './Source/screens/MemberBlog'
-import ClassCreate from './Source/screens/ClassCreate'
-import PersonalSettings from './Source/screens/PersonalSettings'
 import CommentAdd from './Source/screens/CommentAdd'
 import AppInformation from './Source/screens/AppInformation'
 import ScheduleReminding from './Source/screens/ScheduleReminding'
-
 import ContactPage from './Source/screens/ContactPage'
 import Submitted from './Source/screens/Submitted'
 import HomeworkSubmit from './Source/screens/HomeworkSubmit'
@@ -427,44 +423,11 @@ const SimpleNavigation = StackNavigator({
             header: null,
         }
     },
-    ClassCreate: {
-        screen: ClassCreate,
-        navigationOptions: {
-            headerTintColor:'white',
-            headerTitle: '创建班级',
-            headerStyle: {
-                height: 40,
-                backgroundColor: UI.TOP_COLOR,
-            },
-            headerTitleStyle: {
-                fontSize: 18,
-            }
-        }
-    },
-    Notice: {
-        screen: Notice,
-        navigationOptions: {
-            header: null,
-        }
-    },
+
     UserInformation: {
         screen: UserInformation,
         navigationOptions: {
             header: null,
-        }
-    },
-    PersonalSettings:{
-        screen: PersonalSettings,
-        navigationOptions: {
-            headerTintColor:'white',
-            headerTitle: '个人设置',
-            headerStyle: {
-                height: 40,
-                backgroundColor: UI.TOP_COLOR,
-            },
-            headerTitleStyle: {
-               fontSize: 18,
-            }
         }
     },
     AfterloginTab: {
