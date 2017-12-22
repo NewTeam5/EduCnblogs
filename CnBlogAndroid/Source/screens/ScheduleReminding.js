@@ -35,16 +35,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            modalVisible: false,
-            myMarkedDates:{
-                // '2017-12-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
-                // '2017-12-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-18': {selected: true,title:"bbb",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-19': {selected: true,title:"aaa",description:"description",deadline:"deadline",url:"url"}, 
-                // '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-21': {selected: true,title:"ddd",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-22': {selected: true,title:"nnn",description:"description",deadline:"deadline",url:"url"}
-            },
+            myMarkedDates:{},
             data:[],
             classes: [],
             isEmpty: true,
@@ -56,8 +47,11 @@ export default class App extends Component {
         };                
     }
     componentWillMount = () => {
+        var memberId;
         this._isMounted = true;
         this.state.myMarkedDates={};
+        var unfinishedHomework = [];
+        var unsubmitted = [];
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData) => {
             if(this._isMounted){
@@ -70,12 +64,15 @@ export default class App extends Component {
                         isEmpty: false,
                     })
                 }
-            }
-        })
-        .then(() => {
-            var unfinishedHomework = [];
+            }    
+        }).then(() => { 
             for (let i in this.state.classes) {
                 let classId = this.state.classes[i].schoolClassId;
+                url = Config.BlogInClassId + global.user_information.BlogId + '/'+ classId;               
+                Service.Get(url).
+                then((jsonData)=>{
+                    memberId = jsonData.memberId;
+                })
                 url = Config.apiDomain + api.ClassGet.homeworkList + "/false/" + classId + "/1-12";
                 Service.Get(url).then((jsonData) => {
                     if (jsonData !== 'rejected') {
@@ -88,49 +85,29 @@ export default class App extends Component {
                             });
                         }
                     }
-                })
-                .then(() => {
+                }).then(() => {
                     url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
                     Service.Get(url).then((jsonData) => {
+                        let homeworks = jsonData.homeworks;                            
                         if (this._isMounted && this.state.isRequestSuccess){
-                            unfinishedHomework =  unfinishedHomework.concat(jsonData.homeworks);  
-                            this.setState({
-                                homeworks: unfinishedHomework,
-                            }); 
-                        }
-                    }).then(() => {
-                        for (let j in this.state.homeworks) {
-                            if (this.state.homeworks[j].isFinished == true)
-                                continue;
-                            let url_t = Config.HomeWorkAnswer + this.state.homeworks[j].homeworkId;
-                            Service.Get(url_t).then((jsonData)=>{
-                                if(jsonData!=='rejected')
-                                {
-                                    this.setState({
-                                        answers: jsonData
+                            for (let j in homeworks) {
+                                if(homeworks[j].isFinished === false){
+                                    url = Config.SubmitJudge + memberId + '/'+ homeworks[j].homeworkId;
+                                    Service.Get(url).then((data)=>{
+                                        if(data === false){ 
+                                            unsubmitted.push(homeworks[j]);
+                                            this.setState({
+                                                unsubmitHomeworks: unsubmitted
+                                            })                  
+                                        }
                                     })
                                 }
-                                else {
-                                    //ToastAndroid.show(err_info.NO_INTERNET,ToastAndroid.SHORT);
-                                }
-                            }).then(() => {
-                                let flag = 0;
-                                for (let k in this.state.answers) {
-                                    if (global.user_information.DisplayName === this.state.answers[k].answerer) {
-                                        flag = 1;
-                                        break;
-                                    }
-                                }
-                                if (flag === 0) {
-                                    this.state.unsubmitHomeworks.push(this.state.homeworks[j]);
-                                }
-                            })
-                        }
+                            }         
+                        }    
                     })
-                })
-            }
-        })
-        .catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+                })  
+            }        
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})    
     }  
     UpdateData = ()=>{
         this.componentWillMount();
@@ -143,52 +120,15 @@ export default class App extends Component {
             </View>
         );
     }    
-    _renderItem = (item)=>{
-        let item1 = item;
-        // var title = item1.item.title;//作业标题
-        // var description = item1.item.description;//作业描述
-        // var deadline = (item1.item.deadline != null ? item1.item.deadline :"Tundefine");//作业截止日期
-        //var url = item1.item.url;//作业地址
-        var title= item1.item.title
-        var description=item1.item.description
-        var deadline=item1.item.deadline
-        var url = item1.item.url;//作业地址
-        var Id = item1.item.key;//作业Id
-        var isFinished = item1.item.isFinished;   
-        var classId = item1.item.classId;   
-        return (
-            <View>
-                <TouchableOpacity                    
-                    onPress = {()=>{
-                        this.setState({modalVisible:false});
-                        this.props.navigation.navigate('HomeworkDetail',{url: url, Id: Id,
-                                            classId: classId, isFinished: isFinished});
-                    }}
-                    style = {HomeworkStyles.container}
-                >
-                    <Text style= {HomeworkStyles.titleTextStyle}>
-                        {title}
-                    </Text>
-                    <Text numberOfLines={3} style= {HomeworkStyles.abstractTextStyle}>
-                        {description}
-                    </Text>             
-                    <Text style= {HomeworkStyles.informationTextStyle}>
-                        截止于:{deadline.split('T')[0]+' '+deadline.split('T')[1].substring(0,8)}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }    
     render() {
         this.state.myMarkedDates={};
         for(let i in this.state.unsubmitHomeworks) {
-            if(this.state.unsubmitHomeworks[i].isFinished == false) {
-                let t = this.state.unsubmitHomeworks[i].deadline;
-                t = t.split('T');
-                this.state.myMarkedDates[t[0]]={
-                    selected: true                                        
-                };
-            }
+            let t = this.state.unsubmitHomeworks[i].deadline;
+            t = t === null ?"undefineT":t;
+            t = t.split('T');
+            this.state.myMarkedDates[t[0]]={
+                selected: true                                        
+            };
         }
     return (
         <ScrollView>
@@ -198,47 +138,27 @@ export default class App extends Component {
                 flex: 1,
                 backgroundColor: 'white'
             }}
-        >
-            <Modal
-              animationType={"slide"}
-              transparent={false}
-              visible={this.state.modalVisible}
-              onRequestClose={() => {this.setState({modalVisible:false});}}
-              >
-                 <View style={{
-                     flex: 1,
-                     marginTop: 22
-                 }}>
-                    <FlatList
-                        data={this.state.data}
-                        ItemSeparatorComponent = {this._separator}
-                        renderItem={this._renderItem}
-                    />
-
-                 </View>
-            </Modal>        
+        >       
             <Calendar
                 markedDates={this.state.myMarkedDates}                  
                 onDayPress={(day) => {
                     if (day.dateString in this.state.myMarkedDates){
                         this.state.data=[];
-                        for(var i in this.state.homeworks)
+                        for(var i in this.state.unsubmitHomeworks)
                         {          
-                            if(this.state.homeworks[i].isFinished == false) {                                              
-                                let t = this.state.homeworks[i].deadline;
+                                let t = this.state.unsubmitHomeworks[i].deadline;
                                 t = t.split('T');
                                 if (t[0]===day.dateString){
                                     this.state.data.push({
-                                        key: this.state.homeworks[i].homeworkId,//作业ID
-                                        title: this.state.homeworks[i].title,//作业标题
-                                        url: this.state.homeworks[i].url,//作业网址
-                                        description: this.state.homeworks[i].description,//作业描述
-                                        deadline: this.state.homeworks[i].deadline,//作业截止日期
-                                        isFinished: this.state.homeworks[i].isFinished,// 作业是否结束
-                                        classId: this.state.homeworks[i].schoolClassId//班级Id
+                                        key: this.state.unsubmitHomeworks[i].homeworkId,//作业ID
+                                        title: this.state.unsubmitHomeworks[i].title,//作业标题
+                                        url: this.state.unsubmitHomeworks[i].url,//作业网址
+                                        description: this.state.unsubmitHomeworks[i].description,//作业描述
+                                        deadline: this.state.unsubmitHomeworks[i].deadline,//作业截止日期
+                                        isFinished: this.state.unsubmitHomeworks[i].isFinished,// 作业是否结束
+                                        classId: this.state.unsubmitHomeworks[i].schoolClassId//班级Id
                                     })
                                 }
-                            }
                         }
                         this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});
                     }
