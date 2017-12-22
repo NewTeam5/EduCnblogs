@@ -15,6 +15,8 @@ export default{
 	HomeWorkDetail : 'https://api.cnblogs.com/api/edu/homework/',
 	HomeWorkPublish : 'https://api.cnblogs.com/api/edu/homework/publish',
 	HomeWorkAnswer : 'https://api.cnblogs.com/api/edu/homework/answers/',
+	BlogInClassId: 'https://api.cnblogs.com/api/edu/member/',
+	SubmitJudge: 'https://api.cnblogs.com/api/edu/answer/iscommitted/',
 }
 
 export const authData = {
