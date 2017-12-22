@@ -1,11 +1,30 @@
 {
-  "name": "cnblogandroid",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "CnblogAndroid",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "native-base": "^2.3.5",
+    "react": "16.0.0",
+    "react-native": "0.51.0",
+    "react-native-calendars": "^1.15.0",
+    "react-native-cookies": "^3.2.0",
+    "react-native-fetch-polyfill": "^1.1.2",
+    "react-native-storage": "^0.2.2",
+    "react-navigation": "^1.0.0-beta.21",
+    "teaset": "^0.5.1",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "babel-jest": "21.2.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
 }
