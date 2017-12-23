@@ -79,3 +79,6 @@ var storage = new Storage({
 
 global.storage = storage;
 global.internet = true;
+
+global.unsummitted = [];
+global.timeTouch = null;
