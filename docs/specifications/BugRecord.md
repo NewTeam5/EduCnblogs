@@ -37,17 +37,7 @@
       <td></td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
+      <td>部分班级打开作业列表时App崩溃</td>
       <td></td>
       <td></td>
       <td></td>
@@ -77,7 +67,7 @@
       <td></td>
     </tr>
     <tr>
-      <td>日程提醒页面不稳定</td>
+      <td>日程提醒页面闪烁</td>
       <td></td>
       <td></td>
       <td></td>
@@ -97,7 +87,17 @@
       <td></td>
     </tr>
     <tr>
+      <td>日程提醒页面每次显示内容不同</td>
       <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>日程提醒页面跳转到消息页面不显示内容</td>
       <td></td>
       <td></td>
       <td></td>
