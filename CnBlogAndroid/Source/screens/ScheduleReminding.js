@@ -47,11 +47,19 @@ export default class App extends Component {
         };                
     }
     componentWillMount = () => {
+        time = new Date();
+        if(global.timeTouch != null && (time.getTime() - global.timeTouch.getTime() < 1800000)){
+            this.setState({
+                unsubmitHomeworks: global.unsubmitted
+            })
+            return;
+        }
+        global.timeTouch = time;
         var memberId;
         this._isMounted = true;
         this.state.myMarkedDates={};
         var unfinishedHomework = [];
-        var unsubmitted = [];
+        global.unsubmitted = [];
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData) => {
             if(this._isMounted){
@@ -95,9 +103,9 @@ export default class App extends Component {
                                     url = Config.SubmitJudge + memberId + '/'+ homeworks[j].homeworkId;
                                     Service.Get(url).then((data)=>{
                                         if(data === false){ 
-                                            unsubmitted.push(homeworks[j]);
+                                            global.unsubmitted.push(homeworks[j]);
                                             this.setState({
-                                                unsubmitHomeworks: unsubmitted
+                                                unsubmitHomeworks: global.unsubmitted
                                             })                  
                                         }
                                     })
@@ -146,19 +154,19 @@ export default class App extends Component {
                         this.state.data=[];
                         for(var i in this.state.unsubmitHomeworks)
                         {          
-                                let t = this.state.unsubmitHomeworks[i].deadline;
-                                t = t.split('T');
-                                if (t[0]===day.dateString){
-                                    this.state.data.push({
-                                        key: this.state.unsubmitHomeworks[i].homeworkId,//作业ID
-                                        title: this.state.unsubmitHomeworks[i].title,//作业标题
-                                        url: this.state.unsubmitHomeworks[i].url,//作业网址
-                                        description: this.state.unsubmitHomeworks[i].description,//作业描述
-                                        deadline: this.state.unsubmitHomeworks[i].deadline,//作业截止日期
-                                        isFinished: this.state.unsubmitHomeworks[i].isFinished,// 作业是否结束
-                                        classId: this.state.unsubmitHomeworks[i].schoolClassId//班级Id
-                                    })
-                                }
+                            let t = this.state.unsubmitHomeworks[i].deadline;
+                            t = t.split('T');
+                            if (t[0]===day.dateString){
+                                this.state.data.push({
+                                    key: this.state.unsubmitHomeworks[i].homeworkId,//作业ID
+                                    title: this.state.unsubmitHomeworks[i].title,//作业标题
+                                    url: this.state.unsubmitHomeworks[i].url,//作业网址
+                                    description: this.state.unsubmitHomeworks[i].description,//作业描述
+                                    deadline: this.state.unsubmitHomeworks[i].deadline,//作业截止日期
+                                    isFinished: this.state.unsubmitHomeworks[i].isFinished,// 作业是否结束
+                                    classId: this.state.unsubmitHomeworks[i].schoolClassId//班级Id
+                                })
+                            }
                         }
                         this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});
                     }
