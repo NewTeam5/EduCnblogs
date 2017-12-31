@@ -35,26 +35,31 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            modalVisible: false,
-            myMarkedDates:{
-                // '2017-11-16': {selected: true,title:"title",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-17': {selected: true,title:"ggg",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-18': {selected: true,title:"bbb",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-19': {selected: true,title:"aaa",description:"description",deadline:"deadline",url:"url"}, 
-                // '2017-11-20': {selected: true,title:"ccc",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-21': {selected: true,title:"ddd",description:"description",deadline:"deadline",url:"url"},
-                // '2017-11-22': {selected: true,title:"nnn",description:"description",deadline:"deadline",url:"url"}
-            },
+            myMarkedDates:{},
             data:[],
             classes: [],
             isEmpty: true,
             homeworks: [],
+            unsubmitHomeworks: [],
             counts: 0,
-            isRequestSuccess: false,            
+            isRequestSuccess: false,  
+            answers: {}      
         };                
     }
     componentWillMount = () => {
+        time = new Date();
+        if(global.timeTouch != null && (time.getTime() - global.timeTouch.getTime() < 1800000)){
+            this.setState({
+                unsubmitHomeworks: global.unsubmitted
+            })
+            return;
+        }
+        global.timeTouch = time;
+        var memberId;
         this._isMounted = true;
+        this.state.myMarkedDates={};
+        var unfinishedHomework = [];
+        global.unsubmitted = [];
         let url = 'https://api.cnblogs.com/api/edu/member/schoolclasses';
         Service.Get(url).then((jsonData) => {
             if(this._isMounted){
@@ -67,12 +72,15 @@ export default class App extends Component {
                         isEmpty: false,
                     })
                 }
-            }
-        })
-        .then(() => {
-            var unfinishedHomework = [];
+            }    
+        }).then(() => { 
             for (let i in this.state.classes) {
                 let classId = this.state.classes[i].schoolClassId;
+                url = Config.BlogInClassId + global.user_information.BlogId + '/'+ classId;               
+                Service.Get(url).
+                then((jsonData)=>{
+                    memberId = jsonData.memberId;
+                })
                 url = Config.apiDomain + api.ClassGet.homeworkList + "/false/" + classId + "/1-12";
                 Service.Get(url).then((jsonData) => {
                     if (jsonData !== 'rejected') {
@@ -85,39 +93,29 @@ export default class App extends Component {
                             });
                         }
                     }
-                })
-                .then(() => {
+                }).then(() => {
                     url = Config.apiDomain + api.ClassGet.homeworkList + "/false/"+classId+"/"+1+"-"+this.state.counts;
                     Service.Get(url).then((jsonData) => {
+                        let homeworks = jsonData.homeworks;                            
                         if (this._isMounted && this.state.isRequestSuccess){
-                            unfinishedHomework =  unfinishedHomework.concat(jsonData.homeworks);  
-                            this.setState({
-                                homeworks: unfinishedHomework,
-                            }); 
-                        }
+                            for (let j in homeworks) {
+                                if(homeworks[j].isFinished === false && homeworks[j].deadline !== null){
+                                    url = Config.SubmitJudge + memberId + '/'+ homeworks[j].homeworkId;
+                                    Service.Get(url).then((data)=>{
+                                        if(data === false){ 
+                                            global.unsubmitted.push(homeworks[j]);
+                                            this.setState({
+                                                unsubmitHomeworks: global.unsubmitted
+                                            })                  
+                                        }
+                                    })
+                                }
+                            }         
+                        }    
                     })
-                    // .then(() => {
-                    //     // let c = {};
-                    //     for(let i in this.state.homeworks) {
-                    //         if(this.state.homeworks[i].isFinished == false) {
-                    //             let t = this.state.homeworks[i].deadline;
-                    //             t = t.split('T');
-                    //             this.state.myMarkedDates[t[0]]={
-                    //                 selected: true,
-                    //             };
-                    //             // c[t[0]] = {
-                    //             //     title: this.state.homeworks[i].title,
-                    //             //     description: this.state.homeworks[i].description,
-                    //             //     url : this.state.homeworks[i].url,
-                    //             //     class: this.state.homeworks[i].schoolClassId
-                    //             // };
-                    //         }
-                    //     }                        
-                    //     // alert(JSON.stringify(c));
-                    // })
-                })
-            }
-        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})
+                })  
+            }        
+        }).catch((error)=>{ToastAndroid.show("网络请求失败，请检查连接状态！",ToastAndroid.SHORT)})    
     }  
     UpdateData = ()=>{
         this.componentWillMount();
@@ -130,53 +128,15 @@ export default class App extends Component {
             </View>
         );
     }    
-    _renderItem = (item)=>{
-        let item1 = item;
-        // var title = item1.item.title;//作业标题
-        // var description = item1.item.description;//作业描述
-        // var deadline = (item1.item.deadline != null ? item1.item.deadline :"Tundefine");//作业截止日期
-        //var url = item1.item.url;//作业地址
-        var title= item1.item.title
-        var description=item1.item.description
-        var deadline=item1.item.deadline
-        var url = item1.item.url;//作业地址
-        var Id = item1.item.key;//作业Id
-        var isFinished = item1.item.isFinished;   
-        var classId = item1.item.classId;   
-        return (
-            <View>
-                <TouchableOpacity                    
-                    onPress = {()=>{
-                        this.setState({modalVisible:false});
-                        this.props.navigation.navigate('HomeworkDetail',{url: url, Id: Id,
-                                            classId: classId, isFinished: isFinished});
-                    }}
-                    style = {HomeworkStyles.container}
-                >
-                    <Text style= {HomeworkStyles.titleTextStyle}>
-                        {title}
-                    </Text>
-                    <Text numberOfLines={3} style= {HomeworkStyles.abstractTextStyle}>
-                        {description}
-                    </Text>             
-                    <Text style= {HomeworkStyles.informationTextStyle}>
-                        截止于:{deadline.split('T')[0]+' '+deadline.split('T')[1].substring(0,8)}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }    
-    render() {     
+    render() {
         this.state.myMarkedDates={};
-        for(let i in this.state.homeworks) {
-            if(this.state.homeworks[i].isFinished == false) {
-                let t = this.state.homeworks[i].deadline;
-                t = t.split('T');
-                this.state.myMarkedDates[t[0]]={
-                    selected: true                                        
-                };
-            }
-        }                        
+        for(let i in this.state.unsubmitHomeworks) {
+            let t = this.state.unsubmitHomeworks[i].deadline;
+            t = t.split('T');
+            this.state.myMarkedDates[t[0]]={
+                selected: true                                        
+            };
+        }
     return (
         <ScrollView>
         <View
@@ -185,49 +145,29 @@ export default class App extends Component {
                 flex: 1,
                 backgroundColor: 'white'
             }}
-        >
-            <Modal
-              animationType={"slide"}
-              transparent={false}
-              visible={this.state.modalVisible}
-              onRequestClose={() => {this.setState({modalVisible:false});}}
-              >
-                 <View style={{
-                     flex: 1,
-                     marginTop: 22
-                 }}>
-                    <FlatList
-                        data={this.state.data}
-                        ItemSeparatorComponent = {this._separator}
-                        renderItem={this._renderItem}
-                    />
-
-                 </View>
-            </Modal>        
+        >       
             <Calendar
                 markedDates={this.state.myMarkedDates}                  
                 onDayPress={(day) => {
                     if (day.dateString in this.state.myMarkedDates){
                         this.state.data=[];
-                        for(var i in this.state.homeworks)
+                        for(var i in this.state.unsubmitHomeworks)
                         {          
-                            if(this.state.homeworks[i].isFinished == false) {                                              
-                                let t = this.state.homeworks[i].deadline;
-                                t = t.split('T');
-                                if (t[0]===day.dateString){
-                                    this.state.data.push({
-                                        key: this.state.homeworks[i].homeworkId,//作业ID
-                                        title: this.state.homeworks[i].title,//作业标题
-                                        url: this.state.homeworks[i].url,//作业网址
-                                        description: this.state.homeworks[i].description,//作业描述
-                                        deadline: this.state.homeworks[i].deadline,//作业截止日期
-                                        isFinished: this.state.homeworks[i].isFinished,// 作业是否结束
-                                        classId: this.state.homeworks[i].schoolClassId//班级Id
-                                    })
-                                }
+                            let t = this.state.unsubmitHomeworks[i].deadline;
+                            t = t.split('T');
+                            if (t[0]===day.dateString){
+                                this.state.data.push({
+                                    key: this.state.unsubmitHomeworks[i].homeworkId,//作业ID
+                                    title: this.state.unsubmitHomeworks[i].title,//作业标题
+                                    url: this.state.unsubmitHomeworks[i].url,//作业网址
+                                    description: this.state.unsubmitHomeworks[i].description,//作业描述
+                                    deadline: this.state.unsubmitHomeworks[i].deadline,//作业截止日期
+                                    isFinished: this.state.unsubmitHomeworks[i].isFinished,// 作业是否结束
+                                    classId: this.state.unsubmitHomeworks[i].schoolClassId//班级Id
+                                })
                             }
-                        }                        
-                        this.setState({modalVisible:true});
+                        }
+                        this.props.navigation.navigate('UnfinishedHomeworkList',{data:this.state.data});
                     }
                 }}     
                 theme={{

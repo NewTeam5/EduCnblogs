@@ -30,7 +30,7 @@ const titleFontSize= MyAdapter.titleFontSize;
 const abstractFontSize= MyAdapter.abstractFontSize;
 const informationFontSize= MyAdapter.informationFontSize;
 const btnFontSize= MyAdapter.btnFontSize;   
-
+const ItemHandler = require('../DataHandler/ClassMember/ItemHandler')
 export default class ClassMember extends Component{
     constructor(props){
         super(props);
@@ -100,7 +100,6 @@ export default class ClassMember extends Component{
     _renderItem = (item)=>{
         let item1 = item;
         let {blogUrl,displayName,avatarUrl,membership,realName,blogId} = item1.item;
-        realName = realName===null?'':'('+realName+')';
         return(
             <View>
                 <TouchableOpacity
@@ -111,7 +110,7 @@ export default class ClassMember extends Component{
                         <Image source = {avatarUrl?{uri:avatarUrl}:require('../images/defaultface.png')} style = {styles.avatarstyle}/>
                     </View>
                     <View style = {styles.textcontainer}>
-                        <Text style = {{fontSize: 20,color: '#000000',flex:2}}>{displayName+realName}</Text>
+                        <Text style = {{fontSize: 20,color: '#000000',flex:2}}>{displayName+ ItemHandler(realName)}</Text>
                         <Text style = {{fontSize: 15,color: '#616161',flex:3}}>{membership===1?'学生':membership===2?'老师':'助教'}</Text>
                     </View>
                 </TouchableOpacity>

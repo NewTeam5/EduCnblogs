@@ -14,7 +14,8 @@ import {
     TextInput,
     Dimensions,
     FlatList,
-    Modal
+    Modal,
+    ScrollView
 } from 'react-native';
 import {ListItem, Thumbnail, Button, Item} from 'native-base';
 import {
@@ -102,10 +103,9 @@ export default class CommentAdd extends Component{
                         onRefresh = {this.UpdateData}
                         refreshing= {false}
                     />
-                
                     </View>
                 </Modal>
-                <Item regular style = {{marginTop: 0.05*screenHeight,width: 0.95*screenWidth, borderColor: 'gray'}}>
+                {/*<Item regular style = {{flex:1,marginTop: 0.05*screenHeight,width: 0.95*screenWidth, borderColor: 'gray'}}>*/}
                 <TextInput ref="commentRef"
                     style={styles.textcontainer}
                     onChangeText={(text) => this.onShow(text)}
@@ -118,7 +118,7 @@ export default class CommentAdd extends Component{
                     autoCorrect = {false}
                     blurOnSubmit={false}
                 />
-                </Item>
+                {/*</Item>*/}
                 <TouchableOpacity
                     style= {styles.button}
                     onPress = {this.onSubmit.bind(this)}
@@ -159,12 +159,13 @@ const styles = StyleSheet.create({
     },
     textcontainer: {
         color: 'black',
-        flex: 5,
-        height: 250,
+        flex: 1,
+        //height: 250,
         width: 0.95*screenWidth,
         textAlignVertical: 'top',
-        //borderColor: 'rgb(225,225,225)',
-        //borderWidth: 1,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginTop: 0.05*screenHeight
     },
     button: {
         height: 0.18*0.618*screenWidth,
@@ -174,8 +175,8 @@ const styles = StyleSheet.create({
         alignSelf:'flex-end',
         borderRadius: 4,
         backgroundColor: '#3b50ce',  
-        marginTop: 0.05*screenHeight,
-        marginBottom: 0.05*screenHeight,
+        marginTop: 0.025*screenHeight,
+        marginBottom: 0.025*screenHeight,
         marginRight: 0.025*screenWidth,
     }
 });
