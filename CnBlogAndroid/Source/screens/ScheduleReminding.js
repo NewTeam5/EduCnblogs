@@ -99,7 +99,7 @@ export default class App extends Component {
                         let homeworks = jsonData.homeworks;                            
                         if (this._isMounted && this.state.isRequestSuccess){
                             for (let j in homeworks) {
-                                if(homeworks[j].isFinished === false){
+                                if(homeworks[j].isFinished === false && homeworks[j].deadline !== null){
                                     url = Config.SubmitJudge + memberId + '/'+ homeworks[j].homeworkId;
                                     Service.Get(url).then((data)=>{
                                         if(data === false){ 
@@ -132,7 +132,6 @@ export default class App extends Component {
         this.state.myMarkedDates={};
         for(let i in this.state.unsubmitHomeworks) {
             let t = this.state.unsubmitHomeworks[i].deadline;
-            t = t === null ?"undefineT":t;
             t = t.split('T');
             this.state.myMarkedDates[t[0]]={
                 selected: true                                        
